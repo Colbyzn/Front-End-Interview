@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      min-width: 550px;
+    }
+
+    #header {
+      background-color: red;
+    }
+
+    #container {
+      /* 使用 padding 进行为左右两侧留白 */
+      padding-left: 200px;
+      padding-right: 150px;
+    }
+
+    .column {
+      float: left;
+    }
+
+    #center {
+      width: 100%;
+      background-color: orange;
+    }
+
+    #left {
+      position: relative;
+      width: 200px;
+      background-color: skyblue;
+      /* 使用 margin-left 负值和相对定位的 right 调整左侧位置 */
+      margin-left: -100%;
+      right: 200px;
+    }
+
+    #right {
+      width: 150px;
+      background-color: lightgreen;
+      /* 使用 margin-right 负值调整右侧位置 */
+      margin-right: -150px;
+    }
+
+    #footer {
+      background-color: gray;
+    }
+
+    /* 清除浮动 */
+    .clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="header">this is header</div>
+  <div id="container" class="clearfix">
+    <!-- 中间区域与左右两侧同级，没有再使用额外元素包裹 -->
+    <div id="center" class="column">this is center</div>
+    <div id="left" class="column">this is left</div>
+    <div id="right" class="column">this is right</div>
+  </div>
+  <div id="footer">this is footer</div>
+</body>
+
+</html>
