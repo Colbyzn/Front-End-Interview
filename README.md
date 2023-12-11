@@ -4,8 +4,8 @@
 
 | 序号 |                                      分类                                      |  状态  |
 | :--: | :----------------------------------------------------------------------------: | :----: |
-|  1   | [HTML](https://gitee.com/colbyzn/front-end-interview/blob/master/01-HTML/html.md) | 待完善 |
-|  2   |                                      CSS                                       | 进行中 |
+|  1   | [HTML](https://github.com/colbyzn/front-end-interview/blob/master/01-HTML/html.md) | 待完善 |
+|  2   | [HTML](https://github.com/colbyzn/front-end-interview/blob/master/02-CSS/css.md) | 进行中 |
 |  3   |                                JavaScript 基础                                 | 进行中 |
 |  4   |                                JavaScript 高级                                 | 未开始 |
 |  5   |                                   JS-Web-API                                   | 未开始 |
