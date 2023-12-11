@@ -2,18 +2,18 @@
 
 ## 前端面试题分类
 
-| 序号 |                                      分类                                      |  状态  |
-| :--: | :----------------------------------------------------------------------------: | :----: |
+| 序号 |                                        分类                                        |  状态  |
+| :--: | :--------------------------------------------------------------------------------: | :----: |
 |  1   | [HTML](https://github.com/colbyzn/front-end-interview/blob/master/01-HTML/html.md) | 待完善 |
-|  2   | [HTML](https://github.com/colbyzn/front-end-interview/blob/master/02-CSS/css.md) | 进行中 |
-|  3   |                                JavaScript 基础                                 | 进行中 |
-|  4   |                                JavaScript 高级                                 | 未开始 |
-|  5   |                                   JS-Web-API                                   | 未开始 |
-|  6   |                                    开发环境                                    | 未开始 |
-|  7   |                                    运行环境                                    | 未开始 |
-|  8   |                                   HTTP 协议                                    | 未开始 |
-|  9   |                                      Vue                                       | 未开始 |
-|  10  |                                      Node                                      | 未开始 |
+|  2   |  [CSS](https://github.com/colbyzn/front-end-interview/blob/master/02-CSS/css.md)   | 进行中 |
+|  3   |                                     JavaScript                                     | 进行中 |
+|  4   |                                      手撕代码                                      | 未开始 |
+|  5   |                                     JS-Web-API                                     | 未开始 |
+|  6   |                                      开发环境                                      | 未开始 |
+|  7   |                                      运行环境                                      | 未开始 |
+|  8   |                                     HTTP 协议                                      | 未开始 |
+|  9   |                                        Vue                                         | 未开始 |
+|  10  |                                        Node                                        | 未开始 |
 
 ## 关于仓库
 
