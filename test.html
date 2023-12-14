@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // function test() {
+    //   if (true) {
+    //     // 块级作用域
+    //     var x = 1
+    //     let y = 2
+    //     const z = 3
+    //   }
+    //   console.log(x)  // 1
+    //   console.log(y)  // y is not defined
+    //   console.log(z)  // z is not defined
+    // }
+    // test()
+
+    var globalVar = "global";
+
+    function globalFunction() {
+      console.log("I am a global function")
+    }
+
+    function outerFunction() {
+      var outerVar = "outer";
+
+      function innerFunction() {
+        var innerVar = "inner";
+        console.log(innerVar); // 在当前函数作用域中找到 innerVar
+        console.log(outerVar); // 在父级函数作用域中找到 outerVar
+        console.log(globalVar); // 在全局作用域中找到 globalVar
+      }
+
+      innerFunction();
+      globalFunction();
+    }
+
+    outerFunction();
+  </script>
+</body>
+
+</html>

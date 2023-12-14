@@ -105,7 +105,7 @@ BFC 可以看作是独立的渲染区域，内部的元素不会在布局上影�
 
 ## 如何实现圣杯布局和双飞翼布局？
 
-先理解圣杯布局和双飞翼布局的目的，以及两者在实现上所用技术的异同点，再用代码实现布局
+先理解圣杯布局和双飞翼布局的**目的**，以及两者在实现上所用**技术的异同点**，再用代码实现布局
 %
 
 <!-- notecardId: 1701876453725 -->
@@ -116,7 +116,7 @@ BFC 可以看作是独立的渲染区域，内部的元素不会在布局上影�
 
 一、目的：
 
-- 实现三栏布局，两侧内容固定，中间内容随着宽度自适应
+- 实现**三栏布局**，两侧内容固定，中间内容随着宽度自适应
 - 一般用于 PC 网页
 
 二、技术异同点：
@@ -124,14 +124,14 @@ BFC 可以看作是独立的渲染区域，内部的元素不会在布局上影�
 相同点：
 
 - 都是使用 float 来布局
-- HTML 结构的顺序都是中间内容区域、左侧栏、右侧栏
-  > 注：这样做的目的是为了确保中间栏内容能够在页面上先行加载渲染，以提高页面的可访问性和用户体验
+- HTML 结构的顺序都是**中间内容区域、左侧栏、右侧栏**
+  > 注：这样做的目的是为了确保**中间栏内容**能够在页面上**先行加载渲染**，以提高页面的可访问性和用户体验
 
 不同点：
 
-- 额外元素包裹中间栏内容：圣杯布局没有，而双飞翼布局有；
-- 左右两侧留出空白：圣杯布局使用 padding-left 和 padding-right，而双飞翼布局使用 margin-left 和 margin-right；
-- 调整左右两侧位置：圣杯布局使用负 margin-left 和相对定位 relative 调整左侧栏，使用负 margin-right 调整右侧栏，而双飞翼布局只使用负 margin-left 来调整
+- 额外元素包裹中间栏内容：圣杯布局**没有**，而双飞翼布局**有**；
+- 左右两侧留出空白：圣杯布局使用 **padding-left 和 padding-right**，而双飞翼布局使用 **margin-left 和 margin-right**；
+- 调整左右两侧位置：圣杯布局使用**负 margin-left 和相对定位的 right** 调整左侧栏，使用**负 margin-right** 调整右侧栏，而双飞翼布局只使用**负 margin-left** 来调整
 
 三、实现圣杯布局代码：
 
@@ -362,8 +362,9 @@ BFC 可以看作是独立的渲染区域，内部的元素不会在布局上影�
 
    - inline 元素 → text-align: center;
    - inline-block 元素 → text-align: center;
-   - block 元素 → margin: auto;（前提是该块级元素设置了宽度）
+   - block 元素 → margin: auto;（前提是该**块级元素设置了宽度**）
    - absolute 元素 → left: 50% + margin-left: 负值（元素宽度的一半）；
+   - absolute 元素 → left: 50% + transform: translate(-50%, 0);
    - flex 元素 → justify-content: center;
 
 2. 垂直居中
@@ -403,20 +404,19 @@ BFC 可以看作是独立的渲染区域，内部的元素不会在布局上影�
      方法二：使用 Flexbox 或 Grid 布局
 
    - absolute 元素 → top: 50% + margin-top: 负值（元素高度的一半）；
-   - absolute 元素 → transform: translate(-50%,-50%);
+   - absolute 元素 → top: 50% + transform: translate(0, -50%);
    - absolute 元素 → top、right、bottom、left 都设为 0 + margin: auto
    - flex 元素 → align-items: center;
 
 > 注：
 > 不需要知道元素宽高但是有兼容性问题的是：
-> transform: translate(-50%,-50%);
-> justify-content: center; 和 align-items: center;
+> **left: 50% + top: 50% + transform: translate(-50%,-50%);** > **justify-content: center; 和 align-items: center;**
 >
 > 无兼容性问题但是需要知道元素宽高的是：
-> left: 50% + margin-left: 负值和 top: 50% + margin-top: 负值；
+> **left: 50% + margin-left: 负值和 top: 50% + margin-top: 负值;**
 >
 > 既无兼容性问题，也不需要知道元素宽度的是：
-> top、right、.bottom、left 都设为 0 + margin:auto
+> **top、right、bottom、left 都设为 0 + margin:auto;**
 
 ## line-height 的继承问题？
 
@@ -450,102 +450,104 @@ BFC 可以看作是独立的渲染区域，内部的元素不会在布局上影�
 每种方案从实现原理、优缺点、示例代码三方面回想
 %
 
+<!-- notecardId: 1701956975475 -->
+
 🔍 所考察的知识点：响应式布局
 
 📢 参考答案：
 
 1. rem + 媒体查询
 
-- 实现原理：
-  ① 页面中字体、元素宽高、行高等都使用相对单位 rem；
-  ② 使用媒体查询 @media 为不同设备宽度设置不同 `<html>` 根元素的字体大小。
+   - 实现原理：
+     ① 页面中字体、元素宽高、行高等都使用相对单位 rem；
+     ② 使用媒体查询 @media 为不同设备宽度设置不同 `<html>` 根元素的字体大小。
 
-- 优缺点：
-  优点：简单易用
-  缺点：响应具有阶梯型特性，即难以做到元素尺寸随屏幕尺寸无级调节
+   - 优缺点：
+     优点：简单易用
+     缺点：响应具有**阶梯性**特性，即难以做到元素尺寸随屏幕尺寸无级调节
 
-- 示例代码：
+   - 示例代码：
 
-```css
-@media only screen and (max-width: 374px) {
-  /* iphone5 或者更小的尺寸，以 iphone5 的宽度（320px）比例设置 font-size */
-  html {
-    font-size: 86px;
-  }
-}
-@media only screen and (min-width: 375px) and (max-width: 413px) {
-  /* iphone6/7/8 和 iphone x */
-  html {
-    font-size: 100px;
-  }
-}
-@media only screen and (min-width: 414px) {
-  /* iphone6p 或者更大的尺寸，以 iphone6p 的宽度（414px）比例设置 font-size */
-  html {
-    font-size: 110px;
-  }
-}
+   ```css
+   @media only screen and (max-width: 374px) {
+     /* iphone5 或者更小的尺寸，以 iphone5 的宽度（320px）比例设置 font-size */
+     html {
+       font-size: 86px;
+     }
+   }
+   @media only screen and (min-width: 375px) and (max-width: 413px) {
+     /* iphone6/7/8 和 iphone x */
+     html {
+       font-size: 100px;
+     }
+   }
+   @media only screen and (min-width: 414px) {
+     /* iphone6p 或者更大的尺寸，以 iphone6p 的宽度（414px）比例设置 font-size */
+     html {
+       font-size: 110px;
+     }
+   }
 
-body {
-  /* 使用 rem 单位 */
-  font-size: 0.16rem;
-}
-#div1 {
-  /* 使用 rem 单位 */
-  width: 1rem;
-  background-color: #ccc;
-}
-```
+   body {
+     /* 使用 rem 单位 */
+     font-size: 0.16rem;
+   }
+   #div1 {
+     /* 使用 rem 单位 */
+     width: 1rem;
+     background-color: #ccc;
+   }
+   ```
 
 2. vw/vh
 
-- 实现原理：
-  ① 页面中字体、元素宽高、行高等都使用相对单位 vw 或 vh；
-  ② 只要网页视口尺寸改变，则每单位 vw 或 vh 的取值就会发生改变，从而实现响应式；
+   - 实现原理：
+     ① 页面中字体、元素宽高、行高等都使用相对单位 vw 或 vh；
+     ② 只要网页视口尺寸改变，则每单位 vw 或 vh 的取值就会发生改变，从而实现响应式；
 
-> 注：
->
-> 1. 1vw、1vh 分别等于 1/100 网页视口宽度、1/100 网页视口高度；
-> 2. 网页视口指的是你能看到的网页区域，不包括浏览器上下左右的 UI 栏，如下图所示：
->    ![](../Media/%E7%BD%91%E9%A1%B5%E8%A7%86%E5%8F%A3.png)
-> 3. 网页视口宽度、高度可以通过 window.innerWidth 和 window.innerHeight 来获取；
+   > 注：
+   >
+   > 1. 1vw、1vh 分别等于 1/100 网页视口宽度、1/100 网页视口高度；
+   > 2. 网页视口指的是你能看到的网页区域，**不包括浏览器上下左右的 UI 栏**，如下图所示：
+   >    ![](../Media/%E7%BD%91%E9%A1%B5%E8%A7%86%E5%8F%A3.png)
+   > 3. 网页视口宽度、高度可以通过 window.innerWidth 和 window.innerHeight 来获取；
 
-- 优缺点：
-  优点：实现元素尺寸随屏幕尺寸无级调节，解决了「rem + 媒体查询」所存在的阶梯型响应的弊端
-  缺点：目前不要使用 vw/vh 布局来开发 PC 端，因为兼容性很差；
+   - 优缺点：
+     优点：实现元素尺寸随屏幕尺寸**无级调节**，解决了「rem + 媒体查询」所存在的阶梯性响应的弊端
+     缺点：目前不要使用 vw/vh 布局来开发 **PC 端**，因为**兼容性较差**；
 
-- 示例代码：
+   - 示例代码：
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>vw vh test</title>
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-      }
+   ```html
+   <!DOCTYPE html>
+   <html lang="en">
+     <head>
+       <meta charset="UTF-8" />
+       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+       <title>vw vh test</title>
+       <style>
+         body {
+           margin: 0;
+           padding: 0;
+         }
 
-      #container {
-        background-color: red;
-        /* 实际开发中，任选一个做为统一单位，因为屏幕尺寸多样化，无法做到宽高同一比例 */
-        width: 10vw;
-        height: 5vw;
-      }
-    </style>
-  </head>
+         #container {
+           background-color: red;
+           /* 实际开发中，任选一个做为统一单位，因为屏幕尺寸多样化，无法做到宽高同一比例 */
+           width: 10vw;
+           height: 5vw;
+         }
+       </style>
+     </head>
 
-  <body>
-    <p>vw vh 测试</p>
-    <div id="container"></div>
+     <body>
+       <p>vw vh 测试</p>
+       <div id="container"></div>
 
-    <script>
-      // window.innerHeight === 100vh
-      // window.innerWidth === 100vw
-    </script>
-  </body>
-</html>
-```
+       <script>
+         // window.innerHeight === 100vh
+         // window.innerWidth === 100vw
+       </script>
+     </body>
+   </html>
+   ```

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <p>段落1</p>
+  <p>段落2</p>
+  <p>段落3</p>
+
+  <script>
+    /* 手写简易的 jQuery */
+    class jQuery {
+      constructor(selector) {
+        const result = document.querySelectorAll(selector)
+        const len = result.length
+        for (let i = 0; i < len; i++) {
+          this[i] = result[i]
+        }
+        this.length = len
+        this.selector = selector
+      }
+      // 获取指定索引的元素
+      get(index) {
+        return this[index]
+      }
+      // 遍历数组
+      each(fn) {
+        for (let i = 0; i < this.length; i++) {
+          const element = this[i]
+          fn(element)
+        }
+      }
+      // 事件监听
+      on(type, fn) {
+        return this.each((element) => {
+          element.addEventListener(type, fn, false)
+        })
+      }
+    }
+
+    const p = new jQuery('p')
+
+    console.log(p)  // jQuery {0: p, 1: p, 2: p, length: 3, selector: 'p'}
+    console.log(p.get(2)) // <p>段落3</p>
+    p.each((element) => {
+      console.log(element.innerHTML)  // 段落1 段落2 段落3
+    })
+    p.on('click', (e) => {
+      console.log(e.target)
+    })
+
+    // 扩展：往 jQuery 内添加新的 API
+    jQuery.prototype.dialog = function (info) {
+      alert(info)
+    }
+    p.dialog('弹出警告框')
+
+    // 造轮子：以 jQuery 为基础，开发新的东西
+    class NewjQuery extends jQuery {
+      constructor(selector) {
+        super(selector)
+      }
+      // 扩展自己的方法
+      addClass(className) {
+        // 具体代码
+      }
+      style(data) {
+        // 具体代码
+      }
+    }
+  </script>
+</body>
+
+</html>
