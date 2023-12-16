@@ -17,3 +17,29 @@
 
 自定义列表
 : 自定义列表
+
+## 测试成对 $ 符号的显示
+
+<!-- notecardId: 1702606077166 -->
+
+$s = vt$
+
+\$router 和 \$route 的显示
+
+```javascript
+console.log(`姓名 ${this.name} 学号 ${this.number}`);
+```
+
+## 使用 anki for vscode 插件来测试成对 $ 符号的显示
+
+<!-- notecardId: 1702615261621 -->
+
+$s = vt$
+
+\$router 和 \$route 的显示
+
+`$router` 和 `$route` 的显示
+
+```javascript
+console.log(`姓名 ${this.name} 学号 ${this.number}`);
+```

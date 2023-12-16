@@ -10,6 +10,73 @@
 
 <body>
   <script>
+    Function.prototype.myCall = function (context) {
+      context = context || window;
+
+      context.fn = this;
+
+      const args = [...arguments].slice(1);
+
+      const result = context.fn(...args);
+
+      delete context.fn;
+
+      return result;
+    };
+
+    function greet(number) {
+      console.log(`Hello, ${this.name}!, 学号 ${number}`);
+    }
+
+    const person = {
+      name: 'John'
+    };
+
+    // greet.myCall(person, 123); // 输出：Hello, John!
+    // greet.call(person, 123)
+
+    greet.myCall(); // 输出：Hello, John!
+    greet.call()
+
+    // function Student(name) {
+    //   this.name = name;
+    //   console.log(this);  // xialuo 对象
+    // }
+    // const xialuo = new Student('夏洛');
+
+    // const zhangsan = {
+    //   name: "zhangsan",
+    //   sayHi() {
+    //     console.log(this); // zhangsan 对象
+    //   },
+    //   wait() {
+    //     setTimeout(function () {
+    //       console.log(this); // Window 对象
+    //     }, 1000);
+    //   },
+    //   todo() {
+    //     setTimeout(() => {
+    //       console.log(this); // zhangsan 对象
+    //     }, 1000);
+    //   },
+    // };
+    // zhangsan.sayHi();
+    // zhangsan.wait();
+    // zhangsan.todo();
+
+    // 非严格模式下
+    // function fn() {
+    //    console.log(this); // Window 对象
+    //  }
+    //  fn();
+
+    // 严格模式下
+    // function fn() {
+    //   "use strict"; // 开启严格模式
+    //   console.log(this); // undefined
+    // }
+    // fn();
+
     // function test() {
     //   if (true) {
     //     // 块级作用域
@@ -23,27 +90,27 @@
     // }
     // test()
 
-    var globalVar = "global";
+    // var globalVar = "global";
 
-    function globalFunction() {
-      console.log("I am a global function")
-    }
+    // function globalFunction() {
+    //   console.log("I am a global function")
+    // }
 
-    function outerFunction() {
-      var outerVar = "outer";
+    // function outerFunction() {
+    //   var outerVar = "outer";
 
-      function innerFunction() {
-        var innerVar = "inner";
-        console.log(innerVar); // 在当前函数作用域中找到 innerVar
-        console.log(outerVar); // 在父级函数作用域中找到 outerVar
-        console.log(globalVar); // 在全局作用域中找到 globalVar
-      }
+    //   function innerFunction() {
+    //     var innerVar = "inner";
+    //     console.log(innerVar); // 在当前函数作用域中找到 innerVar
+    //     console.log(outerVar); // 在父级函数作用域中找到 outerVar
+    //     console.log(globalVar); // 在全局作用域中找到 globalVar
+    //   }
 
-      innerFunction();
-      globalFunction();
-    }
+    //   innerFunction();
+    //   globalFunction();
+    // }
 
-    outerFunction();
+    // outerFunction();
   </script>
 </body>
 

@@ -5,9 +5,9 @@
 | 序号 |                                        分类                                        |  状态  |
 | :--: | :--------------------------------------------------------------------------------: | :----: |
 |  1   | [HTML](https://github.com/colbyzn/front-end-interview/blob/master/01-HTML/html.md) | 待完善 |
-|  2   |  [CSS](https://github.com/colbyzn/front-end-interview/blob/master/02-CSS/css.md)   | 进行中 |
+|  2   |  [CSS](https://github.com/colbyzn/front-end-interview/blob/master/02-CSS/css.md)   | 待完善 |
 |  3   |                                     JavaScript                                     | 进行中 |
-|  4   |                                      手撕代码                                      | 未开始 |
+|  4   |                                      手撕代码                                      | 进行中 |
 |  5   |                                     JS-Web-API                                     | 未开始 |
 |  6   |                                      开发环境                                      | 未开始 |
 |  7   |                                      运行环境                                      | 未开始 |

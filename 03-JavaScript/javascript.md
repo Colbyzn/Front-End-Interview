@@ -12,7 +12,7 @@
 2. 识别函数：funtion
 3. 识别引用类型：object (到此为止，**无法再进一步区分**出是数组、对象还是 null)
 
-> 注：**null** 被视为一个**特殊的值类型**。虽然 null 在概念上被认为是一个对象类型，当使用 typeof 运算符检查 null 时，会返回 "object"，但是这是由于历史原因导致的。
+> 注：虽然 null 在概念上被认为是一个对象类型，当使用 typeof 运算符检查 null 时，会返回 "object"，但是**null** 被视为一个**特殊的值类型**，这是由于历史原因导致的。
 
 ## 发生隐式类型转换的情况有哪些？
 
@@ -407,7 +407,7 @@ instanceof 运算符作用：
 
 ### 自由变量的定义
 
-- 指的是一个变量**在当前作用域内没有定义，但是被使用了**
+- 指的是一个变量在**当前作用域内没有定义，也不是形参，但是被使用了**
 
 ### 自由变量的执行/查找规则
 
@@ -480,25 +480,25 @@ instanceof 运算符作用：
 
 ### 作用域的定义
 
-- 指的是变量在什么范围内起作用
+- 指的是**变量在什么范围内起作用**
 
 ### 作用域的作用
 
-- 提高程序的可靠性，减少命名冲突
-- > 注：之所以可以减少命名冲突，是因为当同一变量的作用域不同，即使它们被赋予了不同的值，也互不影响
+- 提高程序的可靠性，**减少命名冲突**
+  > 注：之所以可以减少命名冲突，是因为当**同一变量**的**作用域不同**，即使它们被赋予了不同的值，也**互不影响**
 
 ### 作用域的分类
 
 - 按照作用范围大小，可以分为以下几类：
-- 1. 全局作用域
+- 1. **全局作用域**
      - 定义：指的是整个 script 标签或者 js 文件，当然包括里面的函数
-- 2. 局部作用域（也称为函数作用域）
+- 2. **局部作用域**（也称为函数作用域）
      - 指的是函数内部区域
-- 3. 块级作用域
+- 3. **块级作用域**
 
-     - 指的是由一对花括号{}包裹的区域（不包括函数的花括号）
+     - 指的是由一对花括号{}包裹的区域（**不包括函数的花括号**）
 
-       > 注：块级作用域只对 let 和 const 声明有效，对 var 声明无效，示例代码如下：
+       > 注：块级作用域**只对 let 和 const 声明有效，对 var 声明无效**，示例代码如下：
 
        ```javascript
        function test() {
@@ -550,8 +550,315 @@ instanceof 运算符作用：
     }
 
     innerFunction(); // 在当前作用域中找到 innerFunction 函数
-    globalFunction(); // 在当前作用域中找到 globalFunction 函数
+    globalFunction(); // 在全局作用域中找到 globalFunction 函数
   }
 
   outerFunction();
   ```
+
+## 函数内 this 的指向？
+
+<!-- notecardId: 1702742355748 -->
+
+🔍 所考察的知识点：this 指向
+
+📢 参考答案：
+
+### this 指向的确认时机
+
+- this 在被调用的时候确定，即 this 取什么值，是**在函数调用的时候确认**的，**不是在函数定义的时候确认的**
+
+### this 在不同场景下的指向
+
+1. **全局上下文中的`this`**
+
+   - 在全局上下文（非函数内部）中，`this`指向浏览器全局对象`window`。
+
+     ```javascript
+     console.log(this); // window 对象
+     ```
+
+2. **普通函数调用中的`this`**
+
+   - 若一个普通函数被直接调用，而不是作为对象的方法或构造函数，则`this`在非严格模式下指向全局对象`window`，而在严格模式下，指向`undefined`。
+
+     ```javascript
+     // 非严格模式下
+     function fn() {
+       console.log(this); // Window 对象
+     }
+     fn();
+     ```
+
+     ```javascript
+     // 严格模式下
+     function fn() {
+       "use strict"; // 开启严格模式
+       console.log(this); // undefined
+     }
+     fn();
+     ```
+
+3. **方法调用中的`this`**
+
+   - 若一个函数作为对象的方法被调用时，则`this`指向调用该方法的对象。
+
+     ```javascript
+     const zhangsan = {
+       name: "zhangsan",
+       sayHi() {
+         console.log(this); // zhangsan 对象
+       },
+     };
+     zhangsan.sayHi();
+     ```
+
+4. **构造函数中的`this`**
+
+   - 若一个函数被作为构造函数使用（使用`new`关键字）时，则`this`指向所创建的实例对象。
+
+     ```javascript
+     function Student(name) {
+       this.name = name;
+       console.log(this); // xialuo 对象
+     }
+     const xialuo = new Student("夏洛");
+     ```
+
+5. **事件处理函数中的`this`**
+
+   - 若一个函数被作为事件处理函数使用，则`this`指向事件源，即触发事件的元素。
+
+     ```javascript
+     button.addEventListener("click", function () {
+       console.log(this); // 绑定 click 事件的 button 元素
+     });
+     ```
+
+6. **箭头函数中的`this`**
+
+   - 箭头函数不绑定`this`，它的`this`值继承自箭头函数所在作用域的上一级作用域中的`this`。
+
+     ```javascript
+     const obj = {
+       method() {
+         console.log(this); // obj 对象
+
+         const arrowFunc = () => {
+           console.log(this); // obj 对象
+         };
+         arrowFunc();
+       },
+     };
+     obj.method();
+     ```
+
+7. **`call`、`apply`、`bind`调用中的`this`**
+
+   - 使用`call`、`apply`或`bind`方法可以显式地设置函数调用中的`this`值。
+
+     ```javascript
+     function fn() {
+       console.log(this); // 指向 {x:1}，而不是指向 Window 对象
+     }
+     fn.call({ x: 1 });
+     ```
+
+## 描述以下代码中 this 的指向
+
+```javascript
+const zhangsan = {
+  name: "zhangsan",
+  sayHi() {
+    console.log(this);
+  },
+  wait() {
+    setTimeout(function () {
+      console.log(this);
+    }, 1000);
+  },
+  todo() {
+    setTimeout(() => {
+      console.log(this);
+    }, 1000);
+  },
+};
+zhangsan.sayHi();
+zhangsan.wait();
+zhangsan.todo();
+```
+
+%
+
+🔍 所考察的知识点：this 指向
+
+📢 参考答案：
+
+打印结果：zhangsan 对象、Window 对象、zhangsan 对象
+
+分析：
+
+- 第一个 this 所在的函数 sayHi 作为对象的方法被调用，所以指向调用该方法的对象，即 zhangsan 对象；
+  第二个 this 所在的函数`function () {}`作为普通函数被调用，且在非严格模式下，所以指向全局对象 Window；
+  第三个 this 所在的函数`() => {}`为箭头函数，它的 this 继承其上级作用域的 this，即 todo 方法内的 this，而 todo 方法是对象的方法，所以它指向调用的对象 zhangsan，所以第三个 this 也指向 zhangsan 对象；
+
+## 介绍一下 call、apply、bind 之间的区别？
+
+<!-- notecardId: 1702742355757 -->
+
+🔍 所考察的知识点：call、apply、bind 的应用
+
+📢 参考答案：
+
+1. 语法
+
+   - call 方法：`function.call(this 的指向对象, [arg1, arg2, ...])`
+   - apply 方法：`function.apply(this 的指向对象, [[argsArray]])`
+   - bind 方法：`function.bind(this 的指向对象, [arg1, arg2, ...])`
+     > 注：包裹参数的中括号 [] 表示**可选参数**
+
+2. 作用
+
+   - call 方法和 apply 方法**既可以立即调用函数，又可以修改 this 指向**，而 bind 方法**只修改 this 指向，不立即调用函数**，要调用得在其后面再加上小括号；
+
+3. 返回值
+
+   - call 方法和 apply 方法返回的是**调用函数的返回值**，而 bind 方法返回的是一个修改 this 指向和初始化参数后的**新函数**；
+
+4. 可选参数
+
+   - call 方法和 bind 方法的可选参数是使用**参数列表，一个个传递**，而 apply 方法是使用**参数数组/伪数组来传递**；
+
+## 实际开发中闭包的应用场景，举例说明
+
+<!-- notecardId: 1702742355760 -->
+
+🔍 所考察的知识点：闭包的应用
+
+📢 参考答案：
+
+1. **封装私有变量**
+
+   - 闭包所创建的**私有变量只能通过函数内部进行访问，外部是无法直接访问的**，从而提高数据的安全性和隐藏实现细节。
+     示例代码：
+
+     ```javascript
+     function counter() {
+       let count = 0;
+
+       return {
+         increment: function () {
+           count++;
+         },
+         decrement: function () {
+           count--;
+         },
+         getCount: function () {
+           return count;
+         },
+       };
+     }
+
+     const myCounter = counter();
+     myCounter.increment();
+     myCounter.increment();
+     console.log(myCounter.getCount()); // 输出：2
+     ```
+
+     > 注：上述示例代码中的 count 变量为私有变量，外部无法直接访问，只能调用函数内部所提供的 API 进行获取和修改
+
+2. **缓存数据**
+
+   - 使用闭包在函数内部存储数据，一方面，**隐藏数据，不被外界直接访问**，提高数据安全性；另一方面，**实现数据缓存，以避免重复计算或请求相同的数据**，从而提高性能和减少不必要的网络请求。
+     示例代码：
+
+     ```javascript
+     function createCache() {
+       const data = {};
+       return {
+         set: function (key, val) {
+           data[key] = val;
+         },
+         get: function (key) {
+           return data[key];
+         },
+       };
+     }
+
+     const c = createCache();
+     c.set("a", 100);
+     console.log(c.get("a"));
+     ```
+
+     > 注：上述示例代码中的 data 内存储的数据，外部无法直接访问，只能调用函数内部所提供的 API 进行获取和修改
+
+## 请描述以下代码的执行结果，并给出改正方法
+
+```javascript
+let i, a;
+for (i = 0; i < 10; i++) {
+  a = document.createElement("a");
+  a.innerHTML = i + "<br>";
+  a.addEventListener("click", function (e) {
+    e.preventDefault();
+    alert(i);
+  });
+  document.body.appendChild(a);
+}
+```
+
+%
+
+🔍 所考察的知识点：作用域和闭包
+
+📢 参考答案：
+
+结果：
+
+- 点击任意 a 标签，**都会弹出 10**
+
+分析：
+
+- 当**执行完 for 语句**，为每个 a 标签绑定点击事件处理函数后，**全局变量 i 从 0 变为了 10**，当发生点击事件时，事件处理函数内的**自用变量 i 会沿着作用域往上查找，找到了离它最近的全局变量 i**，因此，弹出了 10。
+
+改正方法：
+
+1. 使用立即调用函数表达式
+
+   - 使用立即调用函数表达式来为点击事件**创建一个独立作用域**，**将每次循环中的 i 通过立即调用函数的形参传递到其内的事件处理程序**，这样 i 就不是自由变量，而是形参
+     示例代码：
+
+     ```javascript
+     let i, a;
+     for (i = 0; i < 10; i++) {
+       a = document.createElement("a");
+       a.innerHTML = i + "<br>";
+       // 立即调用函数
+       (function (i) {
+         a.addEventListener("click", function (e) {
+           e.preventDefault();
+           alert(i);
+         });
+       })(i);
+       document.body.appendChild(a);
+     }
+     ```
+
+2. 修改变量 i 的作用域
+
+   - 将变量 i 的作用域**修改为块级作用域**
+     示例代码：
+
+     ```javascript
+     let a;
+     // 在 for 语句中，使用 let 来将 i 修改为块级作用域
+     for (let i = 0; i < 10; i++) {
+       a = document.createElement("a");
+       a.innerHTML = i + "<br>";
+       a.addEventListener("click", function (e) {
+         e.preventDefault();
+         alert(i);
+       });
+       document.body.appendChild(a);
+     }
+     ```
