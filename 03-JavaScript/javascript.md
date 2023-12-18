@@ -308,7 +308,7 @@ instanceof 运算符作用：
 
 #### 对象查找机制
 
-- 实例化对象在调用属性/方法时，会**先从自身内查找**，**若没有**，通过 **`__proto__`** 属性**逐级向上查找**，直到找到该属性或者到达原型链的顶端（Object.prototype）为止
+- 实例化对象在调用属性/方法时，会**先从自身内查找**，**若没有**，通过 **`__proto__`** 属性**逐级向上查找**，直到找到该属性/方法或者到达原型链的顶端（Object.prototype）为止
 
 ## 手写一个简易的 jQuery，考虑扩展性
 
@@ -570,9 +570,9 @@ instanceof 运算符作用：
 
 ### this 在不同场景下的指向
 
-1. **全局上下文中的`this`**
+1. **全局作用域中的`this`**
 
-   - 在全局上下文（非函数内部）中，`this`指向浏览器全局对象`window`。
+   - 在全局作用域（非函数内部）中，**不管你是否开启严格模式**，`this`都指向浏览器全局对象`window`。
 
      ```javascript
      console.log(this); // window 对象
@@ -580,7 +580,7 @@ instanceof 运算符作用：
 
 2. **普通函数调用中的`this`**
 
-   - 若一个普通函数被直接调用，而不是作为对象的方法或构造函数，则`this`在非严格模式下指向全局对象`window`，而在严格模式下，指向`undefined`。
+   - 若一个普通函数被直接调用，而不是作为对象的方法或构造函数，则`this`在**非严格模式**下指向全局对象`window`，而在**严格模式**下，指向`undefined`。
 
      ```javascript
      // 非严格模式下
@@ -601,7 +601,7 @@ instanceof 运算符作用：
 
 3. **方法调用中的`this`**
 
-   - 若一个函数作为对象的方法被调用时，则`this`指向调用该方法的对象。
+   - 若一个函数作为对象的方法被调用时，则`this`**指向调用该方法的对象**。
 
      ```javascript
      const zhangsan = {
@@ -615,7 +615,7 @@ instanceof 运算符作用：
 
 4. **构造函数中的`this`**
 
-   - 若一个函数被作为构造函数使用（使用`new`关键字）时，则`this`指向所创建的实例对象。
+   - 若一个函数被作为构造函数使用（使用`new`关键字）时，则`this`**指向所创建的实例对象**。
 
      ```javascript
      function Student(name) {
@@ -627,7 +627,7 @@ instanceof 运算符作用：
 
 5. **事件处理函数中的`this`**
 
-   - 若一个函数被作为事件处理函数使用，则`this`指向事件源，即触发事件的元素。
+   - 若一个函数被作为事件处理函数使用，则`this`**指向事件源**，即触发事件的元素。
 
      ```javascript
      button.addEventListener("click", function () {
@@ -637,7 +637,7 @@ instanceof 运算符作用：
 
 6. **箭头函数中的`this`**
 
-   - 箭头函数不绑定`this`，它的`this`值继承自箭头函数所在作用域的上一级作用域中的`this`。
+   - 箭头函数不绑定`this`，它的`this`值**继承自箭头函数所在作用域的上一级作用域中的 this**。
 
      ```javascript
      const obj = {
@@ -655,7 +655,9 @@ instanceof 运算符作用：
 
 7. **`call`、`apply`、`bind`调用中的`this`**
 
-   - 使用`call`、`apply`或`bind`方法可以显式地设置函数调用中的`this`值。
+   - 若一个函数（**非箭头函数**）使用`call`、`apply`或`bind`方法来调用，则该函数内的`this`**指向所给定的对象**。
+
+     > 注：箭头函数**无法使用** call、apply、bind 来改变 this 指向
 
      ```javascript
      function fn() {
@@ -690,6 +692,8 @@ zhangsan.todo();
 
 %
 
+<!-- notecardId: 1702742355752 -->
+
 🔍 所考察的知识点：this 指向
 
 📢 参考答案：
@@ -698,9 +702,9 @@ zhangsan.todo();
 
 分析：
 
-- 第一个 this 所在的函数 sayHi 作为对象的方法被调用，所以指向调用该方法的对象，即 zhangsan 对象；
-  第二个 this 所在的函数`function () {}`作为普通函数被调用，且在非严格模式下，所以指向全局对象 Window；
-  第三个 this 所在的函数`() => {}`为箭头函数，它的 this 继承其上级作用域的 this，即 todo 方法内的 this，而 todo 方法是对象的方法，所以它指向调用的对象 zhangsan，所以第三个 this 也指向 zhangsan 对象；
+- 第一个 this 所在的函数 sayHi **作为对象的方法被调用**，所以**指向调用该方法的对象**，即 zhangsan 对象；
+- 第二个 this 所在的函数`function () {}`**作为普通函数被调用**，且**在非严格模式下**，所以**指向全局对象 Window**；
+- 第三个 this 所在的函数`() => {}`为**箭头函数**，它的 this **继承其上级作用域的 this**，即 todo 方法内的 this，而 todo 方法是对象的方法，它指向调用的对象 zhangsan，所以第三个 this 也指向 zhangsan 对象；
 
 ## 介绍一下 call、apply、bind 之间的区别？
 
@@ -809,6 +813,8 @@ for (i = 0; i < 10; i++) {
 
 %
 
+<!-- notecardId: 1702742355764 -->
+
 🔍 所考察的知识点：作用域和闭包
 
 📢 参考答案：
@@ -819,7 +825,7 @@ for (i = 0; i < 10; i++) {
 
 分析：
 
-- 当**执行完 for 语句**，为每个 a 标签绑定点击事件处理函数后，**全局变量 i 从 0 变为了 10**，当发生点击事件时，事件处理函数内的**自用变量 i 会沿着作用域往上查找，找到了离它最近的全局变量 i**，因此，弹出了 10。
+- 当**执行完 for 语句**，为每个 a 标签绑定点击事件处理函数后，**全局变量 i 从 0 变为了 10**，当发生点击事件时，事件处理函数内的**自由变量 i 会沿着作用域往上查找，找到了离它最近的全局变量 i**，因此，弹出了 10。
 
 改正方法：
 
@@ -862,3 +868,291 @@ for (i = 0; i < 10; i++) {
        document.body.appendChild(a);
      }
      ```
+
+## 单线程是什么，为什么 JavaScript 是单线程语言？
+
+<!-- notecardId: 1702829193833 -->
+
+🔍 所考察的知识点：单线程
+
+📢 参考答案：
+
+### 单线程的定义
+
+- 单线程指的是**一次只能执行一个任务**，无法同时执行多个任务
+
+### JavaScript 是单线程语言的理由
+
+- 因为 JavaScript 是为了处理页面中用户交互以及操作 DOM 而设计的，**若 JS 是多线程，那么当两个线程操作同一个 DOM 元素时，一个线程在 DOM 节点上添加内容，另一个线程删除了这个节点，这时就会出现浏览器不知道以哪个线程为准的问题**，所以 JavaScript 就被设计成单线程，这样所有的 DOM 操作都是按照顺序执行的，确保了操作的一致性和可预测性
+
+## 请介绍一下同步和异步，以及它们之间的区别？
+
+<!-- notecardId: 1702829193839 -->
+
+🔍 所考察的知识点：同步和异步
+
+📢 参考答案：
+
+在 JavaScript 中，**同步和异步是两种不同的代码执行方式**，它们处理任务的时间机制不同。
+
+### 同步
+
+- 定义：
+  - 同步是指代码**按顺序一步一步执行**，**每一步都必须等待前一步完成**后才能开始执行下一步。
+- 缺点：
+  - 当上一个任务需要执行的时间较长，则下一个任务就会一直等待，那么就会**导致页面加载阻塞、渲染不连贯的问题**。
+- 示例代码：
+
+  ```javascript
+  console.log("开始");
+
+  function doSomething() {
+    console.log("同步操作");
+  }
+
+  doSomething();
+
+  console.log("结束");
+  // 依次输出：开始 同步操作 结束
+  ```
+
+### 异步
+
+- 定义：
+  - 异步指的是**在等待异步操作**（比如：定时器任务、网络请求等）**完成的同时，可以继续执行其他代码**。
+    > 注：异步操作完成指的是**定时器到时间了**、**网络请求返回响应数据了**、**用户触发事件了**等等这些情况
+- 为什么需要异步：
+  - 之所以需要异步，是为了**避免在执行定时器任务、网络请求等需要等待的任务时，出现一直等待任务完成，造成页面加载阻塞、渲染不连贯的情况**。
+- 异步的实现方式：
+  - 异步通常通过**回调函数、Promises 或 async/await** 来实现。
+- 示例代码：
+
+  ```javascript
+  console.log("开始");
+
+  function doSomethingAsync(callback) {
+    //使用 setTimeout 模拟异步操作
+    setTimeout(() => {
+      console.log("异步操作");
+      callback();
+    }, 1000);
+  }
+
+  doSomethingAsync(() => {
+    console.log("回调执行");
+  });
+
+  console.log("结束");
+  // 依次输出：开始 结束 异步操作 回调执行
+  ```
+
+### 同步与异步的区别
+
+- 同步操作**会阻塞**代码的继续执行，异步操作**不会阻塞**代码的继续执行
+
+## 异步的应用场景有哪些？
+
+<!-- notecardId: 1702829193844 -->
+
+🔍 所考察的知识点：异步应用场景
+
+📢 参考答案：
+
+异步主要用于处理那些**耗时**的操作，以及**需要等待外部资源或事件完成后再执行**的情况。以下是一些常见的异步应用场景：
+
+1. **网络请求**：例如 AJAX 请求、图片加载
+
+2. **定时器操作**：例如使用 setTimeout 或 setInterval 执行动画效果
+
+3. **事件处理**：例如用户点击按钮触发事件，调用事件处理函数来处理。
+
+## 什么是回调地狱（Callback Hell），以及如何解决？
+
+<!-- notecardId: 1702829193848 -->
+
+📢 参考答案：
+
+### 回调地狱
+
+- **在 ES6 之前**，JavaScript 是通过 **Callback（回调函数）的方式**来实现异步操作的，**当回调嵌套很多时，代码就会不断地缩进**，使得代码看起来非常繁琐，导致难以维护，这就是回调地狱的现象，如下图所示：
+  ![](../Media/%E5%9B%9E%E8%B0%83%E5%9C%B0%E7%8B%B1.png)
+
+### 解决措施
+
+- ES6 推出了 **Promise** 来解决异步编程中回调地狱的问题。
+
+## 请描述 event loop（事件循环/事件轮询）的执行机制？
+
+<!-- notecardId: 1702915016925 -->
+
+🔍 所考察的知识点：event loop
+
+📢 参考答案：
+
+event loop 执行过程如下：
+
+![](../Media/event%20loop%20%E7%A4%BA%E6%84%8F%E5%9B%BE.png)
+
+1. 遇到同步任务，将其一行一行地放入调用栈（Call Stack）中执行，执行完毕后，清出调用栈
+2. 遇到异步任务，将其交给浏览器或者 Node.js 的 APIs 处理（Web APIs），一旦异步任务完成，就将其对应的回调函数放入任务队列（Callback Queue）中，等待执行
+3. 一旦调用栈为空，即同步任务执行完毕，就会开启事件循环（event loop）
+4. 循环不断地去任务队列中读取异步任务，一有异步任务，就放入调用栈中立即执行，执行完毕后，再去任务队列中读取异步任务，不断重复该过程
+
+> 注：
+>
+> 1. 异步任务完成，比如：
+>    - 网络请求返回响应数据了，就将网络请求中的回调函数放入任务队列中，等待调用栈的执行；
+>    - 定时时间到了，就将定时函数中的回调函数放入任务队列中，等待调用栈读取；
+>    - DOM 事件发生后，就将事件处理函数放入任务队列中， 等待调用栈读取；
+>    - Promise 对象的链式调用中，当 Promise 对象有结果（成功/失败），才会将下一个 then 或者 catch 对应的异步任务推入微任务中；
+> 2. 在每次读取异步任务的过程中，若同时存在宏任务和微任务，即使微任务推入任务队列的时间在宏任务之后，也会先读取微任务，直到无任何等待的微任务后，才读取宏任务
+
+## 请介绍一下 Promise 对象
+
+从定义、为何存在、语法格式、状态值、实例方法（then、catch）方面介绍
+%
+
+🔍 所考察的知识点：Promise 对象
+
+📢 参考答案：
+
+### Promise 对象的定义
+
+- 指的是 JavaScript 的内置对象，通过构造函数 Promise 实例化获得
+
+### Promise 对象为何存在
+
+- Promise 对象的诞生就是为了解决异步编程中回调地狱的问题
+
+### Promise 对象的语法格式
+
+- `声明变量关键字 变量名 = new Promise(函数)`
+  > 注：
+  >
+  > 1. 构造函数 Promise 的形参是一个函数，该函数有两个形参，分别是 resolve 与 reject，前者表示异步操作成功后的回调函数，后者表示异步操作失败后的回调函数；
+  > 2. resolve 回调函数用于将 Promise 对象的初始状态值由 pending 修改为 fulfilled，而 reject 回调函数用于将 Promise 对象的初始状态值由 pending 修改为 rejected；
+
+### Promise 对象的状态值
+
+- pending、fulfilled、rejected
+  > 注：
+  >
+  > 1. pending 是**待定状态**，fulfilled 是**操作成功状态**，rejected 是**操作失败状态**；
+  > 2. Promise 对象必然处于上述三个状态中的一种；
+  > 3. 状态变化具有**不可逆性**，只能是 pending→fulfilled 或者 pending→rejected，不可能是 fulfilled→rejected 或者 rejected→fulfilled；
+  > 4. 状态值为 **fulfilled** 的 Promise 对象会**调用 then 方法内的成功回调函数**，而状态值为 **rejected** 的 Promise 对象会**调用 catch 方法**内的回调函数**或者 then 方法内的失败回调函数**；
+
+### then 方法
+
+- 语法格式
+  - `Promise 对象.then(成功时的回调函数, [失败时的回调函数])`
+- 回调函数中参数的传递
+  - 成功回调函数内的形参，其取值为**调用 then 方法且状态值为 fulfilled 的 Promise 对象内的结果值**
+    ![](../Media/then%20%E6%96%B9%E6%B3%95%E5%86%85%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92.png)
+  - 失败回调函数内的形参，其取值为**调用 then 方法且状态值为 rejected 的 Promise 对象内的结果值**
+    ![](../Media/then%20%E6%96%B9%E6%B3%95%E5%86%85%E5%A4%B1%E8%B4%A5%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92.png)
+- 返回值
+  - then 方法会**返回一个新 Promise 对象**，其状态值（PromiseState）和结果值（PromiseResult）取决于成功/失败回调函数内 return 的值，具体规则如下：
+    - 若成功/失败回调函数内**没有 return 任何值**，则新 Promise 对象的状态值为 fulfilled，结果值为 undefined
+    - 若成功/失败回调函数内 **return 一个非 Promise 对象**，则新 Promise 对象的状态值为 fulfilled，结果值为这个非 Promise 对象
+    - 若成功/失败回调函数内 **return 一个 Promise 对象**，则新 Promise 对象的状态值与该 Promise 对象的状态值一致（可能是 pending 或 fulfilled 或 rejected），结果值与该 Promise 对象的结果值一致（可能是任何值或错误对象）
+    - 若成功/失败回调函数内**抛出一个错误**，则新 Promise 对象的状态值为 rejected，结果值为 throw new Error() 小括号内的错误值
+
+### catch 方法
+
+- 语法格式
+  - `Promise对象.catch(失败时的回调函数)`
+- 回调函数中参数的传递
+  - 失败回调函数内的形参，其取值为**链式调用中，状态值为 rejected 的 Promise 对象内的结果值**
+    ![](../Media/catch%20%E6%96%B9%E6%B3%95%E5%86%85%E5%A4%B1%E8%B4%A5%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92.png)
+- 返回值
+  - catch 方法会**返回一个新 Promise 对象**，其状态值（PromiseState）和结果值（PromiseResult）取决于失败回调函数内 return 的值，具体规则与 then 方法相同
+
+## 请描述以下代码的执行结果（1）
+
+```javascript
+Promise.resolve()
+  .then(() => {
+    console.log(1);
+  })
+  .catch(() => {
+    console.log(2);
+  })
+  .then(() => {
+    console.log(3);
+  });
+```
+
+%
+
+🔍 所考察的知识点：Promise
+
+📢 参考答案：
+
+结果：
+
+- 1 3
+
+分析：
+
+- `Promise.resolve()`会返回一个 fulfilled 状态的 Promise 对象，它会调用紧跟的 then 方法内的成功回调函数，由于成功回调函数没有任何返回值，所以 then 方法返回一个状态值为 fulfilled 的 Promise 对象，因此，不会调用 catch 方法，而是调用其后的 then 方法
+
+## 请描述以下代码的执行结果（2）
+
+```javascript
+Promise.resolve()
+  .then(() => {
+    console.log(1);
+    throw new Error("erro1");
+  })
+  .catch(() => {
+    console.log(2);
+  })
+  .then(() => {
+    console.log(3);
+  });
+```
+
+%
+
+🔍 所考察的知识点：Promise
+
+📢 参考答案：
+
+结果：
+
+- 1 2 3
+
+分析：
+
+- `Promise.resolve()`会返回一个 fulfilled 状态的 Promise 对象，它会调用紧跟的 then 方法内的成功回调函数，由于成功回调函数抛出了错误，所以 then 方法返回一个状态值为 rejected 的 Promise 对象，因此，会调用 catch 方法，由于 catch 方法内的回调函数没有返回任何值，所以 catch 方法会返回一个状态值为 fulfilled 的 Promies 对象，因而，会继续调用其后的 then 方法
+
+## 请描述以下代码的执行结果（3）
+
+```javascript
+Promise.resolve()
+  .then(() => {
+    console.log(1);
+    throw new Error("erro1");
+  })
+  .catch(() => {
+    console.log(2);
+  })
+  .catch(() => {
+    console.log(3);
+  });
+```
+
+%
+
+🔍 所考察的知识点：Promise
+
+📢 参考答案：
+
+结果：
+
+- 1 2
+
+分析：
+
+- `Promise.resolve()`会返回一个 fulfilled 状态的 Promise 对象，它会调用紧跟的 then 方法内的成功回调函数，由于成功回调函数抛出了错误，所以 then 方法返回一个状态值为 rejected 的 Promise 对象，因此，会调用 catch 方法，由于 catch 方法内的回调函数没有返回任何值，所以 catch 方法会返回一个状态值为 fulfilled 的 Promies 对象，因而，不会继续调用其后的 catch 方法

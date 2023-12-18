@@ -10,33 +10,75 @@
 
 <body>
   <script>
-    Function.prototype.myCall = function (context) {
-      context = context || window;
 
-      context.fn = this;
+    const p = new Promise((resolve, reject) => {
+      reject('失败')
+    })
 
-      const args = [...arguments].slice(1);
+    p.then((value) => {
+      console.log(value)
+      return value
+    }).catch((err) => {
+      console.log(err)  // 失败
+      return Promise.reject(200)
+    }).then((value) => {
+      console.log(value)
+    })
 
-      const result = context.fn(...args);
+    // const p1 = new Promise((resolve, reject) => {
+    //   resolve(100)
+    // })
 
-      delete context.fn;
+    // p1.then((value) => {
+    //   console.log(value)  // 100
+    // })
 
-      return result;
-    };
+    // console.log(p1)
+    // const p2 = new Promise((resolve, reject) => {
+    //   resolve(100)
+    // })
 
-    function greet(number) {
-      console.log(`Hello, ${this.name}!, 学号 ${number}`);
-    }
+    // console.log(p2)
 
-    const person = {
-      name: 'John'
-    };
+    // const p2 = new Promise((resolve, reject) => {
+    //   reject('错误')
+    // })
+    // p2.then((value) => {
+    //   console.log(value)
+    // }, (err) => {
+    //   console.log(err)  // 错误
+    // })
+
+    // console.log(p2)
+    // 'use strict'
+    // console.log(this)
+    // Function.prototype.myCall = function (context) {
+    //   context = context || window;
+
+    //   context.fn = this;
+
+    //   const args = [...arguments].slice(1);
+
+    //   const result = context.fn(...args);
+
+    //   delete context.fn;
+
+    //   return result;
+    // };
+
+    // function greet(number) {
+    //   console.log(`Hello, ${this.name}!, 学号 ${number}`);
+    // }
+
+    // const person = {
+    //   name: 'John'
+    // };
 
     // greet.myCall(person, 123); // 输出：Hello, John!
     // greet.call(person, 123)
 
-    greet.myCall(); // 输出：Hello, John!
-    greet.call()
+    // greet.myCall(); // 输出：Hello, John!
+    // greet.call()
 
     // function Student(name) {
     //   this.name = name;

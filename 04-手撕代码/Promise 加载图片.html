@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    /**
+     思路：
+     1. 定义一个接受 url 参数的 loadImage 函数，并返回一个新的 Promise
+     2. 在返回的 Promise 中，创建了一个 img 元素
+     3. 为 img 元素绑定 onload 事件，当图片加载成功时，调用 resolve 函数并传入 img 元素
+     4. 为 img 元素绑定 onerror 事件，当图片加载失败时，调用 reject 函数并传入一个包含错误提示的 Error 对象
+     5. 将传入的 url 赋值给 img 元素 src 属性
+     6. 调用 loadImage 函数并传入图片的 url 返回 Promise 对象，然后调用该对象的 then 方法来处理成功的情况，catch方法来处理错误的情况
+    */
+
+    function loadImage(url) {
+      return new Promise((resolve, reject) => {
+        const img = document.createElement('img')
+        img.onload = function () {
+          resolve(img)
+        }
+        img.onerror = function () {
+          reject(new Error(`图片加载失败 ${url}`))
+        }
+        img.src = url
+      })
+    }
+
+    const url = 'https://foruda.gitee.com/avatar/1677103757503685327/7933519_colbyzn_1597326220.png!avatar200'
+    loadImage(url).then(img => {
+      document.body.appendChild(img)
+    }).catch(error => {
+      alert(error)
+    })
+  </script>
+</body>
+
+</html>
