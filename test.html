@@ -10,20 +10,90 @@
 
 <body>
   <script>
+    async function async1() {
+      console.log("async1 start");
+      await async2();
+      console.log("async1 end");
+    }
 
-    const p = new Promise((resolve, reject) => {
-      reject('失败')
-    })
+    async function async2() {
+      console.log("async2");
+    }
 
-    p.then((value) => {
-      console.log(value)
-      return value
-    }).catch((err) => {
-      console.log(err)  // 失败
-      return Promise.reject(200)
-    }).then((value) => {
-      console.log(value)
-    })
+    console.log("script start");
+
+    setTimeout(function () {
+      console.log("setTimeout");
+    }, 0);
+
+    async1();
+
+    new Promise(function (resolve) {
+      console.log("promise1");
+      resolve();
+    }).then(function () {
+      console.log("promise2");
+    });
+    console.log("script end");
+    // (async function () {
+    //   console.log("start");
+    //   const a = await 100;
+    //   console.log("a", a);
+    //   const b = await Promise.resolve(200);
+    //   console.log("b", b);
+    //   const c = await Promise.reject(300);
+    //   console.log("c", c);
+    //   console.log("end");
+    // })();
+    // async function fn() {
+    //   return 100;
+    // }
+
+    // (async function () {
+    //   const a = fn();
+    //   console.log(a);
+    //   const b = await fn();
+    //   console.log(b);
+    // })();
+    // async function async1() {
+    //   console.log("async1 start");
+    //   await async2();
+    //   console.log("async1 end");
+    // }
+
+    // async function async2() {
+    //   console.log("async2");
+    // }
+
+    // console.log("script start");
+    // async1();
+    // console.log("script end");
+    // async function foo() {
+    //   // const result = await 2
+    //   // console.log(result)
+    //   // return 1;
+    //   throw new Error('err')
+    // }
+    // console.log(foo())
+    // foo()
+    // console.log('start')
+    // setTimeout(() => {
+    //   console.log(res)
+    // }, 1000);
+
+    // const p = new Promise((resolve, reject) => {
+    //   reject('失败')
+    // })
+
+    // p.then((value) => {
+    //   console.log(value)
+    //   return value
+    // }).catch((err) => {
+    //   console.log(err)  // 失败
+    //   return Promise.reject(200)
+    // }).then((value) => {
+    //   console.log(value)
+    // })
 
     // const p1 = new Promise((resolve, reject) => {
     //   resolve(100)
