@@ -2,227 +2,399 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
 </head>
 
 <body>
+  <div class="container">
+    <p>一段文字1</p>
+    <p>一段文字2</p>
+    <p>一段文字3</p>
+  </div>
   <script>
-    async function async1() {
-      console.log("async1 start");
-      await async2();
-      console.log("async1 end");
-    }
+    const pList = document.getElementsByClassName('container')[0].childNodes
+    // const pList = document.getElementsByClassName('container')[0].children
+    console.log(pList)
+    console.log([...pList])
+      //    Promise.MyAll = (arr) => {
+      //   return new Promise((resolve, reject) => {
+      //     if (!(arr instanceof Array)) {
+      //       return reject(new TypeError('argument must be Array'))
+      //     }
 
-    async function async2() {
-      console.log("async2");
-    }
+      //     let resolvedCounter = 0
+      //     const result = []
+      //     const length = arr.length
 
-    console.log("script start");
+      //     arr.forEach(value => {
+      //       // value.then((data) => {
+      //       Promise.resolve(value).then((data) => {
+      //           result.push(data)
+      //           resolvedCounter++
 
-    setTimeout(function () {
-      console.log("setTimeout");
-    }, 0);
+      //           if (resolvedCounter === length) {
+      //             resolve(result)
+      //           }
+      //         }).catch((error) => {
+      //           reject(error)
+      //         })
+      //     });
 
-    async1();
+      //   })
+      // }
 
-    new Promise(function (resolve) {
-      console.log("promise1");
-      resolve();
-    }).then(function () {
-      console.log("promise2");
-    });
-    console.log("script end");
-    // (async function () {
-    //   console.log("start");
-    //   const a = await 100;
-    //   console.log("a", a);
-    //   const b = await Promise.resolve(200);
-    //   console.log("b", b);
-    //   const c = await Promise.reject(300);
-    //   console.log("c", c);
-    //   console.log("end");
-    // })();
-    // async function fn() {
-    //   return 100;
-    // }
+      // /* 测试用例 */
 
-    // (async function () {
-    //   const a = fn();
-    //   console.log(a);
-    //   const b = await fn();
-    //   console.log(b);
-    // })();
-    // async function async1() {
-    //   console.log("async1 start");
-    //   await async2();
-    //   console.log("async1 end");
-    // }
+      // // 传入一个非数组参数
+      // Promise.MyAll(5)  //  TypeError: argument must be Array
 
-    // async function async2() {
-    //   console.log("async2");
-    // }
+      // 传入只包含成功状态的 Promise 对象
+      // const p1 = Promise.resolve(100)
+      // const p2 = Promise.resolve(200)
+      // const p = Promise.MyAll([p1, p2])
+      // console.log(p)
+      // const p3 = Promise.reject('失败')
 
-    // console.log("script start");
-    // async1();
-    // console.log("script end");
-    // async function foo() {
-    //   // const result = await 2
-    //   // console.log(result)
-    //   // return 1;
-    //   throw new Error('err')
-    // }
-    // console.log(foo())
-    // foo()
-    // console.log('start')
-    // setTimeout(() => {
-    //   console.log(res)
-    // }, 1000);
+      // class MyPromise {
+      //   // 公有属性
+      //   state = 'pending'
+      //   value = undefined
+      //   reason = undefined
+      //   onResolveCallback = []
+      //   onRejectCallback = []
+      //   // 构造函数
+      //   constructor(fn) {
+      //     const resolve = (value) => {
+      //       if (this.state === 'pending') {
+      //         this.state = 'fulfilled'
+      //         this.value = value
+      //         this.onResolveCallback.forEach(fn => fn())
+      //       }
+      //     }
 
-    // const p = new Promise((resolve, reject) => {
-    //   reject('失败')
-    // })
+      //     const reject = (reason) => {
+      //       if (this.state === 'pending') {
+      //         this.state = 'rejected'
+      //         this.reason = reason
+      //         this.onRejectCallback.forEach(fn => fn())
+      //       }
+      //     }
 
-    // p.then((value) => {
-    //   console.log(value)
-    //   return value
-    // }).catch((err) => {
-    //   console.log(err)  // 失败
-    //   return Promise.reject(200)
-    // }).then((value) => {
-    //   console.log(value)
-    // })
+      //     try {
+      //       fn(resolve, reject)
+      //     } catch (error) {
+      //       reject(error)
+      //     }
+      //   }
+      //   // then 方法
+      //   then(onFulfilled, onRejected) {
+      //     onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : value => value
+      //     onRejected = typeof onRejected === 'function' ? onRejected : reason => reason
 
-    // const p1 = new Promise((resolve, reject) => {
-    //   resolve(100)
-    // })
+      //     return new MyPromise((resolve, reject) => {
+      //       if (this.state === 'pending') {
+      //         this.onResolveCallback.push(() => {
+      //           try {
+      //             const newValue = onFulfilled(this.value)
+      //             resolve(newValue)
+      //           } catch (error) {
+      //             reject(error)
+      //           }
+      //         })
+      //         this.onRejectCallback.push(() => {
+      //           try {
+      //             const newReason = onRejected(this.reason)
+      //             resolve(newReason)
+      //           } catch (error) {
+      //             reject(error)
+      //           }
+      //         })
+      //       }
+      //       if (this.state === 'fulfilled') {
+      //         try {
+      //           const newValue = onFulfilled(this.value)
+      //           resolve(newValue)
+      //         } catch (error) {
+      //           reject(error)
+      //         }
+      //       }
+      //       if (this.state === 'rejected') {
+      //         try {
+      //           const newReason = onRejected(this.reason)
+      //           reject(newReason)
+      //         } catch (error) {
+      //           reject(error)
+      //         }
+      //       }
+      //     })
+      //   }
+      //   // catch 方法
+      //   catch(onRejected) {
+      //     return this.then(null, onRejected)
+      //   }
+      // }
 
-    // p1.then((value) => {
-    //   console.log(value)  // 100
-    // })
+      // /* 测试用例 */
 
-    // console.log(p1)
-    // const p2 = new Promise((resolve, reject) => {
-    //   resolve(100)
-    // })
+      // const p1 = new MyPromise((resolve, reject) => {
+      //   resolve(100)
+      // })
+      // console.log(p1)
 
-    // console.log(p2)
+      // const p2 = new MyPromise((resolve, reject) => {
+      //   reject(p1)
+      // })
+      // console.log(p2)
 
-    // const p2 = new Promise((resolve, reject) => {
-    //   reject('错误')
-    // })
-    // p2.then((value) => {
-    //   console.log(value)
-    // }, (err) => {
-    //   console.log(err)  // 错误
-    // })
+      // const p13 = new Promise((resolve, reject) => {
+      //   reject(p1)
+      // })
+      // console.log(p13)
+      // class Student {
+      //   // 将 state 属性定义在构造函数之外
+      //   state = "pending";
 
-    // console.log(p2)
-    // 'use strict'
-    // console.log(this)
-    // Function.prototype.myCall = function (context) {
-    //   context = context || window;
+      //   constructor(name, number) {
+      //     console.log(this.state);  // pending
+      //     this.name = name;
+      //     this.number = number;
+      //   }
 
-    //   context.fn = this;
+      //   sayHi() {
+      //     console.log(this.state);  // pending
+      //   }
+      // }
 
-    //   const args = [...arguments].slice(1);
+      // // new Student('夏洛', 100).sayHi()
+      // console.log(new Student('夏洛', 100).state)
 
-    //   const result = context.fn(...args);
+      // async function fn() {
+      //   console.log(1)
+      //   const p = Promise.resolve(4)
+      //   console.log(2)
+      //   const res = await p
+      //   console.log(res)
+      //   console.log('是否最后打印')
+      // }
+      // fn()
+      // console.log(3)
 
-    //   delete context.fn;
+      // async function async1() {
+      //   console.log("async1 start");
+      //   await async2();
+      //   console.log("async1 end");
+      // }
 
-    //   return result;
-    // };
+      // async function async2() {
+      //   console.log("async2");
+      // }
 
-    // function greet(number) {
-    //   console.log(`Hello, ${this.name}!, 学号 ${number}`);
-    // }
+      // console.log("script start");
 
-    // const person = {
-    //   name: 'John'
-    // };
+      // setTimeout(function () {
+      //   console.log("setTimeout");
+      // }, 0);
 
-    // greet.myCall(person, 123); // 输出：Hello, John!
-    // greet.call(person, 123)
+      // async1();
 
-    // greet.myCall(); // 输出：Hello, John!
-    // greet.call()
+      // new Promise(function (resolve) {
+      //   console.log("promise1");
+      //   resolve();
+      // }).then(function () {
+      //   console.log("promise2");
+      // });
+      // console.log("script end");
+      // (async function () {
+      //   console.log("start");
+      //   const a = await 100;
+      //   console.log("a", a);
+      //   const b = await Promise.resolve(200);
+      //   console.log("b", b);
+      //   const c = await Promise.reject(300);
+      //   console.log("c", c);
+      //   console.log("end");
+      // })();
+      // async function fn() {
+      //   return 100;
+      // }
 
-    // function Student(name) {
-    //   this.name = name;
-    //   console.log(this);  // xialuo 对象
-    // }
-    // const xialuo = new Student('夏洛');
+      // (async function () {
+      //   const a = fn();
+      //   console.log(a);
+      //   const b = await fn();
+      //   console.log(b);
+      // })();
+      // async function async1() {
+      //   console.log("async1 start");
+      //   await async2();
+      //   console.log("async1 end");
+      // }
 
-    // const zhangsan = {
-    //   name: "zhangsan",
-    //   sayHi() {
-    //     console.log(this); // zhangsan 对象
-    //   },
-    //   wait() {
-    //     setTimeout(function () {
-    //       console.log(this); // Window 对象
-    //     }, 1000);
-    //   },
-    //   todo() {
-    //     setTimeout(() => {
-    //       console.log(this); // zhangsan 对象
-    //     }, 1000);
-    //   },
-    // };
-    // zhangsan.sayHi();
-    // zhangsan.wait();
-    // zhangsan.todo();
+      // async function async2() {
+      //   console.log("async2");
+      // }
 
-    // 非严格模式下
-    // function fn() {
-    //    console.log(this); // Window 对象
-    //  }
-    //  fn();
+      // console.log("script start");
+      // async1();
+      // console.log("script end");
+      // async function foo() {
+      //   // const result = await 2
+      //   // console.log(result)
+      //   // return 1;
+      //   throw new Error('err')
+      // }
+      // console.log(foo())
+      // foo()
+      // console.log('start')
+      // setTimeout(() => {
+      //   console.log(res)
+      // }, 1000);
 
-    // 严格模式下
-    // function fn() {
-    //   "use strict"; // 开启严格模式
-    //   console.log(this); // undefined
-    // }
-    // fn();
+      // const p = new Promise((resolve, reject) => {
+      //   reject('失败')
+      // })
 
-    // function test() {
-    //   if (true) {
-    //     // 块级作用域
-    //     var x = 1
-    //     let y = 2
-    //     const z = 3
-    //   }
-    //   console.log(x)  // 1
-    //   console.log(y)  // y is not defined
-    //   console.log(z)  // z is not defined
-    // }
-    // test()
+      // p.then((value) => {
+      //   console.log(value)
+      //   return value
+      // }).catch((err) => {
+      //   console.log(err)  // 失败
+      //   return Promise.reject(200)
+      // }).then((value) => {
+      //   console.log(value)
+      // })
 
-    // var globalVar = "global";
+      // const p1 = new Promise((resolve, reject) => {
+      //   resolve(100)
+      // })
 
-    // function globalFunction() {
-    //   console.log("I am a global function")
-    // }
+      // p1.then((value) => {
+      //   console.log(value)  // 100
+      // })
 
-    // function outerFunction() {
-    //   var outerVar = "outer";
+      // console.log(p1)
+      // const p2 = new Promise((resolve, reject) => {
+      //   resolve(100)
+      // })
 
-    //   function innerFunction() {
-    //     var innerVar = "inner";
-    //     console.log(innerVar); // 在当前函数作用域中找到 innerVar
-    //     console.log(outerVar); // 在父级函数作用域中找到 outerVar
-    //     console.log(globalVar); // 在全局作用域中找到 globalVar
-    //   }
+      // console.log(p2)
 
-    //   innerFunction();
-    //   globalFunction();
-    // }
+      // const p2 = new Promise((resolve, reject) => {
+      //   reject('错误')
+      // })
+      // p2.then((value) => {
+      //   console.log(value)
+      // }, (err) => {
+      //   console.log(err)  // 错误
+      // })
 
-    // outerFunction();
+      // console.log(p2)
+      // 'use strict'
+      // console.log(this)
+      // Function.prototype.myCall = function (context) {
+      //   context = context || window;
+
+      //   context.fn = this;
+
+      //   const args = [...arguments].slice(1);
+
+      //   const result = context.fn(...args);
+
+      //   delete context.fn;
+
+      //   return result;
+      // };
+
+      // function greet(number) {
+      //   console.log(`Hello, ${this.name}!, 学号 ${number}`);
+      // }
+
+      // const person = {
+      //   name: 'John'
+      // };
+
+      // greet.myCall(person, 123); // 输出：Hello, John!
+      // greet.call(person, 123)
+
+      // greet.myCall(); // 输出：Hello, John!
+      // greet.call()
+
+      // function Student(name) {
+      //   this.name = name;
+      //   console.log(this);  // xialuo 对象
+      // }
+      // const xialuo = new Student('夏洛');
+
+      // const zhangsan = {
+      //   name: "zhangsan",
+      //   sayHi() {
+      //     console.log(this); // zhangsan 对象
+      //   },
+      //   wait() {
+      //     setTimeout(function () {
+      //       console.log(this); // Window 对象
+      //     }, 1000);
+      //   },
+      //   todo() {
+      //     setTimeout(() => {
+      //       console.log(this); // zhangsan 对象
+      //     }, 1000);
+      //   },
+      // };
+      // zhangsan.sayHi();
+      // zhangsan.wait();
+      // zhangsan.todo();
+
+      // 非严格模式下
+      // function fn() {
+      //    console.log(this); // Window 对象
+      //  }
+      //  fn();
+
+      // 严格模式下
+      // function fn() {
+      //   "use strict"; // 开启严格模式
+      //   console.log(this); // undefined
+      // }
+      // fn();
+
+      // function test() {
+      //   if (true) {
+      //     // 块级作用域
+      //     var x = 1
+      //     let y = 2
+      //     const z = 3
+      //   }
+      //   console.log(x)  // 1
+      //   console.log(y)  // y is not defined
+      //   console.log(z)  // z is not defined
+      // }
+      // test()
+
+      // var globalVar = "global";
+
+      // function globalFunction() {
+      //   console.log("I am a global function")
+      // }
+
+      // function outerFunction() {
+      //   var outerVar = "outer";
+
+      //   function innerFunction() {
+      //     var innerVar = "inner";
+      //     console.log(innerVar); // 在当前函数作用域中找到 innerVar
+      //     console.log(outerVar); // 在父级函数作用域中找到 outerVar
+      //     console.log(globalVar); // 在全局作用域中找到 globalVar
+      //   }
+
+      //   innerFunction();
+      //   globalFunction();
+      // }
+
+      // outerFunction();
   </script>
 </body>
 

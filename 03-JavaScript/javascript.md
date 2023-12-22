@@ -994,7 +994,7 @@ event loop 执行过程如下：
 ![](../Media/event%20loop%20%E8%AF%A6%E7%BB%86%E7%A4%BA%E6%84%8F%E5%9B%BE.png)
 
 1. 遇到**同步任务**，将其**放入调用栈**（Call Stack）中立即执行，执行完毕后，清出调用栈
-2. 遇到**异步任务中的宏任务**，将其**交给浏览器或者 Node.js 的 APIs 处理**（Web APIs），**一旦宏任务完成**，就将其对应的回调函数**放入回调队列**（Callback Queue）中，等待执行
+2. 遇到**异步任务中的宏任务**，将其**交给浏览器的 APIs 处理**（Web APIs），**一旦宏任务完成**，就将其对应的回调函数**放入回调队列**（Callback Queue）中，等待执行
 3. 遇到**异步任务中的微任务**，等待时机，**一旦 Promise 有结果（成功/失败）**，就将所调用方法（例如 then、catch 等）的回调函数**放入微任务队列**（Micro Task Queue）中，等待执行
 4. **一旦调用栈为空**，即同步任务执行完毕，就会**开启事件循环**（event loop）
 5. **不断循环以下过程**：
@@ -1005,9 +1005,9 @@ event loop 执行过程如下：
 > 注：
 > 宏任务完成，比如：
 >
-> 1. **网络请求返回响应数据了**，就将网络请求中的回调函数放入任务队列中，等待调用栈的执行；
-> 2. **定时时间到了**，就将定时函数中的回调函数放入任务队列中，等待调用栈读取；
-> 3. **DOM 事件被触发了**，就将事件处理函数放入任务队列中， 等待调用栈读取；
+> 1. **网络请求返回响应数据了**，就将网络请求中的回调函数放入回调队列中，等待调用栈读取；
+> 2. **定时时间到了**，就将定时函数中的回调函数放入回调队列中，等待调用栈读取；
+> 3. **DOM 事件被触发了**，就将事件处理函数放入回调队列中， 等待调用栈读取；
 
 ## 请介绍一下 Promise 对象
 
@@ -1171,7 +1171,7 @@ Promise.resolve()
 
 ### async/await 与 Promise 的关系
 
-- async/await 中依然会使用 Promise 对象，只是写法比 Promise 的链式调用更加简洁，所以 async/await 与 Promise 两者并不互斥，是相辅相成的关系
+- **async/await 中依然会使用 Promise 对象**，只是写法比 Promise 的链式调用更加简洁，所以 async/await 与 Promise 两者**并不互斥**，是**相辅相成**的关系
 
 ### async
 
@@ -1183,7 +1183,7 @@ Promise.resolve()
   }
   ```
 
-  > 注：async 函数中可以不使用 await，但是 await 只能在 async 函数中使用；
+  > 注：async 函数中可以不使用 await，但是 **await 只能在 async 函数中使用**；
 
 - 返回值
 
@@ -1201,17 +1201,17 @@ Promise.resolve()
 - 语法格式
   - `await 表达式`
 - await 如何处理其后的表达式
-  - 1、若表达式为非 Promise 对象，则 await 将其先转换为状态值为 fulfilled，结果值为该非 Promise 对象的 Promise 对象，然后返回其结果值；
-  - 2、若表达式为成功状态的 Promise 对象，则返回其结果值；
-  - 3、若表达式为失败状态的 Promise 对象，则需要使用以下两种方法来捕获错误：① 使用 try...catch 语法来捕获错误；② 在表达式后, 使用 catch()方法来捕获错误；具体示例代码如下：
+  - 1、若表达式为**非 Promise 对象**，则 await 将其**先转换**为状态值为 fulfilled，结果值为该非 Promise 对象的 Promise 对象，然后**返回其结果值**；
+  - 2、若表达式为**成功状态的 Promise 对象**，则**返回其结果值**；
+  - 3、若表达式为**失败状态的 Promise 对象**，则需要使用以下两种方法来捕获错误：**① 使用 try...catch 语法来捕获错误**；**② 在表达式后, 使用 catch()方法来捕获错误**；具体示例代码如下：
     ![](../Media/async%E4%B8%AD%E6%8D%95%E8%8E%B7%E5%A4%B1%E8%B4%A5%E7%8A%B6%E6%80%81%E7%9A%84Promise%E5%AF%B9%E8%B1%A1%E7%9A%84%E9%94%99%E8%AF%AF.png)
 - 返回值
-  - 返回成功状态的 Promise 对象的结果值
+  - 返回**成功状态**的 Promise 对象的**结果值**
 - await 对代码执行的影响
-  - 1、每当碰到 await 时，执行其后的表达式；
-  - 2、将该 promise 异步任务放入微任务队列中，并暂停整个 async 函数的进程；
-  - 3、执行完 async 函数之外的所有同步任务；
-  - 4、读取异步任务，一旦微任务队列中的 promise 异步任务有结果了，就恢复整个 async 函数的进程；
+  - 1、每当碰到 await 时，**先执行其后的表达式**；
+  - 2、**当表达式有结果了**（即成功/失败的 Promise 对象），就**将该 promise 微任务放入微任务队列**中，并**暂停整个 async 函数的进程**；
+  - 3、**执行完 async 函数之外的所有同步任务**；
+  - 4、去微任务队列中读取微任务，将其放入调用栈中执行，**同时恢复整个 async 函数的进程**；
 
 ## 请描述以下代码的执行结果（4）
 
@@ -1249,7 +1249,7 @@ console.log("script end");
 
 分析：
 
-- 当执行到代码`await async2()`时，先执行其后表达式`async2()`，打印 async2，由于函数 async2 没有 return 任何值，所以函数 async2 会返回一个状态值为 fulfilled，结果值为 undefined 的 Promise 对象，接着 await 处理该 Promise 对象，将其放入微任务队列中，等待执行，并暂停整个 async1 函数的进程，然后去执行 async1 函数之外的同步代码，当所有同步代码执行完毕，再去读取异步任务，一旦微任务队列中的 promise 异步任务有结果了，就恢复整个 async1 函数的进程，继续往下执行，即打印成 async1 end
+- 当执行到代码`await async2()`时，先执行其后表达式`async2()`，打印 async2，由于函数 async2 没有 return 任何值，所以函数 async2 会返回一个状态值为 fulfilled，结果值为 undefined 的 Promise 对象，接着 await 处理该 Promise 对象，将其对应的回调函数放入微任务队列中，等待执行，并暂停整个 async1 函数的进程，然后去执行 async1 函数之外的同步代码，当所有同步代码执行完毕，再去读取异步任务，将微任务队列中的 promise 微任务放入调用栈中执行，并恢复整个 async1 函数的进程，继续往下执行，即打印成 async1 end
 
 ## 请描述以下代码的执行结果（5）
 
@@ -1310,7 +1310,7 @@ async function fn() {
 
 分析:
 
-- 当执行到代码`await Promise.reject(300)`时，由于 await 无法处理失败状态的 Promise 对象，会报错，报错后，之后的代码都不会被执行
+- 当执行到代码`await Promise.reject(300)`时，由于 **await 无法处理失败状态的 Promise 对象**，会报错，报错后，之后的代码都不会被执行
 
 ## 介绍一下宏任务和微任务
 
@@ -1382,3 +1382,39 @@ console.log("script end");
 - async1 end
 - promise2
 - setTimeout
+
+## ES6 中的类字段
+
+<!-- notecardId: 1703087769393 -->
+
+### 定义
+
+- 指的是允许你在声明 class 类时，**直接初始化属性，而不是在构造函数中初始化属性**。
+
+### 应用场景
+
+- 对于那些**属性值不依赖于构造函数所传递参数**的属性，可以使用类字段来初始化该属性，即**将其定义在构造函数 constructor 之外**，这样可以使得代码更清晰。
+- 示例代码：
+
+  ```javascript
+  class Student {
+    // 将 state 属性定义在构造函数之外
+    state = "pending";
+
+    constructor(name, number) {
+      console.log(this.state); // pending
+      this.name = name;
+      this.number = number;
+    }
+
+    sayHi() {
+      console.log(this.state); // pending
+    }
+  }
+  new Student("夏洛", 100).sayHi();
+  ```
+
+  > 注：
+  >
+  > 1. 定义在构造函数之外的 state 属性，是**实例对象自身的属性**（可以通过【**实例对象.state**】来访问），不会被添加到原型对象上，因为**它不是引用类型，没必要放到原型对象上**
+  > 2. 由于是实例对象自身的属性，所以你可以**在构造函数和方法内通过 this 来访问**

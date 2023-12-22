@@ -55,20 +55,20 @@
 
 一、BFC 的基本概念：
 
-BFC 的英文全称为 Block Formatting Context，即块级格式化上下文。
-BFC 可以看作是独立的渲染区域，内部的元素不会在布局上影响到外面的元素。
+BFC 的英文全称为 Block Formatting Context，即**块级格式化上下文**。
+BFC 可以看作是**独立的渲染区域**，内部的元素不会在布局上影响到外面的元素，反之，亦然。
 
 二、形成 BFC 的常见条件：
 
-- float 不是 none
-- display 是 flex、inline-block、table 等
-- position 是 absolute 或 fixed
-- overflow 不是 visible
+- float **不是 none**
+- overflow **不是 visible**
+- display 是 **flex、inline-block、table** 等
+- position 是 **absolute 或 fixed**
 
 三、BFC 的常见应用：
 
-- 清除浮动
-  比如：当浮动元素的父容器没有设置高度时，会出现元素浮动后，无法撑开父容器的现象，从而影响其下方其他布局，为此，只需为父容器添加触发 BFC 的 css 代码即可解决问题，示例代码如下：
+- **清除浮动**
+  比如：当子元素的**父容器没有设置高度时**，会出现**子元素浮动后**，**无法撑开父容器**的现象，从而**影响其下方其他布局**，为此，只需为父容器添加触发 BFC 的 css 代码即可解决问题，示例代码如下：
 
   ```html
   <!DOCTYPE html>
