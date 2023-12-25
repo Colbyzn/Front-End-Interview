@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <ul id="parent">
+    <li>Item 1</li>
+    <li id="two">Item 2</li>
+    <li>Item 3</li>
+  </ul>
+
+  <button>按钮</button>
+
+  <script>
+    /**
+     * 编写一个通用的事件监听函数
+    */
+
+    /**
+    思路：
+    1. 声明一个名为 bindEvent 的函数
+    2. 该函数接受四个参数，分别是 element, type, selector, fn
+       注：
+       element 用于接受需要绑定的元素
+       type 用于接受要绑定的事件类型
+       selector 用于接受一个指定的选择器，以便在事件代理中监听与之匹配的元素
+       fn 用于接受一个事件处理函数
+    3. 在该函数内：
+       1. 判断用户是否传入 selector 参数
+          - 若没有传入 selector 参数（即 fn 为 null），则将 selector 赋值给 fn，并把 selector 设置为 null
+       2. 调用 addEventListener 方法进行事件绑定，在对应的事件处理函数中内：
+          1. 获取触发事件的元素，并存储
+          2. 判断是代理绑定还是普通绑定
+             - 若为代理绑定（即 selector 有值），则判断触发事件的元素是否与指定的选择器匹配
+               - 若匹配，则使用 call 方法调用 fn，并将触发事件元素和事件对象 event 作为参数传入
+             - 若为普通绑定（即 selector 无值），则使用 call 方法调用 fn，并将触发事件元素和事件对象 event 作为参数传入
+
+    */
+
+    function bindEvent(element, type, selector, fn) {
+      if (fn == null) {
+        fn = selector
+        selector = null
+      }
+
+      element.addEventListener(type, (event) => {
+        const target = event.target
+
+        if (selector) {
+          if (target.matches(selector)) {
+            fn.call(target, event)
+          }
+        } else {
+          fn.call(target, event)
+        }
+      })
+    }
+
+    /* 测试用例 */
+    const parent = document.getElementById('parent');
+    const bodyElement = document.body
+
+    function handleClick(event) {
+      console.log('li clicked:', event.target.textContent);
+    }
+
+    // bindEvent(parent, 'click', 'li', handleClick);
+    bindEvent(parent, 'click', '#two', handleClick);
+    // bindEvent(bodyElement, 'click', handleClick);
+    // bindEvent(bodyElement, 'click', 'li', handleClick);
+    // bindEvent(bodyElement, 'click', 'button', handleClick);
+
+  </script>
+</body>
+
+</html>

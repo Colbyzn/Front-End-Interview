@@ -8,8 +8,8 @@
 
 📢 参考答案：
 
-1. 识别出**除 null 以外**的所有值类型：number string blooean undefind symbol
-2. 识别函数：funtion
+1. 识别**除 null 以外**的所有值类型：number string blooean undefind symbol
+2. 识别函数：function
 3. 识别引用类型：object (到此为止，**无法再进一步区分**出是数组、对象还是 null)
 
 > 注：虽然 null 在概念上被认为是一个对象类型，当使用 typeof 运算符检查 null 时，会返回 "object"，但是**null** 被视为一个**特殊的值类型**，这是由于历史原因导致的。

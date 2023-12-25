@@ -114,26 +114,29 @@ BFC 可以看作是**独立的渲染区域**，内部的元素不会在布局上
 
 📢 参考答案：
 
-一、目的：
+### 目的
 
 - 实现**三栏布局**，两侧内容固定，中间内容随着宽度自适应
 - 一般用于 PC 网页
 
-二、技术异同点：
+### 技术异同点
 
 相同点：
 
-- 都是使用 float 来布局
-- HTML 结构的顺序都是**中间内容区域、左侧栏、右侧栏**
-  > 注：这样做的目的是为了确保**中间栏内容**能够在页面上**先行加载渲染**，以提高页面的可访问性和用户体验
+1. 都是**使用 float 布局**
+2. HTML 结构的顺序都是**中间内容区域、左侧栏、右侧栏**
+   > 注：这样做的目的是为了确保**中间栏内容**能够在页面上**先行加载渲染**，以提高页面的可访问性和用户体验
 
 不同点：
 
-- 额外元素包裹中间栏内容：圣杯布局**没有**，而双飞翼布局**有**；
-- 左右两侧留出空白：圣杯布局使用 **padding-left 和 padding-right**，而双飞翼布局使用 **margin-left 和 margin-right**；
-- 调整左右两侧位置：圣杯布局使用**负 margin-left 和相对定位的 right** 调整左侧栏，使用**负 margin-right** 调整右侧栏，而双飞翼布局只使用**负 margin-left** 来调整
+1. 额外元素包裹中间栏内容：
+   - 圣杯布局**没有**使用额外元素包裹中间栏内容，而双飞翼布局**有**；
+2. 左右两侧留出空白：
+   - 圣杯布局使用 **padding-left 和 padding-right**，而双飞翼布局使用 **margin-left 和 margin-right**；
+3. 调整左右两侧位置：
+   - 圣杯布局使用**负 margin-left 和相对定位的 right** 调整左侧栏，使用**负 margin-right** 调整右侧栏，而双飞翼布局只使用**负 margin-left** 来调整
 
-三、实现圣杯布局代码：
+### 实现圣杯布局代码
 
 ```html
 <!DOCTYPE html>
@@ -209,7 +212,7 @@ BFC 可以看作是**独立的渲染区域**，内部的元素不会在布局上
 </html>
 ```
 
-四、实现双飞翼布局代码：
+### 实现双飞翼布局代码
 
 ```html
 <!DOCTYPE html>
@@ -362,7 +365,7 @@ BFC 可以看作是**独立的渲染区域**，内部的元素不会在布局上
 
    - inline 元素 → text-align: center;
    - inline-block 元素 → text-align: center;
-   - block 元素 → margin: auto;（前提是该**块级元素设置了宽度**）
+   - block 元素 → margin: auto;（**使用前提**是该块级元素设置了宽度）
    - absolute 元素 → left: 50% + margin-left: 负值（元素宽度的一半）；
    - absolute 元素 → left: 50% + transform: translate(-50%, 0);
    - flex 元素 → justify-content: center;
@@ -370,38 +373,40 @@ BFC 可以看作是**独立的渲染区域**，内部的元素不会在布局上
 2. 垂直居中
 
    - inline 元素 → line-height 值等于 height 值
-   - inline-block 元素 → 行内块垂直居中较为复杂。
-     方法一：给自身添加 vertical-align: middle; （使用前提是必须要有已经垂直居中的文本，因为`vertical-align`是设置行内元素/行内块元素与文字的垂直对齐方式）
-     示例代码如下：
+   - inline-block 元素
 
-     ```html
-     <div class="container container-4">
-       <img src="./盒模型宽度计算.png" alt="" />
-       <span>文字</span>
-     </div>
-     ```
+     1. 给自身添加 **vertical-align: middle;** （**使用前提**是必须要有已经垂直居中的文本，因为`vertical-align`是设置行内元素/行内块元素与文字的垂直对齐方式）
 
-     ```css
-     .container {
-       height: 500px;
-       border: 1px solid #ccc;
-       margin: 10px;
-       padding: 10px;
-     }
+        - 示例代码如下：
 
-     .container-4 {
-       text-align: center;
-       /* 先让文本垂直居中 */
-       line-height: 500px;
-     }
+          ```html
+          <div class="container container-4">
+            <img src="./盒模型宽度计算.png" alt="" />
+            <span>文字</span>
+          </div>
+          ```
 
-     img {
-       /* 再让图片与文字垂直对齐，则图片也就垂直居中了 */
-       vertical-align: middle;
-     }
-     ```
+          ```css
+          .container {
+            height: 500px;
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+          }
 
-     方法二：使用 Flexbox 或 Grid 布局
+          .container-4 {
+            text-align: center;
+            /* 先让文本垂直居中 */
+            line-height: 500px;
+          }
+
+          img {
+            /* 再让图片与文字垂直对齐，则图片也就垂直居中了 */
+            vertical-align: middle;
+          }
+          ```
+
+     2. 使用 Flexbox 或 Grid 布局
 
    - absolute 元素 → top: 50% + margin-top: 负值（元素高度的一半）；
    - absolute 元素 → top: 50% + transform: translate(0, -50%);
