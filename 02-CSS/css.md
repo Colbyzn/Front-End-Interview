@@ -192,7 +192,7 @@ BFC 可以看作是**独立的渲染区域**，内部的元素不会在布局上
 
       /* 清除浮动 */
       .clearfix::after {
-        content: "";
+        content: '';
         display: table;
         clear: both;
       }
@@ -279,7 +279,7 @@ BFC 可以看作是**独立的渲染区域**，内部的元素不会在布局上
 ```css
 /* 清除浮动 */
 .clearfix::after {
-  content: "";
+  content: '';
   /* 属性值为 block 也行 */
   display: table;
   clear: both;
@@ -464,95 +464,101 @@ BFC 可以看作是**独立的渲染区域**，内部的元素不会在布局上
 1. rem + 媒体查询
 
    - 实现原理：
-     ① 页面中字体、元素宽高、行高等都使用相对单位 rem；
-     ② 使用媒体查询 @media 为不同设备宽度设置不同 `<html>` 根元素的字体大小。
+
+     - ① 页面中字体、元素宽高、行高等都使用相对单位 rem；
+     - ② 使用媒体查询 @media 为不同设备宽度设置不同 `<html>` 根元素的字体大小。
 
    - 优缺点：
-     优点：简单易用
-     缺点：响应具有**阶梯性**特性，即难以做到元素尺寸随屏幕尺寸无级调节
+
+     - 优点：简单易用
+     - 缺点：响应具有**阶梯性**特性，即难以做到元素尺寸随屏幕尺寸无级调节
 
    - 示例代码：
 
-   ```css
-   @media only screen and (max-width: 374px) {
-     /* iphone5 或者更小的尺寸，以 iphone5 的宽度（320px）比例设置 font-size */
-     html {
-       font-size: 86px;
+     ```css
+     @media only screen and (max-width: 374px) {
+       /* iphone5 或者更小的尺寸，以 iphone5 的宽度（320px）比例设置 font-size */
+       html {
+         font-size: 86px;
+       }
      }
-   }
-   @media only screen and (min-width: 375px) and (max-width: 413px) {
-     /* iphone6/7/8 和 iphone x */
-     html {
-       font-size: 100px;
+     @media only screen and (min-width: 375px) and (max-width: 413px) {
+       /* iphone6/7/8 和 iphone x */
+       html {
+         font-size: 100px;
+       }
      }
-   }
-   @media only screen and (min-width: 414px) {
-     /* iphone6p 或者更大的尺寸，以 iphone6p 的宽度（414px）比例设置 font-size */
-     html {
-       font-size: 110px;
+     @media only screen and (min-width: 414px) {
+       /* iphone6p 或者更大的尺寸，以 iphone6p 的宽度（414px）比例设置 font-size */
+       html {
+         font-size: 110px;
+       }
      }
-   }
 
-   body {
-     /* 使用 rem 单位 */
-     font-size: 0.16rem;
-   }
-   #div1 {
-     /* 使用 rem 单位 */
-     width: 1rem;
-     background-color: #ccc;
-   }
-   ```
+     body {
+       /* 使用 rem 单位 */
+       font-size: 0.16rem;
+     }
+     #div1 {
+       /* 使用 rem 单位 */
+       width: 1rem;
+       background-color: #ccc;
+     }
+     ```
 
 2. vw/vh
 
    - 实现原理：
-     ① 页面中字体、元素宽高、行高等都使用相对单位 vw 或 vh；
-     ② 只要网页视口尺寸改变，则每单位 vw 或 vh 的取值就会发生改变，从而实现响应式；
 
-   > 注：
-   >
-   > 1. 1vw、1vh 分别等于 1/100 网页视口宽度、1/100 网页视口高度；
-   > 2. 网页视口指的是你能看到的网页区域，**不包括浏览器上下左右的 UI 栏**，如下图所示：
-   >    ![](../Media/%E7%BD%91%E9%A1%B5%E8%A7%86%E5%8F%A3.png)
-   > 3. 网页视口宽度、高度可以通过 window.innerWidth 和 window.innerHeight 来获取；
+     - ① 页面中字体、元素宽高、行高等都使用相对单位 vw 或 vh；
+     - ② 只要网页视口尺寸改变，则每单位 vw 或 vh 的取值就会发生改变，从而实现响应式；
+       > 注：
+       >
+       > 1. 1vw、1vh 分别等于 1/100 网页视口宽度、1/100 网页视口高度；
+       > 2. 网页视口指的是你能看到的网页区域，**不包括浏览器上下左右的 UI 栏**，如下图所示：
+       >    ![](../Media/%E7%BD%91%E9%A1%B5%E8%A7%86%E5%8F%A3.png)
+       > 3. 网页视口宽度、高度可以通过 window.innerWidth 和 window.innerHeight 来获取；
 
    - 优缺点：
-     优点：实现元素尺寸随屏幕尺寸**无级调节**，解决了「rem + 媒体查询」所存在的阶梯性响应的弊端
-     缺点：目前不要使用 vw/vh 布局来开发 **PC 端**，因为**兼容性较差**；
+
+     - 优点：实现元素尺寸随屏幕尺寸**无级调节**，解决了「rem + 媒体查询」所存在的阶梯性响应的弊端
+     - 缺点：目前不要使用 vw/vh 布局来开发 **PC 端**，因为**兼容性较差**；
 
    - 示例代码：
 
-   ```html
-   <!DOCTYPE html>
-   <html lang="en">
-     <head>
-       <meta charset="UTF-8" />
-       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-       <title>vw vh test</title>
-       <style>
-         body {
-           margin: 0;
-           padding: 0;
-         }
+     ```html
+     <!DOCTYPE html>
+     <html lang="en">
+       <head>
+         <meta charset="UTF-8" />
+         <meta
+           name="viewport"
+           content="width=device-width, initial-scale=1.0"
+         />
+         <title>vw vh test</title>
+         <style>
+           body {
+             margin: 0;
+             padding: 0;
+           }
 
-         #container {
-           background-color: red;
-           /* 实际开发中，任选一个做为统一单位，因为屏幕尺寸多样化，无法做到宽高同一比例 */
-           width: 10vw;
-           height: 5vw;
-         }
-       </style>
-     </head>
+           #container {
+             background-color: red;
+             /* 实际开发中，任选一个做为统一单位，因为屏幕尺寸多样化，无法做到宽高同一比例 */
+             width: 10vw;
+             height: 5vw;
+           }
+         </style>
+       </head>
 
-     <body>
-       <p>vw vh 测试</p>
-       <div id="container"></div>
+       <body>
+         <p>vw vh 测试</p>
+         <div id="container"></div>
 
-       <script>
-         // window.innerHeight === 100vh
-         // window.innerWidth === 100vw
-       </script>
-     </body>
-   </html>
-   ```
+         <script>
+           // window.innerHeight === 100vh
+           // window.innerWidth === 100vw
+         </script>
+       </body>
+     </html>
+     ```

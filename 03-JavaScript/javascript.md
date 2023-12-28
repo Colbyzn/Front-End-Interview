@@ -32,7 +32,7 @@
      当使用运算符 **+**，并且其**两侧存在 string 类型数据**时，则编译器内部会自动**将两侧非 string 类型转换为 string 类型**，再拼接
 
      ```javascript
-     console.log(123 + "1"); // 1231
+     console.log(123 + '1'); // 1231
      ```
 
 2. 转换为 boolean 类型
@@ -59,7 +59,7 @@
      若进行自增/自减的变量为非 number 类型，则编译器内部会自动**将变量转换为 number 类型**，再运算
 
      ```javascript
-     let num = "10";
+     let num = '10';
      num++;
      console.log(num); // 11
      ```
@@ -69,7 +69,7 @@
 
      ```javascript
      console.log(true + 1); // 2
-     console.log("12" / 4); // 3
+     console.log('12' / 4); // 3
      ```
 
      > 注：对于 **+** 运算符，**只要两侧存在 string 类型的数据**，则**不会**将其隐式转换为 number 类型
@@ -78,8 +78,8 @@
      编译器内部会自动**将比较运算符两侧非 number 类型的数据转换为 number 类型**
 
      ```javascript
-     console.log("5" > 1); // true
-     console.log("12" == 12); // true
+     console.log('5' > 1); // true
+     console.log('12' == 12); // true
      ```
 
      > 注：当**将 == 应用于 null 或 undefined 时**，它们**不会被隐式转换为 number**，且 **null 只等于 null 或 undefined**，不等于其他任何值，示例代码如下：
@@ -249,14 +249,14 @@ instanceof 运算符作用：
   }
 
   // 实例
-  const xialuo = new Student("夏洛", 100);
+  const xialuo = new Student('夏洛', 100);
   console.log(xialuo.name);
   console.log(xialuo.number);
   xialuo.sayHi();
   xialuo.eat();
 
   // 实例
-  const wanglaoshi = new Teacher("王老师", "语文");
+  const wanglaoshi = new Teacher('王老师', '语文');
   console.log(wanglaoshi.name);
   console.log(wanglaoshi.major);
   wanglaoshi.teach();
@@ -366,14 +366,14 @@ instanceof 运算符作用：
         }
       }
 
-      const p = new jQuery("p");
+      const p = new jQuery('p');
 
       console.log(p); // jQuery {0: p, 1: p, 2: p, length: 3, selector: 'p'}
       console.log(p.get(2)); // <p>段落3</p>
       p.each((element) => {
         console.log(element.innerHTML); // 段落1 段落2 段落3
       });
-      p.on("click", (e) => {
+      p.on('click', (e) => {
         console.log(e.target);
       });
 
@@ -381,7 +381,7 @@ instanceof 运算符作用：
       jQuery.prototype.dialog = function (info) {
         alert(info);
       };
-      p.dialog("弹出警告框");
+      p.dialog('弹出警告框');
 
       // 造轮子：以 jQuery 为基础，开发新的东西
       class NewjQuery extends jQuery {
@@ -420,54 +420,55 @@ instanceof 运算符作用：
 
 ### 闭包的定义
 
-- 闭包是**函数的一种特殊行为**，指的是函数可以**访问其外部作用域中的变量**的能力，即使该函数是在外部作用域执行完毕之后才被调用的
+- 闭包是**函数的一种特殊行为**，指的是函数可以**访问其外部作用域中的变量**的能力，即使外部作用域所在的函数已经执行完毕，依然可以访问
 
 ### 闭包的产生
 
 - 以下三种情况会产生闭包：
-- 1. **父函数内定义了子函数**，且子函数引用了父函数的变量，示例代码如下：
 
-  ```javascript
-  function father() {
-    var a = 10;
-    function son() {
-      console.log(a); // 10
-    }
-    son();
-  }
+  1. **父函数内定义了子函数**，且子函数引用了父函数的变量，示例代码如下：
 
-  var a = 20;
-  father();
-  ```
+     ```javascript
+     function father() {
+       var a = 10;
+       function son() {
+         console.log(a); // 10
+       }
+       son();
+     }
 
-- 2. **子函数作为父函数的返回值**，且子函数引用了父函数的变量，示例代码如下：
+     var a = 20;
+     father();
+     ```
 
-  ```javascript
-  function father() {
-    var a = 10;
-    return function son() {
-      console.log(a); // 10
-    };
-  }
+  2. **子函数作为父函数的返回值**，且子函数引用了父函数的变量，示例代码如下：
 
-  var a = 20;
-  father()();
-  ```
+     ```javascript
+     function father() {
+       var a = 10;
+       return function son() {
+         console.log(a); // 10
+       };
+     }
 
-- 3. **函数作为参数传递**，且该函数引用了外部作用域变量，示例代码如下：
+     var a = 20;
+     father()();
+     ```
 
-  ```javascript
-  function fn1(fn) {
-    var a = 10;
-    fn();
-  }
+  3. **函数作为参数传递**，且该函数引用了外部作用域变量，示例代码如下：
 
-  var a = 20;
-  function fn2() {
-    console.log(a); // 20
-  }
-  fn1(fn2);
-  ```
+     ```javascript
+     function fn1(fn) {
+       var a = 10;
+       fn();
+     }
+
+     var a = 20;
+     function fn2() {
+       console.log(a); // 20
+     }
+     fn1(fn2);
+     ```
 
 ### 闭包的缺点
 
@@ -533,17 +534,17 @@ instanceof 运算符作用：
   查找变量名和函数名两种情况的示例代码如下：
 
   ```javascript
-  var globalVar = "global";
+  var globalVar = 'global';
 
   function globalFunction() {
-    console.log("I am a global function");
+    console.log('I am a global function');
   }
 
   function outerFunction() {
-    var outerVar = "outer";
+    var outerVar = 'outer';
 
     function innerFunction() {
-      var innerVar = "inner";
+      var innerVar = 'inner';
       console.log(innerVar); // 在当前函数作用域中找到 innerVar
       console.log(outerVar); // 在父级函数作用域中找到 outerVar
       console.log(globalVar); // 在全局作用域中找到 globalVar
@@ -593,7 +594,7 @@ instanceof 运算符作用：
      ```javascript
      // 严格模式下
      function fn() {
-       "use strict"; // 开启严格模式
+       'use strict'; // 开启严格模式
        console.log(this); // undefined
      }
      fn();
@@ -605,7 +606,7 @@ instanceof 运算符作用：
 
      ```javascript
      const zhangsan = {
-       name: "zhangsan",
+       name: 'zhangsan',
        sayHi() {
          console.log(this); // zhangsan 对象
        },
@@ -622,7 +623,7 @@ instanceof 运算符作用：
        this.name = name;
        console.log(this); // xialuo 对象
      }
-     const xialuo = new Student("夏洛");
+     const xialuo = new Student('夏洛');
      ```
 
 5. **事件处理函数中的`this`**
@@ -630,7 +631,7 @@ instanceof 运算符作用：
    - 若一个函数被作为事件处理函数使用，则`this`**指向事件源**，即触发事件的元素。
 
      ```javascript
-     button.addEventListener("click", function () {
+     button.addEventListener('click', function () {
        console.log(this); // 绑定 click 事件的 button 元素
      });
      ```
@@ -670,7 +671,7 @@ instanceof 运算符作用：
 
 ```javascript
 const zhangsan = {
-  name: "zhangsan",
+  name: 'zhangsan',
   sayHi() {
     console.log(this);
   },
@@ -698,7 +699,11 @@ zhangsan.todo();
 
 📢 参考答案：
 
-打印结果：zhangsan 对象、Window 对象、zhangsan 对象
+打印结果：
+
+- zhangsan 对象
+- Window 对象
+- zhangsan 对象
 
 分析：
 
@@ -790,8 +795,8 @@ zhangsan.todo();
      }
 
      const c = createCache();
-     c.set("a", 100);
-     console.log(c.get("a"));
+     c.set('a', 100);
+     console.log(c.get('a'));
      ```
 
      > 注：上述示例代码中的 data 内存储的数据，外部无法直接访问，只能调用函数内部所提供的 API 进行获取和修改
@@ -801,9 +806,9 @@ zhangsan.todo();
 ```javascript
 let i, a;
 for (i = 0; i < 10; i++) {
-  a = document.createElement("a");
-  a.innerHTML = i + "<br>";
-  a.addEventListener("click", function (e) {
+  a = document.createElement('a');
+  a.innerHTML = i + '<br>';
+  a.addEventListener('click', function (e) {
     e.preventDefault();
     alert(i);
   });
@@ -837,11 +842,11 @@ for (i = 0; i < 10; i++) {
      ```javascript
      let i, a;
      for (i = 0; i < 10; i++) {
-       a = document.createElement("a");
-       a.innerHTML = i + "<br>";
+       a = document.createElement('a');
+       a.innerHTML = i + '<br>';
        // 立即调用函数
        (function (i) {
-         a.addEventListener("click", function (e) {
+         a.addEventListener('click', function (e) {
            e.preventDefault();
            alert(i);
          });
@@ -859,9 +864,9 @@ for (i = 0; i < 10; i++) {
      let a;
      // 在 for 语句中，使用 let 来将 i 修改为块级作用域
      for (let i = 0; i < 10; i++) {
-       a = document.createElement("a");
-       a.innerHTML = i + "<br>";
-       a.addEventListener("click", function (e) {
+       a = document.createElement('a');
+       a.innerHTML = i + '<br>';
+       a.addEventListener('click', function (e) {
          e.preventDefault();
          alert(i);
        });
@@ -904,15 +909,15 @@ for (i = 0; i < 10; i++) {
 - 示例代码：
 
   ```javascript
-  console.log("开始");
+  console.log('开始');
 
   function doSomething() {
-    console.log("同步操作");
+    console.log('同步操作');
   }
 
   doSomething();
 
-  console.log("结束");
+  console.log('结束');
   // 依次输出：开始 同步操作 结束
   ```
 
@@ -928,21 +933,21 @@ for (i = 0; i < 10; i++) {
 - 示例代码：
 
   ```javascript
-  console.log("开始");
+  console.log('开始');
 
   function doSomethingAsync(callback) {
     //使用 setTimeout 模拟异步操作
     setTimeout(() => {
-      console.log("异步操作");
+      console.log('异步操作');
       callback();
     }, 1000);
   }
 
   doSomethingAsync(() => {
-    console.log("回调执行");
+    console.log('回调执行');
   });
 
-  console.log("结束");
+  console.log('结束');
   // 依次输出：开始 结束 异步操作 回调执行
   ```
 
@@ -1107,7 +1112,7 @@ Promise.resolve()
 Promise.resolve()
   .then(() => {
     console.log(1);
-    throw new Error("erro1");
+    throw new Error('erro1');
   })
   .catch(() => {
     console.log(2);
@@ -1137,7 +1142,7 @@ Promise.resolve()
 Promise.resolve()
   .then(() => {
     console.log(1);
-    throw new Error("erro1");
+    throw new Error('erro1');
   })
   .catch(() => {
     console.log(2);
@@ -1217,18 +1222,18 @@ Promise.resolve()
 
 ```javascript
 async function async1() {
-  console.log("async1 start");
+  console.log('async1 start');
   await async2();
-  console.log("async1 end");
+  console.log('async1 end');
 }
 
 async function async2() {
-  console.log("async2");
+  console.log('async2');
 }
 
-console.log("script start");
+console.log('script start');
 async1();
-console.log("script end");
+console.log('script end');
 ```
 
 %
@@ -1283,14 +1288,14 @@ async function fn() {
 
 ```javascript
 (async function () {
-  console.log("start");
+  console.log('start');
   const a = await 100;
-  console.log("a", a);
+  console.log('a', a);
   const b = await Promise.resolve(200);
-  console.log("b", b);
+  console.log('b', b);
   const c = await Promise.reject(300);
-  console.log("c", c);
-  console.log("end");
+  console.log('c', c);
+  console.log('end');
 })();
 ```
 
@@ -1338,30 +1343,30 @@ async function fn() {
 
 ```javascript
 async function async1() {
-  console.log("async1 start");
+  console.log('async1 start');
   await async2();
-  console.log("async1 end");
+  console.log('async1 end');
 }
 
 async function async2() {
-  console.log("async2");
+  console.log('async2');
 }
 
-console.log("script start");
+console.log('script start');
 
 setTimeout(function () {
-  console.log("setTimeout");
+  console.log('setTimeout');
 }, 0);
 
 async1();
 
 new Promise(function (resolve) {
-  console.log("promise1");
+  console.log('promise1');
   resolve();
 }).then(function () {
-  console.log("promise2");
+  console.log('promise2');
 });
-console.log("script end");
+console.log('script end');
 ```
 
 %
@@ -1399,7 +1404,7 @@ console.log("script end");
   ```javascript
   class Student {
     // 将 state 属性定义在构造函数之外
-    state = "pending";
+    state = 'pending';
 
     constructor(name, number) {
       console.log(this.state); // pending
@@ -1411,7 +1416,7 @@ console.log("script end");
       console.log(this.state); // pending
     }
   }
-  new Student("夏洛", 100).sayHi();
+  new Student('夏洛', 100).sayHi();
   ```
 
   > 注：

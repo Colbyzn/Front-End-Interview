@@ -645,13 +645,13 @@ document.creatElement(element);
    - 语法格式
 
      ```javascript
-     XMLHttpRequest对象.send([查询字符串]);
+     XMLHttpRequest对象.send([请求体数据]);
      ```
 
      > 注：
      >
      > 1. 若为 **GET** 请求，则**不设置参数或者设置为 null**；
-     > 2. 若为 **POST** 请求，则**参数为查询字符串**，内容形式为表单的 name 属性值=用户输入值且由符号&分隔的字符串，比如："userName=Colbyzn&password=123456"；
+     > 2. 若为 **POST** 请求，则**需要设置参数**，其类型为**字符串、FormData 对象、ArrayBuffer、Blob 等类型**
 
 3. setRequestHeader()
 
@@ -660,15 +660,20 @@ document.creatElement(element);
    - 语法格式
 
      ```javascript
-     XMLHttpRequest对象.setRequestHeader('Content-Type', 值);
+     XMLHttpRequest对象.setRequestHeader(请求头名称, 值);
      ```
 
-     > 注：Content-Type 的作用是告诉服务端，将要发送给你的数据是什么格式；
-
    - 使用场景
-     - **只在使用 POST 请求时，才需要调用**，并取值为'application/x-www-form-urlencoded'；
+
+     - **当需要发送请求体数据时（如 POST 请求），需要设置请求头**，比如：
+
+       ```javascript
+       XMLHttpRequest对象.setRequestHeader('Content-Type', 'application/json');
+       // 表示告诉服务端，将要发送给你的数据是什么格式
+       ```
+
    - 调用位置
-     - 必须**在 open() 方法和 send() 之间调用**；
+     - **必须在调用 send() 方法之前**，否则设置的请求头部信息将不会生效；
 
 ### XMLHttpRequest 对象的相关事件
 
@@ -685,12 +690,12 @@ document.creatElement(element);
 ### 同源
 
 - 定义
-  - 当多个网页之间的协议、域名和端口完全相同，就称这些网页同源
+  - 当多个网页之间的**协议、域名和端口完全相同**，就称这些网页同源
     > 注：任意一项不相同，都视为非同源
 - 示例网址
   1. <https://www.example.com/api/banner> 和 <http://www.example.com/> 非同源，它们协议不同
   2. <https://www.example.com/api/banner> 和 <https://www.example.net/api/banner> 非同源，它们域名不同
-  3. <https://www.example.com/api/banner> 和 <https://www.example.com:8080/api/banner> 非同源，它们端口号不同
+  3. <https://www.example.com/api/> 和 <https://www.example.com:8080/> 非同源，它们端口号不同
   4. <https://www.example.com/api/banner> 和 <https://www.example.com/> 同源，它们协议、域名、端口号完全相同
 
 ### 同源策略
@@ -699,17 +704,17 @@ document.creatElement(element);
   - 是浏览器提供的**一种安全机制**，指的是使用 **AJAX** 发起请求时，**浏览器**要求**所请求的地址必须与当前网页同源**，否则，响应数据会被浏览器拦截，无法使用，示意图如下：
     ![](../Media/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%8B%A6%E6%88%AA%E8%B7%A8%E5%9F%9F%E8%AF%B7%E6%B1%82%E7%A4%BA%E6%84%8F%E5%9B%BE.png)
 - 作用
-  - 限制非同源网页之间的资源交互行为，从而隔离潜在的恶意文件，比如：
+  - **限制非同源网页之间的资源交互行为，从而隔离潜在的恶意文件**，比如：
     1. 网站 A 无法获取非同源网站 B 的 localStorage、cookie；
     2. 网站 A 无法操作非同源网站 B 的 DOM；
     3. 网站 A 向非同源网站 B 发送 AJAX 请求，无法获取资源；
 - 哪些受制于同源策略
-  - 使用 AJAX 请求非同源地址
+  - **使用 AJAX 请求**非同源地址
 - 哪些无视同源策略
-  1. 使用 `<link>` 标签请求非同源的 CSS 文件地址
-  2. 使用 `<img>` 标签请求非同源的图片文件地址
-  3. 使用 `<audio>`、`<video>` 标签请求非同源的音频、视频文件地址
-  4. 使用 `<script>` 标签请求非同源的 js 文件地址
+  1. **使用 `<link>` 标签**请求非同源的 CSS 文件地址
+  2. **使用 `<img>` 标签**请求非同源的图片文件地址
+  3. **使用 `<audio>`、`<video>` 标签**请求非同源的音频、视频文件地址
+  4. **使用 `<script>` 标签**请求非同源的 js 文件地址
 
 ## 请介绍一下跨域及其解决方案
 
@@ -719,21 +724,21 @@ document.creatElement(element);
 
 ### 跨域的定义
 
-- 指的是从一个网页请求非同源网页的资源
+- 指的是从一个网页**请求非同源网页的资源**
 
 ### 为什么需要跨域
 
-- 由于受到浏览器同源策略的限制，无法直接访问非同源地址的资源，而有时候确实又需要跨域访问非同源地址的资源，所以就需要跨域
+- **由于受到浏览器同源策略的限制，无法直接访问非同源地址的资源**，而有时候**确实又需要跨域访问非同源地址的资源**，所以就需要跨域
 
 ### 跨域解决方案
 
 - 绕过浏览器同源策略的限制，实现跨域访问的解决方案如下：
 
-  1. JSONP（JSON with Padding）
+  1. **JSONP**（JSON with Padding）
 
      - 实现原理
 
-       - 利用 `<script>` 标签不受同源限制的特性，通过其 src 属性，跨域请求非同源地址，服务器会将响应数据放到请求地址中查询参数 callback 所指定的回调函数内，并以字符串的形式返回，之后，浏览器会自动执行该回调函数，从而获取到数据。示例代码如下：
+       - **利用 `<script>` 标签不受同源限制的特性**，通过其 src 属性，跨域请求非同源地址，**服务器会将响应数据放到请求地址中查询参数 callback 所指定的回调函数内**，并以字符串的形式返回，之后，浏览器会自动执行该回调函数，从而获取到数据。示例代码如下：
 
          ```javascript
          function handleResponse(data) {
@@ -747,10 +752,10 @@ document.creatElement(element);
          ```
 
      - 支持的请求类型
-       - 只支持 get 请求，不支持 post 请求
+       - **只支持 get 请求**，不支持 post 请求
      - 实际开发中的应用
 
-       - 实际开发中，使用的是已经封装的 API，比如使用 jQuery 的 ajax() 方法实现 JSONP
+       - 实际开发中，使用的是已经封装的 API，比如**使用 jQuery 的 ajax() 方法实现 JSONP**
 
          ```javascript
          $.ajax({
@@ -765,15 +770,15 @@ document.creatElement(element);
 
          > 注：
          >
-         > 1. 使用 jQuery 发起的 JSONP 请求，会自动生成一个随机回调函数，名为 jQueryxxx，并以「callback=随机生成的函数名」的形式追加到 url 地址上，不需要自己追加；
-         > 2. 使用 jQuery 发起的 JSONP 请求时，会动态添加 script 标签，当请求结束时，会删除 script 标签；
+         > 1. 使用 jQuery 发起的 JSONP 请求，会**自动生成一个随机回调函数**，名为 jQueryxxx，并**以「callback=随机生成的函数名」的形式追加到 url 地址上**，不需要自己追加；
+         > 2. 使用 jQuery 发起的 JSONP 请求时，会**动态添加 script 标签**，当**请求结束时**，会**自动删除 script 标签**；
 
-  2. CORS（Cross-Origin Resource Sharing）
+  2. **CORS**（Cross-Origin Resource Sharing）
 
      - 实现原理
-       - 通过在服务器端设置响应头中的 `Access-Control-Allow-Origin` 字段，来指定允许被访问的非同源地址，该方法是在服务器端进行配置，客户端浏览器无须做任何额外的配置，即可请求已开启 CORS 的服务端非同源地址接口
+       - 通过**在服务器端设置响应头中的 `Access-Control-Allow-Origin` 字段，来指定允许被访问的非同源地址**，该方法是在服务器端进行配置，**客户端浏览器无须做任何额外的配置**，即可请求已开启 CORS 的服务端非同源地址接口
      - 支持的请求类型
-       - 若服务器未设置 `Access-Control-Allow-Methods` 响应头，则浏览器会默认允许 GET、POST 和 HEAD 请求
+       - 若服务器未设置 `Access-Control-Allow-Methods` 响应头，则浏览器会**默认允许 GET、POST 和 HEAD 请求**
 
 ## 发起 ajax 网络请求的常用工具有哪些，以及它们的优缺点
 
@@ -783,26 +788,26 @@ document.creatElement(element);
 
 以下是一些封装了 XMLHttpRequest 对象的操作，简化了代码编写的常用工具：
 
-1. jQuery.ajax
+1. **jQuery.ajax**
 
    - 优点
      - 使用简单、易于理解、兼容性好
    - 缺点
-     1. 需要引入整个 jQuery 库，如果只是使用 ajax 功能可能显得过于臃肿
-     2. 不支持链式调用
+     1. **需要引入整个 jQuery 库**，如果只是使用 ajax 功能可能显得过于臃肿
+     2. **不支持链式调用**
 
-2. Axios
+2. **Axios**
 
    - 优点
-     - 使用简单、功能丰富、支持链式调用和 async/await 语法来处理异步操作、支持浏览器和 Node.js 环境
+     - 使用简单、功能丰富、**支持链式调用和 async/await 语法来处理异步操作**、**支持浏览器和 Node.js 环境**
 
-3. Fetch
+3. **Fetch**
    - 优点
-     - 使用简单、功能丰富、支持链式调用和 async/await 语法来处理异步操作
+     - 使用简单、功能丰富、**支持链式调用和 async/await 语法来处理异步操作**
    - 缺点
-     1. 兼容性相对较差
-     2. fetch 默认不会带 cookie，需要添加配置项
-     3. fetcht 只对网络请求报错，对 400，500 都当做成功的请求
+     1. **兼容性相对较差**
+     2. fetch 默认**不会自动携带 cookie**，需要添加配置项
+     3. fetcht 只对网络请求报错，**对响应状态码 400、500 都当做成功的请求**
 
 ## 请介绍一下 cookie
 
@@ -812,18 +817,18 @@ document.creatElement(element);
 
 ### cookie 是什么
 
-- 指的是由服务器发送给浏览器，并保存在本地的一小段以键值对形式存储的字符串
+- 指的是由**服务器发送给浏览器**，并**保存在本地**的一小段以**键值对**形式存储的**字符串**
 
 ### cookie 的分类
 
-1. 会话 cookie
+1. **会话 cookie**
 
    - 定义
      - 指的是不设置过期时间的 cookie
    - 生命周期
      - 随浏览器的关闭而销毁
 
-2. 持久 cookie
+2. **持久 cookie**
    - 定义
      - 指的是设置过期时间的 cookie
    - 生命周期
@@ -831,25 +836,25 @@ document.creatElement(element);
 
 ### cookie 的工作原理
 
-1. 用户访问某个网站时，网站的服务器可以发送一个或多个 cookie 到用户的浏览器。
-2. 浏览器会根据服务器的要求将 cookie 保存在本地。
-3. 当用户再次访问该网站时，浏览器会自动携带之前保存的 cookie 发送到服务器，这样服务器就能根据 cookie 信息，识别用户并进行相应的操作。
+1. 用户访问某个网站时，网站的服务器可以**发送一个或多个 cookie** 到用户的浏览器
+2. 浏览器会根据服务器的要求**将 cookie 保存在本地**
+3. 当用户再次访问该网站时，浏览器会**自动携带之前保存的 cookie 发送到服务器**，这样服务器就能根据 cookie 信息，识别用户并进行相应的操作
 
 ### cookie 的特点
 
 1. 单个 cookie 的大小不超过 4KB
-2. 不同域名下的 cookie 各自独立
+2. **不同域名下的 cookie 各自独立**
 3. 请求时自动发送
 4. 有过期时限
 5. 安全性较差
-   > 注：安全性较差，是因为 Cookie 存储于浏览器中，且浏览器提供了读写 Cookie 的 API，因此 Cookie 很容易被伪造
+   > 注：之所以安全性较差，是因为 cookie 存储于浏览器中，且浏览器提供了读写 cookie 的 API，因此，**cookie 很容易被伪造**
 
 ### cookie 的用途
 
-1. 保持用户登录状态
+1. **保持用户登录状态**
    - 用户首次登录后，服务器会发送一个包含用户身份验证信息的 cookie 给客户端，以便用户下次访问网站时，可以自动登录
-2. 记录用户的偏好设置，如语言选择、主题等
-3. 跟踪用户的行为和浏览习惯
+2. **记录用户的偏好设置**，如语言选择、主题等
+3. **跟踪用户的行为和浏览习惯**
 
 ## 描述 cookie、localStorage、sessionStorage 之间的区别
 
@@ -862,12 +867,12 @@ document.creatElement(element);
 区别主要体现在以下几个方面：
 
 1. 是否随 HTTP 请求发出
-   - cookie 在每次 HTTP 请求时，都会自动附加到请求头中，而 localStorage 和 sessionStorage 不会自动发送到服务器，仅在本地保存
+   - cookie 在每次 HTTP 请求时，都**会**自动附加到请求头中，而 localStorage 和 sessionStorage **不会**自动发送到服务器，仅在本地保存
 2. 生命周期
-   - 会话 cookie 在浏览器关闭后失效，而持久 cookie 直到过期时间才销毁
-   - localStorage 除非手动删除，否则永久存在
-   - sessionStorage 当前页面关闭就会被清除
+   - 会话 cookie 在**浏览器关闭**后失效，而持久 cookie **直到过期时间**才被清除
+   - localStorage **除非手动删除**，否则**永久存在**
+   - sessionStorage **当前页面关闭**就会被清除
 3. 大小限制
-   - 每个 cookie 的大小不超过 4KB，而 localStorage 和 sessionStorage 最大可以存储 5MB 左右
+   - 每个 cookie 的大小不超过 **4KB**，而 localStorage 和 sessionStorage 最大可以存储 **5MB** 左右
 4. 数据共享范围
-   - cookie 和 localStorage 在所有同源页面之间可以共享存储数据，而 sessionStorage 只限于当前页面，其他页面无法使用当前页面的存储数据，即使同源也不行
+   - cookie 和 localStorage 在**所有同源页面之间**可以共享存储数据，而 sessionStorage **只限于当前页面**，其他页面无法使用当前页面的存储数据，即使同源也不行
