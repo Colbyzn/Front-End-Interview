@@ -845,7 +845,7 @@ document.creatElement(element);
 1. 单个 cookie 的大小不超过 4KB
 2. **不同域名下的 cookie 各自独立**
 3. 请求时自动发送
-4. 有过期时限
+4. 可设置过期时限
 5. 安全性较差
    > 注：之所以安全性较差，是因为 cookie 存储于浏览器中，且浏览器提供了读写 cookie 的 API，因此，**cookie 很容易被伪造**
 
