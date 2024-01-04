@@ -16,7 +16,7 @@
 
     /**
     思路：
-    1. 往构造函数上 Promise 上添加静态方法 MyAll
+    1. 往构造函数 Promise 上添加静态方法 MyAll
     2. 该方法接受一个参数数组 arr，并返回一个新的 Promise 对象，在 Promise 对象内：
        - 1、判断所传入参数类型，若不是数组，则直接调用 reject 方法，并传入自定义类型错误提示，并返回
        - 2、若为数组，则定义相关变量，分别是 resolvedCounter、resolvedValue、length

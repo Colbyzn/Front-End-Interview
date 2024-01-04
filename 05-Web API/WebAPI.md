@@ -295,24 +295,18 @@ document.creatElement(element);
 
 📢 参考答案：
 
-在前端开发中，可以**通过该 location 对象的属性**来获取 URL 的各个部分。
+在前端开发中，可以**通过该 location 对象的属性**来获取 URL 的各个部分
 
-- **`location.href`**
-  - 获取**完整的 URL**，包括协议、域名、端口、路径和查询参数。
-- **`location.protocol`**
-  - 获取**协议**部分，例如 "http:" 或 "https:"。
-- **`location.host`**
-  - 获取**域名和端口号**部分，例如 "example.com:8080"。
-- **`location.hostname`**
-  - 获取**域名**部分，例如 "example.com"。
-- **`location.port`**
-  - 获取**端口号**部分，例如 "8080"。
-- **`location.pathname`**
-  - 获取**路径**部分，例如 "/path/to/file.html"。
-- **`location.search`**
-  - 获取**查询参数**部分，例如 "?key=value"。
-- **`location.hash`**
-  - 获取 URL 中的**哈希**部分，例如 "#section1"。
+| 属性                    | 描述                                                     |
+| ----------------------- | -------------------------------------------------------- |
+| **`location.href`**     | 获取**完整的 URL**，包括协议、域名、端口、路径和查询参数 |
+| **`location.protocol`** | 获取**协议**部分，例如 "http:" 或 "https:"               |
+| **`location.host`**     | 获取**域名和端口号**部分，例如 "example.com:8080"        |
+| **`location.hostname`** | 获取**域名**部分，例如 "example.com"                     |
+| **`location.port`**     | 获取**端口号**部分，例如 "8080"                          |
+| **`location.pathname`** | 获取**路径**部分，例如 "/path/to/file.html"              |
+| **`location.search`**   | 获取**查询参数**部分，例如 "?key=value"                  |
+| **`location.hash`**     | 获取 URL 中的**哈希**部分，例如 "#section1"              |
 
 ## 请介绍一下事件绑定以及事件解绑？
 

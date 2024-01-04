@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <input type="text" id="input">
+
+  <script>
+    /**
+     * 手写防抖 debounce
+    */
+
+    /**
+    思路：
+    1. 声明一个名为 debounce 的函数
+    2. 该函数接受两个参数：fn（函数）、delay（定时时间）
+    3. 该函数内：
+       1. 声明一个变量 timer，并初始化为 null，用于存储定时器编号
+          > 注：定时器编号就是函数 setTimeout() 的返回值，一个正整数
+       2. 返回有一个新函数（使用非箭头函数），在该新函数内：
+          1. 判断是否已有定时器
+             - 若有（即 timer 有值），则清除定时器
+               > 注：调用 clearTimeout(timer) 只是取消计时器，并不会改变 timer 变量本身的值
+          2. 若没有，则设置定时器，传入参数 delay，并在其回调函数（使用箭头函数）内：
+             1. 使用 apply 方法调用 fn，并传入 this 和 arguments
+                > 注：
+                >
+                > 1. 箭头函数中 this 继承上一级作用域（返回的新函数）内的 this，而返回的新函数作为事件处理函数被调用，所以 this 指向事件源
+                > 2. 箭头函数没有 arguments，所以会沿着作用域链往上查找，使用返回新函数的 arguments，其值为触发事件时，所生成的事件对象 event
+             2. 将 timer 设置为 null
+                > 注：若不设置为 null，则从第二次触发事件开始，timer 会一直有值，导致 if (timer) 形同虚设
+          3. 将所返回的定时器编号存储在 timer 中
+    */
+
+    function debounce(fn, delay) {
+      let timer = null
+
+      return function () {
+        if (timer) {
+          clearTimeout(timer)
+        }
+
+        timer = setTimeout(() => {
+          fn.apply(this, arguments)
+          timer = null
+        }, delay);
+      }
+    }
+
+    /* 测试用例 */
+    const input = document.getElementById('input')
+
+    input.addEventListener('keyup', debounce(function () {
+      console.log(this)
+      console.log(input.value)
+    }, 500))
+    
+    // input.addEventListener('keyup', debounce(() => {
+    //   console.log(this)
+    //   console.log(input.value)
+    // }, 500))
+  </script>
+</body>
+
+</html>
