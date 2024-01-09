@@ -43,3 +43,4 @@ $s = vt$
 ```javascript
 console.log(`姓名 ${this.name} 学号 ${this.number}`);
 ```
+

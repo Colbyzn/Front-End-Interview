@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 手动捕获异常 -->
+  <script>
+    try {
+      // 放置可能会抛出异常的代码块
+      // 例如，可能发生的错误的代码
+      throw new Error('发生错误了');
+    } catch (error) {
+      // 捕获异常并处理
+      console.error('Caught an error:', error.message);
+    } finally {
+      // 可选的 finally 语句块
+      // 无论是否有异常都会执行的代码
+      console.log('Finally 被执行了');
+    }
+  </script>
+
+  <!-- 自动捕获异常 -->
+  <script>
+    window.onerror = function (message, source, lineNum, colNum, error) {
+      console.error('Global Error Handler:', message, 'at', source, 'line', lineNum, 'column', colNum, error);
+      // 返回 true 阻止浏览器默认行为（例如在控制台中显示错误）
+      return true;
+    };
+
+    // 人为制造一个异常
+    function createError() {
+      throw new Error('手动创建错误');
+    }
+
+    // 调用可能抛出异常的函数
+    createError();
+  </script>
+</body>
+
+</html>

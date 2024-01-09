@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!-- 方法一：拆成数组再遍历查找 -->
+  <script>
+    /**
+    思路：
+    1. 声明一个名为 query 的函数
+    2. 该函数接受一个参数 name（属性名）
+    3. 在该函数内：
+       1. 定义一个变量 result，用于接受查询结果
+       2. 获取 url 的查询参数部分，并去掉第一个字符 ?
+       3. 将处理后的查询参数以分隔符 & 拆分成数组
+       4. 遍历数组，在回调函数内：
+          1. 将元素以分隔符 = 拆分为数组
+          2. 判断数组内第一项是否是要查询的属性
+             若是，则将数组第二项作为结果存入 result，并 return true 终止循环
+          > 注：之所以使用 some 来遍历数组，是因为它可以终止循环，而 forEach 无法终止循环
+       5. 返回查询结果 result
+    */
+    function query(name) {
+      let result = null
+
+      const search = location.search.substr(1)
+
+      const splitSearch = search.split('&')
+
+      splitSearch.some((value) => {
+        const splitValue = value.split('=')
+
+        if (splitValue[0] === name) {
+          result = splitValue[1]
+          return true
+        }
+      })
+
+      return result
+    }
+
+    /* 测试用例 */
+    console.log(query('a'))
+    console.log(query('b'))
+    console.log(query('c'))
+  </script>
+
+  <!-- 方法二：URLSearchParams 实例对象的 get() 方法 -->
+  <script>
+    /**
+    思路：
+    1. 声明一个名为 query 的函数
+    2. 该函数接受一个参数 name（属性名）
+    3. 在该函数内：
+       1. 获取 url 的查询参数部分
+       2. 传入所获取的查询参数，实例化一个 URLSearchParams 对象
+       3. 调用该对象的 get() 方法，传入要查询的属性名，并返回其查询结果
+    */
+    function query(name) {
+      const search = location.search
+
+      const params = new URLSearchParams(search)
+
+      return params.get(name)
+    }
+
+    /* 测试用例 */
+    console.log(query('a'))
+    console.log(query('b'))
+    console.log(query('c'))
+  </script>
+</body>
+
+</html>
