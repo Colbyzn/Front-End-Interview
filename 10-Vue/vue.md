@@ -38,7 +38,7 @@
 | `v-on`    | **`.enter`**   | **当按下按键 enter 时**，执行处理函数                                | `<input v-on:keyup.enter="submit">`                   |
 |           | **`.stop`**    | **阻止事件冒泡**                                                     | `<button v-on:click.stop="doSomething">点击</button>` |
 |           | **`.prevent`** | **阻止事件的默认行为**                                               | `<form v-on:submit.prevent="onSubmit">提交</form>`    |
-|           | **`.self`**    | **只有当触发事件的元素为本身时**，才执行处理函数                     | `<div v-on:click.self="doSomething">点击</div>`       |
+|           | **`.self`**    | **只有当触发事件的元素为绑定事件元素本身时**，才执行处理函数         | `<div v-on:click.self="doSomething">点击</div>`       |
 |           | **`.once`**    | **事件只触发一次**                                                   | `<button v-on:click.once="doSomething">点击</button>` |
 |           | **`.capture`** | 将事件监听行为**从冒泡阶段改为捕获阶段**，在捕获阶段，执行处理函数   | `<div v-on:click.capture="doSomething">点击</div>`    |
 
@@ -54,10 +54,10 @@
 
 v-if 和 v-show **都是用来显示和隐藏元素**，但是它们在**实现原理**和**应用场景**上有些不同，具体如下：
 
-|          | v-if                                                                               | v-show                                                                                                 |
-| -------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| 实现原理 | 通过**创建和移除**来控制显示与隐藏，被隐藏元素**不存在**于 HTML 结构中             | 通过**修改样式 display 的值**来控制显示与隐藏，被隐藏元素**存在**于 HTML 结构中                        |
-| 应用场景 | 当**需要频繁切换**显示与隐藏元素时，比如：鼠标经过/离开导航栏，显示/隐藏子菜单元素 | 当**不需要频繁切换**显示与隐藏元素时，比如：用户未登录时的提示【立即登录】元素，登录后，直接移除该元素 |
+|          | v-if                                                                                                   | v-show                                                                             |
+| -------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
+| 实现原理 | 通过**创建和移除**来控制显示与隐藏，被隐藏元素**不存在**于 HTML 结构中                                 | 通过**修改样式 display 的值**来控制显示与隐藏，被隐藏元素**存在**于 HTML 结构中    |
+| 应用场景 | 当**不需要频繁切换**显示与隐藏元素时，比如：用户未登录时的提示「立即登录」元素，登录后，直接移除该元素 | 当**需要频繁切换**显示与隐藏元素时，比如：鼠标经过/离开导航栏，显示/隐藏子菜单元素 |
 
 ## 请介绍一下计算属性 computed
 
@@ -89,7 +89,7 @@ v-if 和 v-show **都是用来显示和隐藏元素**，但是它们在**实现�
 
 ### 与 methods 的区别
 
-- 虽然也可以在配置属性 **methods** 中，声明一个函数来封装一串复杂逻辑的表达式，然后使用 `{{方法名()}}` 来显示处理的结果，但是这种方式是**不会缓存计算结果**，即使所依赖的数据没有变化，也会重新计算，而**计算属性具有缓存特性**，且只有当所依赖的数据发生变化时，才会重新计算结果
+- 虽然也可以在配置属性 **methods** 中，声明一个函数来封装一串复杂逻辑的表达式，然后使用 **`{{方法名()}}`** 来显示处理的结果，但是这种方式是**不会缓存计算结果**，即使所依赖的数据没有变化，也会重新计算，而**计算属性具有缓存特性**，且只有当所依赖的数据发生变化时，才会重新计算结果
 
 ### 语法格式
 
@@ -99,7 +99,7 @@ v-if 和 v-show **都是用来显示和隐藏元素**，但是它们在**实现�
    computed: {
 
      计算属性名 () {
-       // 计算相关代码
+       // 计算逻辑代码
        return 结果
      }
 
@@ -113,17 +113,18 @@ v-if 和 v-show **都是用来显示和隐藏元素**，但是它们在**实现�
 
      计算属性名: {
        get () {
-         // 计算相关代码
+         // 计算逻辑代码
          return 结果
        },
-       set () {
-         // 计算相关代码
-         return 结果
+       set (修改值) {
+         // 修改逻辑代码
        }
      }
 
    }
    ```
+
+   > 注：当计算属性**被赋值**了，会**自动调用**其内的 **set()** 方法，并将所赋的值**传递给** set 方法的**形参**
 
 ### 使用步骤
 
@@ -176,6 +177,10 @@ v-if 和 v-show **都是用来显示和隐藏元素**，但是它们在**实现�
 
 - **监听数据变化**，一旦所监听的数据发生改变，就自动调用侦听属性所对应的方法
 
+### 何时使用
+
+- 当需要在数据变化时，执行**异步操作**（如网络请求）或执行**开销较大的操作**时
+
 ### 语法格式
 
 1. **监听简单数据类型的属性**
@@ -213,11 +218,7 @@ v-if 和 v-show **都是用来显示和隐藏元素**，但是它们在**实现�
    >
    > 1. 方法名**必须叫 handler，不能自定义**
    > 2. 只有 newValue，**拿不到 oldValue**，因为引用类型修改内容不会改变引用地址
-   > 3. 若想在监听开启之后（初始化时），立即执行一次 handler 方法，则需要添加 **`immediate: true`**
-
-### 使用场景
-
-- 当需要在数据变化时，执行**异步操作**（如网络请求）或执行**开销较大的操作**时
+   > 3. 若想在监听开启之后（初始化时），**立即执行一次 handler 方法**，则需要添加 **`immediate: true`**
 
 ## 请介绍一下 Vue 中的样式操作
 
@@ -389,7 +390,7 @@ Vue 框架中，可以**使用动态绑定属性的方式**来进行样式操作
 
 - 为什么要使用 key
 
-  - 之所以要使用 key，是为了通过给每个列表项绑定一个唯一标识的方式，**让 Vue 可以跟踪每个列表项**，这样当数据发生更新后，它会**基于 key 的变化，来重用元素或者移除元素或者重新排列元素顺序，从而实现以最小的 DOM 操作来更新列表，提高渲染性能**，示例如下：
+  - 之所以要使用 key，是为了通过**给每个列表项绑定一个唯一标识**的方式，**让 Vue 可以跟踪每个列表项**，这样当数据发生更新后，它会**基于 key 的变化，来重用元素或者移除元素或者重新排列元素顺序，从而实现以最小的 DOM 操作来更新列表，提高渲染性能**，示例如下：
     ![](../Media/%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%20key.png)
 
 - 语法格式
@@ -407,7 +408,7 @@ Vue 框架中，可以**使用动态绑定属性的方式**来进行样式操作
    ```html
    <template>
      <div v-for="(item, index) in items" :key="item.id">
-       {{ index }}. {{ item.text }}
+       {{ index }} - {{ item }}
      </div>
    </template>
    ```
@@ -417,7 +418,7 @@ Vue 框架中，可以**使用动态绑定属性的方式**来进行样式操作
    ```html
    <template>
      <div v-for="(value, key, index) in object" :key="index">
-       {{ index }}. {{ key }}: {{ value }}
+       {{ index }} - {{ key }}: {{ value }}
      </div>
    </template>
    ```
@@ -681,7 +682,7 @@ Vue 框架中，可以**使用动态绑定属性的方式**来进行样式操作
 - mounted 阶段 **DOM 元素已经创建完成**，而 created 阶段只是创建了组件实例，**DOM 元素还没有被创建**
 - mounted 阶段一般**进行一些 DOM 操作**，而 created 阶段一般会**发起 ajax 请求获取初始化数据**
 
-## 钩子函数在父子组件中的执行顺序
+## 多组件（父子组件）中生命周期的调用顺序说一下
 
 <!-- notecardId: 1704814900129 -->
 
@@ -689,14 +690,10 @@ Vue 框架中，可以**使用动态绑定属性的方式**来进行样式操作
 
 📢 参考答案：
 
-- created 阶段：先父后子
-- mounted 阶段：**先子后父**
-- beforeUpadate 阶段：先父后子
-- upadated 阶段：**先子后父**
-- beforeDestory 阶段：先父后子
-- destroyed 阶段：**先子后父**
-
-  > 注：挂载、更新、销毁肯定等子组件先完成，之后父组件才能说自己也完成
+1. 加载渲染过程：父 beforeCreate-> 父 created-> 父 beforeMount-> 子 beforeCreate-> 子 created-> 子 beforeMount- > **子** mounted-> **父** mounted
+2. 更新过程：**父** beforeUpdate-> 子 beforeUpdate-> 子 updated-> **父** updated
+3. 销毁过程：**父** beforeDestroy-> 子 beforeDestroy-> 子 destroyed-> **父** destroyed
+   > 注：挂载、更新、销毁都是等子组件先完成，之后父组件才能说自己也完成
 
 ## 如何简化父子通信的写法
 
@@ -903,3 +900,1039 @@ Vue 框架中，可以**使用动态绑定属性的方式**来进行样式操作
      ```
 
      > 注：该方法可以**自定义**子组件内接受数据的属性名和触发事件名
+
+## 请介绍一下 $nextTick() 方法
+
+<!-- notecardId: 1704903445060 -->
+
+🔍 所考察的知识点：Vue 高级特性
+
+📢 参考答案：
+
+### 作用
+
+- **延迟**代码的执行时间直至**下次** DOM 更新完成后，再**立即**执行
+
+### 语法格式
+
+```javascript
+this.$nextTick(() => {
+  // 需要等待下次 DOM 更新，再执行的代码
+});
+```
+
+### 何时使用
+
+- 当**修改数据后**，要**进行相关 DOM 操作**时
+
+### 实际场景
+
+- 例如：你上一句代码更改了 input 输入框的显示状态，从隐藏更改为显示，然后下一句代码获取该元素调用 focus() 方法自动聚焦
+
+  ```html
+  <input ref="inp" v-if="isShow" />
+  ```
+
+  ```javascript
+  this.isShow = true; // 显示输入框
+  this.$refs.inp.focus(); // 获取输入框焦点
+  ```
+
+  由于 Vue 是采用**异步更新渲染页面**的，即等待全部数据修改完成后，再统一更新渲染页面，而**不是每执行一行修改数据的代码就马上更新渲染页面**，所以当执行代码 `this.isShow = true` 后，没有马上更新渲染对应的 input 的元素，即此时页面没有该 input 元素，从而导致代码 `this.$refs.inp` **获取元素的结果为 undefined**
+  而将代码 `this.$refs.inp` 放入 $nextTick() 方法的回调函数中，就可以延迟该代码的执行时间，**等 input 元素渲染后，立即执行**
+
+  ```javascript
+  this.isShow = true; // 显示输入框
+
+  this.$nextTick(() => {
+    this.$refs.inp.focus(); // 获取输入框焦点
+  });
+  ```
+
+  > 注：
+  >
+  > 1. 之所以不使用 setTimeout()方法来延迟代码执行，是因为你**无法知道下次渲染更新得多久**，就无法设置延迟的具体时间
+  > 2. 之所以不使用 mounted() 方法来解决，是因为该方法是**首次加载页面后**，在生命周期的挂载阶段执行，且**只执行一次**，而修改数据是在生命周期的更新阶段
+
+## 请介绍一下 slot
+
+<!-- notecardId: 1704903445069 -->
+
+🔍 所考察的知识点：Vue 高级特性
+
+📢 参考答案：
+
+### 作用
+
+- 允许父组件往子组件内添加内容，实现子组件内部结构的**自定义**
+
+### 为什么需要 slot
+
+- **当组件的结构一致，只是部分内容不同时**，若重新再封装成一个组件，就显得有点麻烦，且没有必要，为此，我们希望不同部分不要写死，那么可以在使用组件时，**通过插槽来自定义这部分不同的内容**
+  ![](../Media/%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%20slot.png)
+
+### 原理
+
+- 本质上就是将组件中那些不同的部分使用 `<slot>` 标签进行**占位**，在使用组件时，再传递自定义结构**替换** `<slot>` 标签
+
+### 分类
+
+1. **默认插槽**
+
+   - 定义
+     - 指的是**没有使用 name 属性**进行命名的 slot 标签
+   - 何时使用
+     - 当组件当中，**只有一处**需要自定义结构时
+   - 使用步骤
+     1. 在子组件内，**将需要定制的结构部分改用插槽标签** `<slot></slot>` 进行占位
+     2. 在父组件内使用组件时，**提供用于替换插槽的自定义结构**
+        ![](../Media/%E9%BB%98%E8%AE%A4%E6%8F%92%E6%A7%BD.png)
+        > 注：
+        >
+        > 1. 所提供的自定义结构不单单可以放置**文本内容**，还可以放置**任何 HTML 结构**
+        > 2. 若**不提供**自定义结构，则默认插槽会**空白显示**
+        > 3. 若想给插槽**设置默认内容**，则直接在子组件的插槽标签内添加即可，如 **`<slot>默认内容</slot>`**
+
+2. **具名插槽**
+
+   - 定义
+     - 指的是**使用 name 属性**进行命名的 slot 标签
+   - 何时使用
+     - 当组件当中，**多处**需要自定义结构时
+   - 使用步骤
+     1. 在子组件内，为插槽标签 `<slot></slot>` **添加 name 属性**，格式为 `name: 自定义插槽名`，来区分不同的插槽标签
+     2. 在父组件内使用组件时，**使用 `<template>` 标签包裹所提供的自定义结构**，并**添加指令 `v-slot` 来指定**该自定义结构要替换哪个插槽标签
+        ![](../Media/%E5%85%B7%E5%90%8D%E6%8F%92%E6%A7%BD.png)
+        > 注：`v-slot` 指令可以简写为 **#**
+
+3. **作用域插槽**
+
+   - 作用
+     - **向父组件传递数据**，即将子组件内插槽所绑定的数据传递给父组件使用
+   - 为什么需要作用域插槽
+     - 由于插槽的实际内容是父组件所提供的自定义结构，因此，这部分结构只能访问父组件内的数据，**无法访问子组件内的数据**，若要实现访问，就需要使用作用域插槽
+   - 何时使用
+     - 父组件**要使用子组件内的数据**时
+   - 使用步骤
+     1. 在插槽标签 `<slot></slot>` 内，**将要传递的子组件数据赋值给所添加的自定义属性**
+     2. 在父组件内使用组件时，在 `<template>` 标签处使用 `v-slot` 指令来**接受所传递的子组件数据**，格式为 **`#自定义插槽名="自定义变量名"`**
+        ![](../Media/%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%8F%92%E6%A7%BD.png)
+        > 注：
+        >
+        > 1. 若使用**默认插槽**，其**插槽名为 default**
+        > 2. 接受数据也可以使用**解构赋值**的方式，如上图中可以直接使用 `#default="{id}"` 来解构出 id
+
+## 请介绍一下异步加载组件（路由懒加载）
+
+<!-- notecardId: 1704903445072 -->
+
+🔍 所考察的知识点：性能优化
+
+📢 参考答案：
+
+### 定义
+
+- 指的是在单页面程序开发中，**按需加载组件**，而不是一次性全部加载
+
+### 为什么需要异步加载组件
+
+- 实际开发中，需要将较大的组件和与首页加载无关的组件配置为异步组件，即什么时候访问，什么时候加载，这样可以**避免组件较大或者较多时所导致的首页加载速度慢的问题**
+
+### 实现方法
+
+- **修改组件的默认导入语法**，改写前后对比如下：
+  ![](../Media/%E5%BC%82%E6%AD%A5%E5%8A%A0%E8%BD%BD%E7%BB%84%E4%BB%B6.png)
+
+## 请介绍一下 keep-alive
+
+<!-- notecardId: 1704903445076 -->
+
+🔍 所考察的知识点：性能优化
+
+📢 参考答案：
+
+### 定义
+
+- `<keep-alive>` 是 Vue 所提供的一个**内置组件**
+
+### 作用
+
+- **缓存组件**
+
+### 为什么需要 keep-alive
+
+1. 在**多组件频繁切换时**，**避免重新加载渲染 DOM**，从而减少性能消耗、提高用户体验性
+2. **保留被切换出去的组件状态**，如位置、内容等等
+   > 注：默认情况下，一个组件**在被切换出去后会被立即销毁**，从而导致它**丢失其中所有已变化的状态**，如位置、内容等等，当这个组件**再一次被显示时**，会**重新创建和渲染**
+
+### 实际场景
+
+- 例如：实际开发中，我们希望**从当前组件后退到上一个组件时，能够回到上一个组件跳转前的位置**
+  ![](../Media/keep-alive%20%E5%AE%9E%E9%99%85%E5%9C%BA%E6%99%AF.png)
+
+### 三个属性
+
+1. include：用于缓存**所指定的组件**
+2. exclude：用于缓存除了指定组件之外的**其余组件**
+3. max：用于指定**最多**可以缓存多少个组件，常用 exclude 属性搭配使用
+
+### 新增钩子函数
+
+- 被缓存的组件会新增两个钩子函数
+  1. **activated**：当组件**被激活时触发**，即切换到该组件时触发
+  2. **deactivated**：当组件**失活时触发**，即离开该组件时触发
+     > 注：被缓存的组件**无法再触发**以下钩子函数：**created、mounted、destroyed**
+
+### 使用步骤
+
+- 缓存单个组件
+
+  ```html
+  <keep-alive>
+    <your-component></your-component>
+  </keep-alive>
+  ```
+
+- 缓存某个路由组件
+
+  ```html
+  <!-- 只有路由组件 HomeComponent 会被缓存 -->
+  <keep-alive :include="[ 'HomeComponent' ]">
+    <router-view></router-view>
+  </keep-alive>
+  ```
+
+## 请介绍一下 mixins
+
+<!-- notecardId: 1704903445081 -->
+
+🔍 所考察的知识点：Vue 高级特性
+
+📢 参考答案：
+
+### 定义
+
+- 指的是将所定义的属性/方法**混入**目标组件内
+
+### 作用
+
+- 将**多个组件**内的**相同逻辑**抽离出来，实现多个组件可以**复用**
+
+### 使用步骤
+
+1. 在 src→mixins 文件夹内，**新建**一个自定义名称的 js 文件
+2. 在新建的 js 文件中，**定义**属性和方法，并使用 export default 全部**导出**
+
+```javascript
+export default {
+  data() {
+    return {
+      city: '北京',
+    };
+  },
+  methods: {
+    showName() {
+      console.log(this.name);
+    },
+  },
+  mounted() {
+    console.log('mixin mounted', this.name);
+  },
+};
+```
+
+3. 在目标组件内**导入**该文件，并在 export default 内**添加属性 mixins**，使用**数组存放**所导入的文件
+
+```html
+<template>
+  <div>
+    <p>{{name}} {{major}} {{city}}</p>
+    <button @click="showName">显示姓名</button>
+  </div>
+</template>
+
+<script>
+  // 导入文件
+  import myMixin from './mixin';
+
+  export default {
+    mixins: [myMixin], // 可以添加多个，会自动合并起来
+    data() {
+      return {
+        name: '张三',
+        major: 'web 前端',
+      };
+    },
+    methods: {},
+    mounted() {
+      console.log('component mounted', this.name);
+    },
+  };
+</script>
+```
+
+### 存在的问题
+
+1. **变量来源不明确，不利于阅读**
+   > 注：由于使用了 mixins 技术，所以导致目标组件内会出现一些当前组件内**未定义的属性和方法**，这些属性和方法**查找起来不方便**
+2. 多 mixins 可能会造成**命名冲突**
+   > 注：冲突时，若为**生命周期函数**，则**不会覆盖**，一起执行；若为**非生命周期函数**，则目标组件内的同名属性/方法会**覆盖** mixins 内所定义的属性/方法
+3. mixins 和组件可能出现**多对多**的关系，**复杂度较高**
+   > 注：多对多指的是一个组件引用多个 mixins 文件，而一个 mixins 文件又被多个组件引用
+
+## 请介绍一下 Vuex
+
+<!-- notecardId: 1704903445085 -->
+
+🔍 所考察的知识点：Vuex
+
+📢 参考答案：
+
+### 定义
+
+- 指的是 Vue 提供的**第三方插件**
+
+### 作用
+
+- 管理**多个组件之间**用于互相通信的**公用数据**，比如：购物车数据、个人信息数据
+
+### 为什么使用 Vuex
+
+- 之所以需要使用 Vuex，是因为**使用之前组件通信方式**，则传递和修改数据都需要在相关组件内添加相关属性和监听自定义事件来实现，**当需要多个组件进行互相通信时，就会显得特别的繁琐**，而**使用 Vuex 将公用的数据集中化管理**，当公用数据一变化，响应式更新所有使用该公用数据的组件
+  ![](../Media/Vuex%20%E5%A4%9A%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1.png)
+
+### 何时使用
+
+- 当**数据在多个组件中使用或者被修改**时，比如：个人信息、购物车数据
+
+### 核心属性
+
+1. **state**
+
+   - 作用
+     - **存储状态数据**
+   - 示例代码
+
+     ```javascript
+     // 在 Vuex store 中的 state 定义
+     const store = new Vuex.Store({
+       state: {
+         count: 0,
+         user: null,
+       },
+     });
+     ```
+
+2. **getters**
+
+   - 作用
+     - **依赖 state 数据，自动计算结果**，且只有当数据发生变化时，才重新计算结果
+   - 与 computed 的异同点
+     - 相同点
+       1. 都能**自动计算**并更新结果
+       2. 都能**缓存**计算结果
+     - 不同点
+       1. getters 依赖 **state** 数据，computed 依赖 **data** 数据
+       2. getters **只能获取不能设置**，computed 既可以获取，又可设置
+   - 示例代码
+
+     ```javascript
+     // 在 Vuex store 中的 getters 定义
+     const store = new Vuex.Store({
+       state: {
+         /* ... */
+       },
+       getters: {
+         doubleCount: (state) => state.count * 2,
+       },
+     });
+     ```
+
+3. **mutations**
+
+   - 作用
+     - **同步**操作 state 数据
+   - 示例代码
+
+     ```javascript
+     // 在 Vuex store 中的 mutations 定义
+     const store = new Vuex.Store({
+       state: {
+         /* ... */
+       },
+       mutations: {
+         increment(state) {
+           state.count++;
+         },
+         setUser(state, user) {
+           state.user = user;
+         },
+       },
+     });
+     ```
+
+     ```javascript
+     // 在组件内调用 commit() 方法来触发
+     this.$store.commit('setUser', 'colbyzn');
+     ```
+
+4. **actions**
+
+   - 作用
+     - **异步操作** state 数据
+   - 与同步操作数据的区别
+     - 异步操作数据需要**先经过 actions 内的方法处理后，再将结果传递给 mutations 内的方法**，从而更新 state 内的数据
+   - 示例代码
+     ![](../Media/Vuex%20%E5%BC%82%E6%AD%A5%E6%93%8D%E4%BD%9C%E6%95%B0%E6%8D%AE.png)
+
+5. **modules**
+   - 作用
+     - **将 store 分割成模块**
+   - 使用步骤
+     1. 在 store 文件夹下**新建**一个 **modules 文件夹**，并**放置不同模块文件**
+     2. 在模块内，**定义变量** state、mutations、actions、getters，并**导出**
+     3. 在 store 文件夹下的 **index.js 文件内**，**导入**各自的模块，并**挂载**到 new Vuex.Store()的配置对象中 **modules 对象内**
+        ![](../Media/Vuex%20%E6%8B%86%E5%88%86%E6%A8%A1%E5%9D%97.png)
+
+### 辅助函数
+
+1. **`mapState`**
+
+   - `mapState` 辅助函数用于在组件中**映射** `store` 中的 **`state`**
+   - 使用示例
+
+     ```javascript
+     import { mapState } from 'vuex';
+
+     export default {
+       computed: {
+         // 原始写法
+         // count() {
+         //   return this.$store.state.count;
+         // },
+         ...mapState(['count']),
+       },
+     };
+     ```
+
+2. **`mapGetters`**
+
+   - `mapGetters` 辅助函数用于在组件中**映射** `store` 中的 **`getters`**
+   - 使用示例
+
+     ```javascript
+     import { mapGetters } from 'vuex';
+
+     export default {
+       computed: {
+         // 原始写法
+         // doubleCount() {
+         //   return this.$store.getters.doubleCount;
+         // },
+         ...mapGetters(['doubleCount']),
+       },
+     };
+     ```
+
+3. **`mapMutations`**
+
+   - `mapMutations` 辅助函数用于在组件中**映射** `store` 中的 **`mutations`**
+   - 使用示例
+
+     ```javascript
+     import { mapMutations } from 'vuex';
+
+     export default {
+       methods: {
+         // 原始写法
+         // increment() {
+         //   return this.$store.commit('increment');
+         // },
+         ...mapMutations(['increment']),
+       },
+     };
+     ```
+
+4. **`mapActions`**
+
+   - `mapActions` 辅助函数用于在组件中**映射** `store` 中的 **`actions`**
+   - 使用示例
+
+     ```javascript
+     import { mapActions } from 'vuex';
+
+     export default {
+       methods: {
+         // 原始写法
+         // login() {
+         //   return this.$store.dispatch('login');
+         // },
+         ...mapActions(['login']),
+       },
+     };
+     ```
+
+   > 注：在组件内，**使用辅助函数**可以使得访问和修改 Store 仓库状态的**写法更加简单**
+
+### 数据传递流程
+
+![](../Media/Vuex%20%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92%E6%B5%81%E7%A8%8B.png)
+
+## 请介绍一下 Vue Router
+
+<!-- notecardId: 1704985276418 -->
+
+🔍 所考察的知识点：Vue Router
+
+📢 参考答案：
+
+### 定义
+
+- 指的是 Vue 官方提供的一个**路由插件**
+
+### 作用
+
+- 跳转访问路径时，切换显示**与之对应**的组件
+
+### 实现原理
+
+- 通过**建立访问路径 url 与组件的映射关系**来实现的
+
+## Vue Router 怎么配置路由？
+
+<!-- notecardId: 1704985276422 -->
+
+🔍 所考察的知识点：Vue Router
+
+📢 参考答案：
+
+1. 终端
+
+   - **下载 vue-router 包**，命令如下：
+
+     ```text
+      npm i vue-router
+     ```
+
+     > 注：默认下载的是**以 4 开头**给 Vue3 使用的版本，Vue2 下载需要使用 @ 来指定**以 3 开头**的版本
+
+2. src → router → index.js
+
+   1. **导入**
+
+      ```javascript
+      // Vue2
+      import VueRouter from 'vue-router';
+      ```
+
+      ```javascript
+      // Vue3
+      import { createRouter } from 'vue-router';
+      ```
+
+   2. **全局注册**
+
+      ```javascript
+      // Vue2
+      Vue.use(VueRouter);
+      ```
+
+      ```javascript
+      // Vue3
+      // 在 src → main.js 内全局注册
+      ```
+
+   3. **创建 router 实例，并配置 url 与组件的映射规则**
+
+      ```javascript
+      // Vue2
+      const router = new VueRouter({
+        routes: [
+          // 一级路由
+          { path: '/login', component: Login },
+          // 二级嵌套路由
+          {
+            path: '/',
+            component: Layout,
+            redirect: '/home',
+            children: [
+              { path: '/home', component: Home },
+              { path: '/category', component: Category },
+            ],
+          },
+        ],
+      });
+      ```
+
+      ```javascript
+      // Vue3
+      const router = createRouter({
+        routes: [
+          // 一级路由
+          { path: '/login', component: Login },
+          // 二级嵌套路由
+          {
+            path: '/',
+            component: Layout,
+            redirect: '/home',
+            children: [
+              { path: '/home', component: Home },
+              { path: '/category', component: Category },
+            ],
+          },
+        ],
+      });
+      ```
+
+   4. **导出 router 实例**
+
+      ```javascript
+      export default router;
+      ```
+
+3. src → main.js
+
+   1. **导入 router 实例**
+
+      ```javascript
+      import router from './router';
+      ```
+
+   2. **注入路由建立关联**/**全局注册**
+
+      ```javascript
+      // Vue2
+      // 注入路由建立关联
+      new Vue({
+        router,
+      }).$mount('#app');
+      ```
+
+      ```javascript
+      // Vue3
+      // 全局注册
+      app.use(router);
+      ```
+
+4. **配置路由出口**
+
+   ```html
+   <div id="app">
+     <h1>Hello App!</h1>
+
+     <!-- 路由匹配到的组件将渲染在这里 -->
+     <router-view></router-view>
+   </div>
+   ```
+
+5. **配置导航链接**
+
+   ```html
+   <div id="app">
+     <h1>Hello App!</h1>
+     <ul>
+       <!-- 使用 router-link 组件来导航. -->
+       <!-- 通过传入 `to` 属性指定链接. -->
+       <!-- <router-link> 默认会被渲染成一个 `<a>` 标签 -->
+       <li>
+         <router-link to="/home">首页</router-link>
+       </li>
+       <li>
+         <router-link to="/category">分类页</router-link>
+       </li>
+     </ul>
+   </div>
+   ```
+
+## 请介绍一下 Vue Router 中的路由模式，以及如何切换模式？
+
+<!-- notecardId: 1704985276426 -->
+
+🔍 所考察的知识点：Vue Router
+
+📢 参考答案：
+
+### 路由模式
+
+- Vue Router 中有两种路由模式：**hash 模式**、**history 模式**
+
+  1. hash 模式
+
+     - 定义
+
+       - 指的是 url 中路由**带 #**
+
+     - 示例
+
+       - <https://www.example.com/#/home>
+
+     - 特点
+       - **兼容性**，但是**不利于搜索引擎优化**（SEO）
+
+  2. history 模式
+
+     - 定义
+
+       - 指的是 url 中路由**不带 #**
+
+     - 示例
+
+       - <https://www.example.com/home>
+
+     - 特点
+       - **有利于搜索引擎优化**，但是**需要服务端进行相关配置，才能支持**
+
+  > 注：以上两种路由模式都**不会引起页面的重新加载**
+
+### 路由模式切换
+
+- **hash** 模式是**默认模式**，**不需要配置**，若切换到 history 模式，则需要配置
+
+  ```javascript
+  // Vue2
+  const router = new VueRouter({
+    mode: 'history',
+    routes: [
+      // 路由配置...
+    ],
+  });
+  ```
+
+  ```javascript
+  // Vue3
+  const router = createRouter({
+    history: createWebHistory(),
+    routes: [
+      // 路由配置...
+    ],
+  });
+  ```
+
+## 路由配置项常用的属性及其作用
+
+<!-- notecardId: 1704985276430 -->
+
+🔍 所考察的知识点：Vue Router
+
+📢 参考答案：
+
+1. **path**：配置**跳转路径**
+2. **component**：配置**与路径相映射的组件**
+3. **name**：配置**路由名称**
+4. **children**：配置**二级路由**，即嵌套路由
+5. **redirect**：配置**路由重定向**
+
+## 路由跳转传参的方式有哪些？
+
+<!-- notecardId: 1704985276434 -->
+
+🔍 所考察的知识点：
+
+📢 参考答案：
+
+路由跳转传参的方式有两种：**查询参数传参**、**动态路由传参**
+
+1. 查询参数传参
+
+   - 何时使用
+
+     - 当需要传递**多个**参数时
+
+   - 语法格式
+
+     1. 声明式导航
+
+        ```html
+        <router-link to="/path?参数名1=值&参数名2=值"></router-link>
+        ```
+
+        ```html
+        <a href="/path?参数名1=值&参数名2=值"></a>
+        ```
+
+     2. 编程式导航
+
+        ```javascript
+        this.$router.push('/路径?参数名1=值&参数名2=值');
+        ```
+
+        ```javascript
+        this.$router.push({
+          path: '/路径',
+          query: {
+            参数名1: '值',
+            参数名2: '值',
+          },
+        });
+        ```
+
+        ```javascript
+        this.$router.push({
+          // 使用命名路由，需先在配置项 routes 内的对应路由中添加 name 属性
+          // 使用命名路由跳转的好处是可以防止你在 url 中出现打字错误
+          name: '路由名称',
+          query: {
+            参数名1: '值',
+            参数名2: '值',
+          },
+        });
+        ```
+
+   - 获取查询参数
+
+     - 通过 **`$route.query.参数名`** 来获取传递的查询参数
+
+2. 动态路由传参
+
+   - 何时使用
+
+     - 当只传递**一个**参数时
+
+   - 配置动态路由
+
+     ```javascript
+     const router = new VueRouter({
+       routes: [
+         {
+           // 动态字段以冒号开始，如下方示例中的 :username
+           path: '/user/:username',
+           component: User,
+         },
+       ],
+     });
+     ```
+
+   - 语法格式
+
+     1. 声明式导航
+
+        ```html
+        <router-link to="/path/值"></router-link>
+        ```
+
+        ```html
+        <a href="/path/值"></a>
+        ```
+
+     2. 编程式导航
+
+        ```javascript
+        this.$router.push('/路径/值');
+        ```
+
+        ```javascript
+        this.$router.push({
+          path: '/路径/值',
+        });
+        ```
+
+        ```javascript
+        this.$router.push({
+          name: '路由名称',
+          params: {
+            参数名: '值',
+          },
+        });
+        ```
+
+   - 获取查询参数
+
+     - 通过 **`$route.params.参数名`** 来获取传递的查询参数
+
+## `$route` 和 `$router` 的区别是什么？
+
+🔍 所考察的知识点：Vue Router
+
+📢 参考答案：
+
+|          | `$route`                                                           | `$router`                                                        |
+| -------- | ------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| 包含内容 | 包含了**当前路由页面信息**，比如：路径、查询参数、动态路由参数等等 | 包含了**编程式导航相关方法**，比如：push()、replace()、go() 等等 |
+| 使用场景 | 主要用于在路由跳转传参时，**获取相关的路径、参数**等               | 主要用于**实现路由的跳转、前进、后退**等                         |
+
+## 谈一谈对 MVVM 的理解？
+
+<!-- notecardId: 1704985276443 -->
+
+🔍 所考察的知识点：Vue 原理
+
+📢 参考答案：
+
+- MVVM 的全称为 **Model View ViewModel** 的缩写，其中 Model 代表**数据模型**，View 代表**视图**，而 ViewModel 是**数据模型和视图的连接桥梁**
+- 在 MVVM 架构下，**View 和 Model 之间并没有直接的联系**，而是通过 ViewModel 进行交互的
+- ViewModel 负责**处理 View 的逻辑**，例如响应用户的输入，**将命令发送到 Model**，并**监听 Model 的数据改变**，**反过来更新 View**
+- MVVM 的**数据驱动视图**方式，使得开发者**更专注于业务逻辑的实现**，**而不是手动操作 DOM 更新视图**
+- 可以将 View 类比为**顾客**，Model 类比为**后厨**，而 ViewModel 就是**服务员**
+- 顾客**只需关注菜单，选择菜品**，后厨**只需关注如何做菜**，而服务员需要**接受顾客的点单**，然后**告诉后厨**需要准备什么菜品，**当菜品准备好了**，将其**送到顾客面前**
+  ![](../Media/MVVM.png)
+
+## 说一下对 Vue 响应式原理的理解
+
+<!-- notecardId: 1705073225026 -->
+
+🔍 所考察的知识点：响应式原理
+
+📢 参考答案：
+
+### Vue2 的响应式
+
+#### 监听对象
+
+- 原理
+
+  - Vue2 实现响应式主要是依赖于 **`Object.defineProperty()`** 函数
+  - 在 Vue 实例初始化时，会遍历 data 对象中的所有属性，并使用 `Object.defineProperty()` 函数**把这些属性全部转换为 getter/setter，实现数据劫持**
+  - 当属性**被访问**时，使用 getter 来**收集依赖**，从而**知道哪些组件或计算属性使用了该数据**
+  - 使用 setter 来**监听数据变化**，当属性**被修改**时，**通知使用该数据的组件或计算属性进行更新**
+
+    ```javascript
+    const data = {
+      username: 'zhangsan',
+    };
+
+    Object.defineProperty(data, 'username', {
+      get: function () {
+        console.log('get');
+        return username;
+      },
+      set: function (newValue) {
+        console.log('set');
+        username = newValue;
+      },
+    });
+
+    // 属性被访问时，就会打印出 get
+    data.username;
+
+    // 属性被修改时，就会打印出 set
+    data.username = 'lisi';
+    ```
+
+- 缺点
+
+  1. 对于**复杂对象**进行深度监听时，需要**递归到底**，即**为所有属性递归调用 `Object.defineProperty()` 函数**，这样会造成**一次性计算量大**，当复杂对象很大时，在页面初始化时，就会卡死
+  2. **无法监听**新增属性和删除的属性
+     > 注：解决方法是使用 **`Vue.set()`** 方法来新增属性，使用 **`Vue.delete()`** 方法来删除属性，而不是直接使用对象的新增和删除语法，如：`obj.新属性名 = 值`、`delete obj.属性名`
+  3. **无法原生监听数组**，需要另外进行特殊处理
+     > 注：具体解决方法见上方「原理 → 监听数组」
+
+#### 监听数组
+
+- 原理
+
+  - 由于 **`Object.defineProperty()`** 函数**无法监听数组的变化**，为了解决这个问题，**Vue2 扩展了 push、pop、splice 等变异方法**，使得使用这些方法**修改数组时**，可以**触发视图更新**
+
+    ```javascript
+    // 数据
+    const data = {
+      nums: [10, 20, 30],
+    };
+
+    // 创建一个空对象，其原型为数组的原型对象
+    const obj = Object.create(Array.prototype);
+
+    // 在该对象上扩展变异方法，如：push、pop 等
+    ['push', 'pop', 'shift', 'unshift', 'splice'].forEach((methodName) => {
+      obj[methodName] = function () {
+        // 调用方法时，触发视图更新
+        console.log('视图更新');
+        // 再调用原生的 push、pop 等方法
+        // this 为调用方法的原数组，arguments 为传入的参数
+        Array.prototype[methodName].call(this, ...arguments);
+      };
+    });
+
+    // 将数据 data 内数组的原型指向 obj
+    // 从而数组会调用 obj 内扩展的变异方法
+    data.nums.__proto__ = obj;
+
+    data.nums.push(40);
+    ```
+
+- 缺点
+
+  1. 无法监听**利用索引直接新增或修改数组元素**的情况，例如：`items[index] = value`，因此，实际开发中，**避免这么做**
+
+     > 注：解决方法如下：
+     >
+     > 1. 使用 **`Vue.set()`** 方法，例如：`Vue.set(items, index, value)`
+     > 2. 使用**数组变异方法 splice()** 方法，例如：`items.splice(index, 1, value)`
+     > 3. 直接使用**新数组替换旧数组**
+
+  2. 无法监听**直接修改数组长度**的情况，例如：`items.length = newLength`，因此，实际开发中，**避免这么做**
+     > 注：解决方法同上
+
+### Vue3 的响应式
+
+#### 原理
+
+- Vue3 实现响应式主要依赖于 **Proxy**
+
+#### 缺点
+
+- Proxy 有兼容性问题，无法使用 polyfill
+
+## 用 JS 模拟以下 DOM 结构（请用 vnode 来模拟以下 html 片段）
+
+```html
+<div id="div1" class="container">
+  <p>vdom</p>
+  <ul style="font-size: 20px">
+    <li>a</li>
+  </ul>
+</div>
+```
+
+%
+
+📢 参考答案：
+
+```javascript
+const vnode = {
+  tag: 'div',
+  props: {
+    id: 'div1',
+    className: 'container',
+  },
+  children: [
+    {
+      tag: 'p',
+      children: 'vdom',
+    },
+    {
+      tag: 'ul',
+      props: {
+        style: 'font-size: 20px',
+      },
+      children: [
+        {
+          tag: 'li',
+          children: 'a',
+        },
+      ],
+    },
+  ],
+};
+```
+
+> 注：
+>
+> 1. 对于**标签上的 class 属性**，js 中要使用 **className**，因为 class 是 js 内的关键字，已被占用
+> 2. 不同的框架使用 JS 模拟 DOM 结构**不完全相同**，例如：定义元素，有的用 **tag** 作为属性名，有的用 **element** 作为属性名，有的会**将 style 属性放在 props 属性内**，而有的会**单独将 style 属性拎出来**
+
+## 请介绍一下 VDOM
+
+<!-- notecardId: 1705073225036 -->
+
+🔍 所考察的知识点：VDOM
+
+📢 参考答案：
+
+### 定义
+
+- VDOM 的英文全称为 **Virtual DOM**（虚拟 DOM），指的是**使用 JavaScript 对象的形式来模拟真实 DOM 的层次结构**
+  ![](../Media/VDOM.png)
+
+### 为什么需要使用 VDOM
+
+- 之所以要使用 VDOM，是因为 **DOM 操作非常耗费性能**，要**避免没有必要的 DOM 的操作**，以减少 DOM 操作次数，而 **VDOM 存在于内存中**，并不是直接操作浏览器的 DOM，它通过**对比**新旧 VDOM 的差别，**预先计算出** DOM 操作的**最小更新范围**，再**一次性更新** DOM 操作，做到该更新的 DOM 更新，不该更新的 DOM 不更新

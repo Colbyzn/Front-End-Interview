@@ -6,13 +6,13 @@
 | :--: | :--------------------------------------------------------------------------------: | :----: |
 |  1   | [HTML](https://github.com/colbyzn/front-end-interview/blob/master/01-HTML/html.md) | 待完善 |
 |  2   |  [CSS](https://github.com/colbyzn/front-end-interview/blob/master/02-CSS/css.md)   | 待完善 |
-|  3   |                                     JavaScript                                     | 进行中 |
-|  4   |                                      手撕代码                                      | 进行中 |
-|  5   |                                     JS-Web-API                                     | 未开始 |
-|  6   |                                      开发环境                                      | 未开始 |
-|  7   |                                      运行环境                                      | 未开始 |
-|  8   |                                     HTTP 协议                                      | 未开始 |
-|  9   |                                        Vue                                         | 未开始 |
+|  3   |                                     JavaScript                                     | 待完善 |
+|  4   |                                      手撕代码                                      | 待完善 |
+|  5   |                                     JS-Web-API                                     | 待完善 |
+|  6   |                                      开发环境                                      | 待完善 |
+|  7   |                                      运行环境                                      | 待完善 |
+|  8   |                                     HTTP 协议                                      | 待完善 |
+|  9   |                                        Vue                                         | 待完善 |
 |  10  |                                        Node                                        | 未开始 |
 
 ## 关于仓库
