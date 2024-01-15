@@ -666,7 +666,7 @@ Vue 框架中，可以**使用动态绑定属性的方式**来进行样式操作
 
 - 与数据属性 data、方法 methods 等同级
 
-## vue 生命周期中，钩子函数 mounted 和 created 的区别是什么
+## vue 生命周期中，钩子函数 mounted 和 created 的区别是什么？
 
 <!-- notecardId: 1704814900126 -->
 
@@ -675,7 +675,7 @@ Vue 框架中，可以**使用动态绑定属性的方式**来进行样式操作
 📢 参考答案：
 
 - mounted 阶段 **DOM 元素已经创建完成**，而 created 阶段只是创建了组件实例，**DOM 元素还没有被创建**
-- mounted 阶段一般**进行一些 DOM 操作**，而 created 阶段一般会**发起 ajax 请求获取初始化数据**
+- mounted 阶段一般**进行一些 DOM 操作**以及**发起 ajax 请求获取初始化数据**，而 created 阶段一般会进行**初始化数据**以及**设置事件监听器**
 
 ## 多组件（父子组件）中生命周期的调用顺序说一下
 
@@ -1562,7 +1562,11 @@ export default {
        - <https://www.example.com/#/home>
 
      - 特点
-       - **兼容性**，但是**不利于搜索引擎优化**（SEO）
+
+       - hash 变化时，**不会刷新页面**
+       - hash **不会被提交到服务器端**（与服务器端无关，只在前端自生自灭）
+       - **兼容性**，不需要服务器端配置
+       - **不利于搜索引擎优化**（SEO）
 
   2. history 模式
 
@@ -1575,7 +1579,10 @@ export default {
        - <https://www.example.com/home>
 
      - 特点
-       - **有利于搜索引擎优化**，但是**需要服务端进行相关配置，才能支持**
+
+       - 跳转时，**不刷新页面**
+       - **有利于搜索引擎优化**
+       - **需要服务器端进行相关配置，比如：将所有页面都配置重定向到首页路由，否则会返回 404**
 
   > 注：以上两种路由模式都**不会引起页面的重新加载**
 
@@ -1968,8 +1975,7 @@ const vnode = {
      1. **若一方有子节点，另一方没有子节点**，则根据具体情况，执行**添加或者移除**的操作
         > 注：例如，新的 children 有子节点，而旧的 children 没有子节点，则对旧的 children 执行移除子节点操作，反之，执行添加操作
      2. **若都有子节点**，则**进行双端比较**，即从新旧 children 的两端开始进行比较，每次循环，**进行前前、后后、前后比较，以及借助 key 在旧 children 中寻找可复用节点**
-        > 注：相比于从头到尾依次比较的方法，**双端比较算法能有效减少循环的次数**
-        > ![](../Media/diff_%E5%8F%8C%E7%AB%AF%E6%AF%94%E8%BE%83%E7%AE%97%E6%B3%95.png)
+        > 注：相比于从头到尾依次比较的方法，**双端比较算法能有效减少循环的次数** > ![](../Media/diff_%E5%8F%8C%E7%AB%AF%E6%AF%94%E8%BE%83%E7%AE%97%E6%B3%95.png)
 
 ### Vue3 的 diff 算法
 
@@ -2037,11 +2043,183 @@ const vnode = {
 
 <!-- notecardId: 1705158331714 -->
 
-🔍 所考察的知识点：
+🔍 所考察的知识点：模版编译、组件渲染与更新
 
 📢 参考答案：
 
-1. 将模版编译为 render 函数
-2. 执行 render 函数生成 vnode
-3. 基于 vnode，再执行 patch 和 diff 来更新 DOM
-4. 待补充~~~
+### 初步渲染过程
+
+1. 将模版**编译为 render 函数**
+2. **执行 render 函数，生成 vnode**，同时会**触发**响应式数据的 **getter**，**收集依赖**
+   > 注：收集依赖的目的是**_知道哪些组件或者计算属性使用了数据_**
+3. 基于 vnode，再执行 **patch(element, vnode)** 进行**初次渲染**
+
+### 更新渲染过程
+
+1. **修改数据时**，会**触发**响应式数据的 **setter**，进而**通知** getter 所搜集的**依赖**进行**更新**
+2. **重新执行 render 函数，生成新的 vnode**
+3. **比较新旧 vnode**，再执行 **patch(vnode, newVnode)** 进行**更新渲染**
+
+### 流程示意图
+
+![](../Media/%E7%BB%84%E4%BB%B6%E6%B8%B2%E6%9F%93%E5%92%8C%E6%9B%B4%E6%96%B0%E7%9A%84%E8%BF%87%E7%A8%8B.png)
+
+## 请介绍一下 Vue 组件的异步渲染
+
+<!-- notecardId: 1705222011605 -->
+
+🔍 所考察的知识点：异步渲染
+
+📢 参考答案：
+
+### 定义
+
+- 指的是 Vue 在**更新组件时**，并**不是立即渲染**，而是**汇总 data 修改**，然后**将更新组件的异步任务放到下一轮事件循环（event loop）中统一更新**
+
+### 好处
+
+- 当数据 data **修改多次**，组件的**更新只会执行一次**，从而**避免了不必要的计算和 DOM 操作，提高了性能**
+
+## Vue 路由的实现原理
+
+<!-- notecardId: 1705222011611 -->
+
+🔍 所考察的知识点：路由实现原理
+
+📢 参考答案：
+
+要实现跳转路径，切换到对应的组件，需要满足以下三个条件：
+
+1. **跳转路径时，不刷新页面**
+
+   - 利用 **hash 模式**和 **histroy 模式**跳转不刷新页面的特性来实现
+
+2. **要知道何时跳转**
+
+   - hash 模式
+
+     - 通过为 **`location.hash`** 赋值来实现**跳转到指定路由路径**，通过 **`window.onhashchange`** 事件来**监听 hash 的变化**
+
+       ```javascript
+       // 跳转到指定路由路径
+       document.getElementById('btn').addEventListener('click', () => {
+         location.hash = '#/user';
+       });
+       ```
+
+       ```javascript
+       // 监听 hash 变化
+       window.onhashchange = (event) => {
+         console.log('old url', event.oldURL);
+         console.log('new url', event.newURL);
+
+         console.log('hash:', location.hash);
+       };
+       ```
+
+   - history 模式
+
+     - 通过 **`history.pushState`** 来**跳转到指定路由路径**，通过 **`window.onpopstate`** 来**监听路径的变化**
+
+       ```javascript
+       // 跳转到指定路由路径
+       document.getElementById('btn').addEventListener('click', () => {
+         const state = { name: 'user' };
+         history.pushState(state, '', 'user');
+       });
+       ```
+
+       ```javascript
+       // 监听路径的变化
+       window.onpopstate = (event) => {
+         console.log('onpopstate', event.state, location.pathname);
+       };
+       ```
+
+3. **建立跳转路径和组件的映射关系**
+
+   - 当监听到路由路径变化时，调用对应组件显示即可
+
+## v-model 实现双向数据绑定的原理
+
+<!-- notecardId: 1705246475061 -->
+
+🔍 所考察的知识点：模版编译
+
+📢 参考答案：
+
+1. v-model 本质是一个**语法糖**，背后是通过 **v-bind 和 v-on** 的结合来实现的
+2. 通过 v-bind **将数据绑定到相应的属性上**（如 value、checked），当数据发生变化时，视图会自动更新
+3. 通过 v-on **自动监听相应的输入事件**（如 input、change 等），当视图发生变化（例如用户在输入框中输入了新的值）时，**将新的值赋给数据**，从而实现双向绑定
+4. **在模版编译过程中**，vue 会自动将 v-model 指令**转换为 v-bind 和 v-on 相结合的形式**，示例如下：
+
+   ```html
+   <template>
+     <!-- 使用 v-model 绑定数据的 input 输入框 -->
+     <input type="text" v-model="name" />
+   </template>
+   ```
+
+   ```javascript
+   // 编译后的 render 函数
+   with (this) {
+     return _c('input', {
+       directives: [
+         {
+           name: 'model',
+           rawName: 'v-model',
+           // 数据 name 绑定到 value 属性上
+           value: name,
+           expression: 'name',
+         },
+       ],
+       attrs: { type: 'text' },
+       domProps: { value: name },
+       on: {
+         input: function ($event) {
+           if ($event.target.composing) return;
+           // 获取新的值，并赋值给数据绑定数据 name
+           name = $event.target.value;
+         },
+       },
+     });
+   }
+   ```
+
+## Vue 组件内的 data 为什么必须是一个函数？
+
+<!-- notecardId: 1705246475070 -->
+
+📢 参考答案：
+
+主要原因是确保每个组件实例都拥有一个**独立的数据对象**，**防止组件之间的数据共享和相互影响**
+
+**若 data 写成对象**，则**所有**的组件实例都会**共用一份 data**，就会造成在一个组件内修改数据，其他组件内的数据也跟着变的问题
+**若 data 写成一个函数**，则每次创建组件实例时，都会调用该函数，**返回一个全新的数据对象**，这样，每个组件实例都拥有独立的数据，彼此之间不会互相影响
+
+## ajax 请求应该放在哪个生命周期？
+
+<!-- notecardId: 1705246475076 -->
+
+📢 参考答案：
+
+结果：
+
+- 发起 AJAX 请求获取数据是 **`mounted`** 阶段进行的
+
+理由：
+
+- 若放在 **`created` 阶段**发起 AJAX 请求，**可能不够理想**，因为此时 DOM 还未挂载，**无法确保操作的准确性**，而在 `mounted` 阶段，DOM 已经完成挂载，可以进行 DOM 操作，因此，在该阶段发起 AJAX 请求，更为合适
+
+## 如何将组件所有 props 传递给子组件？
+
+<!-- notecardId: 1705246475083 -->
+
+📢 参考答案：
+
+可以通过 **`$props`** 来实现，示例代码如下：
+
+```html
+<!-- 假如子组件为 User -->
+<User v-bind="$props" />
+```
