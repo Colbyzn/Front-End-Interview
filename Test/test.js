@@ -1,28 +1,47 @@
-const VDOM = {
-  tag: 'div',
-  props: {
-    id: 'div1',
-    className: 'container'
-  },
-  children: [
-    {
-      tag: 'p',
-      children: 'vdom'
-    },
-    {
-      tag: 'ul',
-      props: {
-        style: 'font-size: 20px'
-      },
-      children: [
-        {
-          tag: 'li',
-          children: 'a'
-        }
-      ]
-    }
-  ]
-}
+// watch(ref / reactive 对象, (newValue, oldValue) => {
+//   // 处理逻辑
+// }, {
+//   deep: true
+// })
+// // 监听基本数据类型
+// watch(ref 对象, (newValue, oldValue) => {
+//   // 处理逻辑
+// })
+
+// // 监听对象内的基本数据类型
+// watch(() => ref 对象.value.子数据名, (newValue, oldValue) => {
+//   // 处理逻辑
+// })
+// // 或者
+// watch(() => reactive 对象.子数据名, (newValue, oldValue) => {
+//   // 处理逻辑
+// })
+
+// const VDOM = {
+//   tag: 'div',
+//   props: {
+//     id: 'div1',
+//     className: 'container'
+//   },
+//   children: [
+//     {
+//       tag: 'p',
+//       children: 'vdom'
+//     },
+//     {
+//       tag: 'ul',
+//       props: {
+//         style: 'font-size: 20px'
+//       },
+//       children: [
+//         {
+//           tag: 'li',
+//           children: 'a'
+//         }
+//       ]
+//     }
+//   ]
+// }
 
 // import { mapState } from 'vuex';
 
