@@ -117,58 +117,59 @@ document.creatElement(element);
 
    - Attribute 通过 **HTML 标签的属性直接设置**，也可以通过 API 方法 **setAttribute()、getAttribute()** 来操作
 
-     - 示例代码：
+     示例代码：
 
-       ```html
-       <div id="myDiv" class="example"></div>
-       <!-- 其中的 id 和 class 就是 Attribute 属性 -->
-       ```
+     ```html
+     <div id="myDiv" class="example"></div>
+     <!-- 其中的 id 和 class 就是 Attribute 属性 -->
+     ```
 
-       ```javascript
-       var element = document.getElementById('myDiv');
-       element.getAttribute('class'); // example
-       element.setAttribute('class', 'newClass');
-       ```
+     ```javascript
+     var element = document.getElementById('myDiv');
+     element.getAttribute('class'); // example
+     element.setAttribute('class', 'newClass');
+     ```
 
    - property 是通过**访问 DOM 对象的属性来获取和修改的**
 
-     - 示例代码：
+     示例代码：
 
-       ```html
-       <div id="myDiv" class="example"></div>
-       ```
+     ```html
+     <div id="myDiv" class="example"></div>
+     ```
 
-       ```javascript
-       var element = document.getElementById('myDiv');
-       // 获取属性
-       console.log(element.id);
-       // 修改属性值
-       element.id = 'newId';
-       ```
+     ```javascript
+     var element = document.getElementById('myDiv');
+     // 获取属性
+     console.log(element.id);
+     // 修改属性值
+     element.id = 'newId';
+     ```
 
 3. **属性值同步**
 
-   - 访问 attribute 所获得的值是**始终**是 HTML 元素在**初始状态下的属性值**，而访问 property 所获得的值是**当前状态下的属性值**
+   - 访问 attribute 所获得的值是**始终**是 HTML 元素在**初始状态下的属性值**
+   - 访问 property 所获得的值是**当前状态下的属性值**
 
-     - 示例代码：
-       假设我们在 HTML 中有一个文本框：
+     示例代码：
+     假设我们在 HTML 中有一个文本框：
 
-       ```html
-       <input type="text" value="Hello" />
-       ```
+     ```html
+     <input type="text" value="Hello" />
+     ```
 
-       ```javascript
-       // 初始状态下
-       const input = document.querySelector('input');
-       console.log(input.getAttribute('value')); // Hello
-       console.log(input.value); // Hello
-       ```
+     ```javascript
+     // 初始状态下
+     const input = document.querySelector('input');
+     console.log(input.getAttribute('value')); // Hello
+     console.log(input.value); // Hello
+     ```
 
-       ```javascript
-       // 但是在文本框中键入 World! 后:
-       console.log(input.getAttribute('value')); // Hello
-       console.log(input.value); // Hello World!
-       ```
+     ```javascript
+     // 但是在文本框中键入 World! 后:
+     console.log(input.getAttribute('value')); // Hello
+     console.log(input.value); // Hello World!
+     ```
 
 ## 如何减少 DOM 操作？
 
@@ -784,24 +785,32 @@ document.creatElement(element);
 
 1. **jQuery.ajax**
 
-   - 优点
-     - 使用简单、易于理解、兼容性好
-   - 缺点
-     1. **需要引入整个 jQuery 库**，如果只是使用 ajax 功能可能显得过于臃肿
-     2. **不支持链式调用**
+   优点
+
+   - 使用简单、易于理解、兼容性好
+
+   缺点
+
+   1. **需要引入整个 jQuery 库**，如果只是使用 ajax 功能可能显得过于臃肿
+   2. **不支持链式调用**
 
 2. **Axios**
 
-   - 优点
-     - 使用简单、功能丰富、**支持链式调用和 async/await 语法来处理异步操作**、**支持浏览器和 Node.js 环境**
+   优点
+
+   - 使用简单、功能丰富、**支持链式调用和 async/await 语法来处理异步操作**、**支持浏览器和 Node.js 环境**
 
 3. **Fetch**
-   - 优点
-     - 使用简单、功能丰富、**支持链式调用和 async/await 语法来处理异步操作**
-   - 缺点
-     1. **兼容性相对较差**
-     2. fetch 默认**不会自动携带 cookie**，需要添加配置项
-     3. fetcht 只对网络请求报错，**对响应状态码 400、500 都当做成功的请求**
+
+   优点
+
+   - 使用简单、功能丰富、**支持链式调用和 async/await 语法来处理异步操作**
+
+   缺点
+
+   1. **兼容性相对较差**
+   2. fetch 默认**不会自动携带 cookie**，需要添加配置项
+   3. fetcht 只对网络请求报错，**对响应状态码 400、500 都当做成功的请求**
 
 ## 请介绍一下 cookie
 

@@ -2344,13 +2344,43 @@ const vnode = {
 
 📢 参考答案：
 
-结果：
+当请求完成的同时**不进行相关 DOM 操作**时，则发起 ajax 请求既可以放在 **created** 阶段，也可以放在 **mounted** 阶段
 
-- 发起 AJAX 请求获取数据是 **`mounted`** 阶段进行的
+当请求完成的同时**要进行相关 DOM 操作**时，则发起 ajax 请求要放在 **mounted** 阶段
 
-理由：
+示例代码：
 
-- 若放在 **`created` 阶段**发起 AJAX 请求，**可能不够理想**，因为此时 DOM 还未挂载，**无法确保操作的准确性**，而在 `mounted` 阶段，DOM 已经完成挂载，可以进行 DOM 操作，因此，在该阶段发起 AJAX 请求，更为合适
+```javascript
+// 不进行 DOM 操作的 ajax 请求示例
+import axios from 'axios';
+
+axios
+  .get('https://api.example.com/data')
+  .then((response) => {
+    const data = response.data;
+    // 处理获取到的数据，但不涉及对 DOM 的直接操作
+  })
+  .catch((error) => {
+    console.error('Error fetching data:', error);
+  });
+```
+
+```javascript
+// 进行 DOM 操作的 ajax 请求示例
+import axios from 'axios';
+
+// 发起请求，并在请求完成时对 DOM 进行操作
+axios
+  .get('https://api.example.com/data')
+  .then((response) => {
+    const data = response.data;
+    // 处理获取到的数据，并对 DOM 进行操作
+    document.getElementById('content').innerText = data.message;
+  })
+  .catch((error) => {
+    console.error('Error fetching data:', error);
+  });
+```
 
 ## 如何将组件所有 props 传递给子组件？
 
@@ -2376,11 +2406,11 @@ v-model 本质是一个**语法糖**，背后是通过 **v-bind 和 v-on** 的�
 例如：
 
 1. text 和 textarea 元素
-   - 使用 **value** 属性和 **input** 事件
+   使用 **value** 属性和 **input** 事件
 2. select 元素
-   - 使用 **value** 属性和 **change** 事件
+   使用 **value** 属性和 **change** 事件
 3. checkbox 和 radio 元素
-   - 使用 **checked** 属性和 **change** 事件
+   使用 **checked** 属性和 **change** 事件
 
 ## 何时要使用异步组件？
 
@@ -2403,31 +2433,31 @@ v-model 本质是一个**语法糖**，背后是通过 **v-bind 和 v-on** 的�
 
 1. **清理定时器**
 
-   - 清理组件中使用 **`setTimeout` 或 `setInterval`** 创建的定时器
+   清理组件中使用 **`setTimeout` 或 `setInterval`** 创建的定时器
 
-     ```javascript
-     export default {
-       beforeDestroy() {
-         clearInterval(this.timer);
-       },
-     };
-     ```
+   ```javascript
+   export default {
+     beforeDestroy() {
+       clearInterval(this.timer);
+     },
+   };
+   ```
 
 2. **解绑事件监听器**
 
-   - 解绑组件中使用 **`addEventListener`** 添加的事件监听器
+   解绑组件中使用 **`addEventListener`** 添加的事件监听器
 
-     ```javascript
-     export default {
-       beforeDestroy() {
-         window.removeEventListener('resize', this.handleResize);
-       },
-     };
-     ```
+   ```javascript
+   export default {
+     beforeDestroy() {
+       window.removeEventListener('resize', this.handleResize);
+     },
+   };
+   ```
 
 3. **解绑自定义事件**
 
-   - 解绑组件中使用 **`$on`** 添加的自定义事件
+   解绑组件中使用 **`$on`** 添加的自定义事件
 
    ```javascript
    export default {
@@ -2515,7 +2545,9 @@ v-model 本质是一个**语法糖**，背后是通过 **v-bind 和 v-on** 的�
 | 销毁前 | beforeDestroy | **beforeUnmount**   | **onBeforeUnmount** |
 | 销毁后 | destroyed     | **unmounted**       | **onUnmounted**     |
 
-> 注：**setup 的执行时机**在生命周期钩子函数 **beforeCreate 之前** > ![](../Media/setup%20%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA.png)
+> 注：**setup 的执行时机**在生命周期钩子函数 **beforeCreate 之前**
+>
+> ![](../Media/setup%20%E6%89%A7%E8%A1%8C%E6%97%B6%E6%9C%BA.png)
 
 ## Composition API 对比 Options API
 
@@ -2749,7 +2781,7 @@ Vue 3 相比于 Vue 2，新增了如下新功能：
 
 8. **新的生命周期钩子**
 
-   如 `onBeforeMount`、`onMounted`、`onBeforeUpdate`、`onUpdated`、**`onBeforeUnmount`**、**`onUnmounted`** 等，这些新的生命周期钩子与 `setup` 函数结合，提供了更多的灵活性
+   如 `onBeforeMount`、`onMounted`、`onBeforeUpdate`、`onUpdated`、**`onBeforeUnmount`、`onUnmounted`** 等，这些新的生命周期钩子与 `setup` 函数结合，提供了更多的灵活性
 
 ## Composition API 如何实现逻辑复用
 
@@ -2947,6 +2979,20 @@ v-model 参数是 Vue3 的新增功能，**用于简化父子通信的写法**�
 </script>
 ```
 
+## Vue3 为何比 Vue2 快
+
+<!-- notecardId: 1705504440799 -->
+
+📢 参考答案：
+
+1. 使用 **Proxy** 实现响应式
+2. 对模板编译过程进行了优化
+   1. 使用 **PatchFlag** 标记动态节点
+   2. 使用 **hoistStatic** 缓存静态节点
+   3. 使用 **cacheHandlers** 缓存事件
+   4. 使用 **SSR**，绕过 vdom 的处理，直接将静态节点输出为字符串
+   5. 使用 **tree-shaking**，根据模版内容，按需导入相应的 API
+
 ## 请介绍一下 PatchFlag
 
 <!-- notecardId: 1705504440791 -->
@@ -3045,15 +3091,580 @@ export function render(_ctx, _cache, $props, $setup, $data, $options) {
 }
 ```
 
-## Vue3 为何比 Vue2 快
+## 请介绍一下 hoistStatic
 
-<!-- notecardId: 1705504440799 -->
+<!-- notecardId: 1705592825252 -->
 
 📢 参考答案：
 
-1. 使用 Proxy 实现响应式
-2. 编译模版时，使用 PatchFlag 标记动态节点
-3. hoistStatic
-4. cacheHandler
-5. SSR 优化
-6. tree-shaking
+### 作用
+
+1. 将**静态节点**的定义，提升到父作用域，**缓存**起来
+   > 注：典型的拿空间换时间的优化策略
+2. 多个相邻的静态节点，会被**合并**起来
+
+### 示例代码
+
+1. 缓存静态节点
+
+```html
+<div>
+  <!-- 静态节点 -->
+  <span>hello vue3</span>
+  <span>hello vue3</span>
+  <span>hello vue3</span>
+  <!-- 动态节点 -->
+  <span>{{ msg }}</span>
+</div>
+```
+
+```javascript
+// 不使用 hoistStatic
+import {
+  createCommentVNode as _createCommentVNode,
+  createElementVNode as _createElementVNode,
+  toDisplayString as _toDisplayString,
+  openBlock as _openBlock,
+  createElementBlock as _createElementBlock,
+} from 'vue';
+
+export function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (
+    _openBlock(),
+    _createElementBlock('div', null, [
+      _createCommentVNode(' 静态节点 '),
+      _createElementVNode('span', null, 'hello vue3'),
+      _createElementVNode('span', null, 'hello vue3'),
+      _createElementVNode('span', null, 'hello vue3'),
+      _createCommentVNode(' 动态节点 '),
+      _createElementVNode(
+        'span',
+        null,
+        _toDisplayString(_ctx.msg),
+        1 /* TEXT */
+      ),
+    ])
+  );
+}
+```
+
+```javascript
+// 使用 hoistStatic
+import {
+  createCommentVNode as _createCommentVNode,
+  createElementVNode as _createElementVNode,
+  toDisplayString as _toDisplayString,
+  openBlock as _openBlock,
+  createElementBlock as _createElementBlock,
+} from 'vue';
+
+// 通过变量存储静态节点，实现缓存
+const _hoisted_1 = /*#__PURE__*/ _createElementVNode(
+  'span',
+  null,
+  'hello vue3',
+  -1 /* HOISTED */
+);
+const _hoisted_2 = /*#__PURE__*/ _createElementVNode(
+  'span',
+  null,
+  'hello vue3',
+  -1 /* HOISTED */
+);
+const _hoisted_3 = /*#__PURE__*/ _createElementVNode(
+  'span',
+  null,
+  'hello vue3',
+  -1 /* HOISTED */
+);
+
+export function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (
+    _openBlock(),
+    _createElementBlock('div', null, [
+      _createCommentVNode(' 静态节点 '),
+      _hoisted_1,
+      _hoisted_2,
+      _hoisted_3,
+      _createCommentVNode(' 动态节点 '),
+      _createElementVNode(
+        'span',
+        null,
+        _toDisplayString(_ctx.msg),
+        1 /* TEXT */
+      ),
+    ])
+  );
+}
+```
+
+2. 多个相邻静态节点，进行合并
+
+```html
+<div>
+  <!-- 静态节点 -->
+  <span>hello vue3</span>
+  <span>hello vue3</span>
+  <span>hello vue3</span>
+  <span>hello vue3</span>
+  <span>hello vue3</span>
+  <span>hello vue3</span>
+  <span>hello vue3</span>
+  <span>hello vue3</span>
+  <span>hello vue3</span>
+  <span>hello vue3</span>
+  <!-- 动态节点 -->
+  <span>{{ msg }}</span>
+</div>
+```
+
+```javascript
+import {
+  createCommentVNode as _createCommentVNode,
+  createElementVNode as _createElementVNode,
+  toDisplayString as _toDisplayString,
+  createStaticVNode as _createStaticVNode,
+  openBlock as _openBlock,
+  createElementBlock as _createElementBlock,
+} from 'vue';
+
+// 将 10 个相邻静态节点合并为一个，然后再使用变量存储
+const _hoisted_1 = /*#__PURE__*/ _createStaticVNode(
+  '<span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span>',
+  10
+);
+
+export function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (
+    _openBlock(),
+    _createElementBlock('div', null, [
+      _createCommentVNode(' 静态节点 '),
+      _hoisted_1,
+      _createCommentVNode(' 动态节点 '),
+      _createElementVNode(
+        'span',
+        null,
+        _toDisplayString(_ctx.msg),
+        1 /* TEXT */
+      ),
+    ])
+  );
+}
+```
+
+## 请介绍一下 cacheHandlers
+
+<!-- notecardId: 1705592825262 -->
+
+📢 参考答案：
+
+### 作用
+
+- **缓存事件**
+
+### 示例代码
+
+```html
+<div>
+  <button @click="clickHandler">hello vue3</button>
+</div>
+```
+
+```javascript
+// 不使用cacheHandlers
+import {
+  createElementVNode as _createElementVNode,
+  openBlock as _openBlock,
+  createElementBlock as _createElementBlock,
+} from 'vue';
+
+export function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (
+    _openBlock(),
+    _createElementBlock('div', null, [
+      _createElementVNode(
+        'button',
+        { onClick: _ctx.clickHandler },
+        'hello vue3',
+        8 /* PROPS */,
+        ['onClick']
+      ),
+    ])
+  );
+}
+```
+
+```javascript
+// 不使用cacheHandlers
+import {
+  createElementVNode as _createElementVNode,
+  openBlock as _openBlock,
+  createElementBlock as _createElementBlock,
+} from 'vue';
+
+export function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (
+    _openBlock(),
+    _createElementBlock('div', null, [
+      _createElementVNode(
+        'button',
+        {
+          onClick:
+            // 若有缓存，直接读取，否则，重新定义一个
+            _cache[0] ||
+            (_cache[0] = (...args) =>
+              _ctx.clickHandler && _ctx.clickHandler(...args)),
+        },
+        'hello vue3'
+      ),
+    ])
+  );
+}
+```
+
+## 请介绍一下 SSR 优化
+
+<!-- notecardId: 1705592825270 -->
+
+📢 参考答案：
+
+### 作用
+
+- 静态节点**不经过 vdom 处理**，直接输出为**字符串**
+
+  > 注：动态节点依旧需要经过 vdom 处理
+
+### 示例代码
+
+```html
+<div>
+  <!-- 静态节点 -->
+  <span>hello vue3</span>
+  <span>hello vue3</span>
+  <span>hello vue3</span>
+  <!-- 动态节点 -->
+  <span>{{ msg }}</span>
+</div>
+```
+
+```javascript
+// 不使用 SSR 优化
+import {
+  createCommentVNode as _createCommentVNode,
+  createElementVNode as _createElementVNode,
+  toDisplayString as _toDisplayString,
+  openBlock as _openBlock,
+  createElementBlock as _createElementBlock,
+} from 'vue';
+
+export function render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (
+    _openBlock(),
+    _createElementBlock('div', null, [
+      _createCommentVNode(' 静态节点 '),
+      _createElementVNode('span', null, 'hello vue3'),
+      _createElementVNode('span', null, 'hello vue3'),
+      _createElementVNode('span', null, 'hello vue3'),
+      _createCommentVNode(' 动态节点 '),
+      _createElementVNode(
+        'span',
+        null,
+        _toDisplayString(_ctx.msg),
+        1 /* TEXT */
+      ),
+    ])
+  );
+}
+```
+
+```javascript
+// 使用 SSR 优化
+import { mergeProps as _mergeProps } from 'vue';
+import {
+  ssrRenderAttrs as _ssrRenderAttrs,
+  ssrInterpolate as _ssrInterpolate,
+} from 'vue/server-renderer';
+
+export function ssrRender(
+  _ctx,
+  _push,
+  _parent,
+  _attrs,
+  $props,
+  $setup,
+  $data,
+  $options
+) {
+  const _cssVars = { style: { color: _ctx.color } };
+  _push(
+    `<div${_ssrRenderAttrs(
+      _mergeProps(_attrs, _cssVars)
+      // 直接输出字符串，而不是使用 _createElementVNode() 方法来创建 vnode
+    )}><!-- 静态节点 --><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><!-- 动态节点 --><span>${_ssrInterpolate(
+      _ctx.msg
+    )}</span></div>`
+  );
+}
+```
+
+## 请介绍一下 tree shaking
+
+<!-- notecardId: 1705592825278 -->
+
+📢 参考答案：
+
+### 作用
+
+- 编译模版时，根据不同的内容，**按需导入**相应的 API
+
+### 示例代码
+
+```html
+<div>
+  <span>{{ msg }}</span>
+</div>
+```
+
+```javascript
+import {
+  toDisplayString as _toDisplayString,
+  createElementVNode as _createElementVNode,
+  openBlock as _openBlock,
+  createElementBlock as _createElementBlock,
+} from 'vue';
+```
+
+```html
+<div>
+  <input v-model="content" />
+</div>
+```
+
+```javascript
+import {
+  vModelText as _vModelText,
+  withDirectives as _withDirectives,
+  createElementVNode as _createElementVNode,
+  openBlock as _openBlock,
+  createElementBlock as _createElementBlock,
+} from 'vue';
+```
+
+## 请介绍一下 Vite？
+
+<!-- notecardId: 1705592825286 -->
+
+📢 参考答案：
+
+### 定义
+
+- 指的是一款**前端自动化构建工具**，即打包工具
+
+### 对比 Webpack
+
+1. **开发环境**（development）下，Vite 使用 ES6 Module，**无需打包，启动比 Webpack 快**
+
+   > 注：无需打包指的是在 script 标签内，直接引入 ES6 模块化，**而不是将其编译成 ES5 后再使用**，因此，速度更快
+
+   ```html
+   <!-- 在开发环境下，Vite 使用 type="module" 来引入 main.js 入口文件 -->
+   <script type="module" src="/src/main.js"></script>
+   ```
+
+2. **生产环境**（production）下，Vite **使用 rollup 来打包，与 Webpack 的速度差不多**
+
+## 请介绍一下 JSX
+
+<!-- notecardId: 1705592825294 -->
+
+📢 参考答案：
+
+### 定义
+
+- JSX 全称为 **JavaScript XML**，是 JavaScript 的**语法扩展**
+
+### 作用
+
+- 允许开发者在 JavaScript 代码中，**直接书写标记语言 HTML 和 XML**
+
+### 与 template 的区别
+
+1. JSX 是 **ES6 规范**，而 template 是 **Vue 自家规范**
+2. JSX 本质就是 js 代码，**可以使用 js 的任何能力**，而 template **只能嵌入简单的 js 表达式**，要实现其他功能，**需要搭配指令**，如 v-if、v-for 等
+
+### 在 Vue3 的基本使用
+
+需要注意的是，**虽然 JSX 在 Vue 中可以使用，但并不是 Vue 官方推荐的主要用法**。在实际项目中，是否使用 JSX 应根据团队的技术栈和项目需求来决定
+
+1. 插值
+
+   ```javascript
+   import { defineComponent, ref } from 'vue';
+
+   export default defineComponent({
+     setup() {
+       const message = ref('Hello, Vue with JSX!');
+       return () => (
+         <div>
+           <h1>{message.value}</h1>
+         </div>
+       );
+     },
+   });
+   ```
+
+   > 注：JSX 中，**插值**使用**单对花括号**，而不是两对花括号
+
+2. 循环
+
+   ```javascript
+   import { defineComponent, ref } from 'vue';
+
+   export default defineComponent({
+     setup() {
+       const items = ref(['Vue', 'React', 'Angular']);
+
+       return () => (
+         <ul>
+           {items.value.map((item, index) => (
+             <li key={index}>{item}</li>
+           ))}
+         </ul>
+       );
+     },
+   });
+   ```
+
+   > 注：**使用 `.map()` 方法来循环 `items` 数组，并为每个元素创建一个 `<li>` 标签**，而不是使用 v-for 指令来循环数组
+
+3. 条件判断
+
+   ```javascript
+   import { defineComponent, ref } from 'vue';
+
+   export default defineComponent({
+     setup() {
+       const show = ref(true);
+       const message = ref('This message will be shown or hidden.');
+
+       return () => (
+         <div>
+           {show.value ? <p>{message.value}</p> : <p>Message is hidden.</p>}
+         </div>
+       );
+     },
+   });
+   ```
+
+   > 注：**使用三元运算符来控制显示何种内容**，而不是使用 v-if 来控制
+
+## 请介绍一下 `<script setup>`
+
+<!-- notecardId: 1705592825302 -->
+
+📢 参考答案：
+
+### 定义
+
+- `<script setup>` 是 **`setup()` 函数的语法糖**
+
+### 作用
+
+- 简化原先 `setup()` 函数的写法，**省去了一些繁琐的组件配置**，使得使用 Composition API 编写代码时，**代码结构更简洁、更清晰**
+
+### 与使用 `setup()` 函数相比的变化
+
+1. **无需手动返回对象**
+   在 `setup()` 函数中，需要**手动返回一个包含数据、方法等配置的对象**，而在 `<script setup>` 中，不需要显式地返回，系统会**自动返回数据和方法**
+2. **Props 和 Context 自动注入**
+   使用 `setup()` 函数时，需要**显式地传入** `props` 和 `context` 参数，而使用 `<script setup>` 时，`props` 和 `context` 参数会被**自动注入**
+3. **省去了局部注册**
+   使用 `setup()` 函数时，导入组件后，**需要再添加到 components 对象内**，而使用 `<script setup>` 时，**导入组件即可视为完成了局部注册**
+4. **父子通信中自定义属性和事件方式不同**
+   使用 `setup()` 函数时，自定义属性和事件需要通过 **`props`** 和 **`emits`** 属性来定义，而使用 `<script setup>` 时，自定义属性和事件是使用 **`defineProps()`** 和 **`defineEmits()`** 方法来定义的
+5. 父组件访问子组件内数据或方法的方式不同
+   使用 `setup()` 函数时，在父组件内直接使用「ref 对象.value.组件内的数据/方法()」就可以访问子组件内的数据/方法，而使用 `<script setup>` 时，需要**先在子组件内**，通过**调用 defineExpose() 函数暴露所要被外部访问的属性和方法**，再使用「ref 对象.value.组件内的数据/方法()」来访问
+   > 注：上述中的 ref 对象指的是子组件上 **ref 属性所绑定的 ref 对象数据**
+
+### 示例代码对比
+
+1. 使用 `setup()` 函数的组件
+
+   ```html
+   <script>
+     import { ref } from 'vue';
+     // 导入组件
+     import Child from './components/Child';
+
+     export default {
+       // 局部注册
+       components: {
+         Child,
+       },
+       // 定义接受属性
+       props: {
+         name: String,
+         age: Number,
+         msg: String,
+       },
+       // 定义触发事件
+       emits: ['change', 'delete'],
+       // 显示地传入 props 参数
+       setup(props) {
+         const count = ref(0);
+         function increment() {
+           count.value++;
+         }
+
+         const newMessage = ref('');
+         function getMessage() {
+           newMessage.value = props.msg;
+         }
+         // 手动返回包含数据和方法的对象
+         return {
+           count,
+           increment,
+           newMessage,
+           getMessage,
+         };
+       },
+     };
+   </script>
+   ```
+
+2. 使用 `<script setup>` 的等效组件
+
+   ```html
+   <script setup>
+     import { ref, defineProps, defineEmits } from 'vue';
+
+     // 导入组件
+     import Child from './components/Child';
+
+     // 定义接受属性
+     const props = defineProps({
+       name: String,
+       age: Number,
+       msg: String,
+     });
+
+     // 定义触发事件
+     const emit = defineEmits(['change', 'delete']);
+
+     const count = ref(0);
+     function increment() {
+       count.value++;
+     }
+
+     const newMessage = ref('');
+     function getMessage() {
+       newMessage.value = props.msg;
+     }
+
+     // 暴露所要被外部访问的属性和方法
+     defineExpose({
+       count,
+       increment,
+     });
+   </script>
+   ```

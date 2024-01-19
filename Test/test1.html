@@ -9,12 +9,25 @@
 </head>
 
 <body>
-  <div id="div1" class="container">
-    <p>vdom</p>
-    <ul style="font-size: 20px">
-      <li>a</li>
-    </ul>
-  </div>
+  <script>
+    function isDuplicated(arr) {
+      let flag = false
+
+      arr.some((item, index, self) => {
+        if (self.indexOf(item) !== index) {
+          flag = true
+          return true
+        }
+      })
+
+      return flag
+    }
+
+    const arr1 = [1, 2, 3, 5, 2, 1]
+    const arr2 = [1, 2, 3, 5]
+    console.log(isDuplicated(arr1))
+    console.log(isDuplicated(arr2))
+  </script>
 </body>
 
 </html>
