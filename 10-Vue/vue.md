@@ -423,17 +423,17 @@ Vue 框架中，可以**使用动态绑定属性的方式**来进行样式操作
 
 ### 常搭配的属性 key
 
-- 作用
+#### 作用
 
-  - 为每个列表项绑定一个**唯一的标识**，便于 Vue 跟踪每个列表项
+- 为每个列表项绑定一个**唯一的标识**，便于 Vue 跟踪每个列表项
 
-- 语法格式
+#### 语法格式
 
-  ```javascript
-  :key="值"
-  ```
+```javascript
+:key="值"
+```
 
-  > 注：key 的值必须是**字符串或者数字**，且**唯一**，不重复，但是**不能是随机数或者索引**
+> 注：key 的值必须是**字符串或者数字**，且**唯一**，不重复，但是**不能是随机数或者索引**
 
 ### 示例代码
 
@@ -1115,7 +1115,7 @@ this.$nextTick(() => {
 - 被缓存的组件会新增两个钩子函数
   1. **activated**：当组件**被激活时触发**，即切换到该组件时触发
   2. **deactivated**：当组件**失活时触发**，即离开该组件时触发
-     > 注：被缓存的组件**无法再触发**以下钩子函数：**created、mounted、destroyed**
+     > 注：被缓存的组件**无法再触发**以下钩子函数：**beforeCreate、created、beforeMount、mounted、beforeDestroy、destroyed**
 
 ### 使用步骤
 
@@ -2696,6 +2696,7 @@ Vue 3 相比于 Vue 2，新增了如下新功能：
    ```
 
    ```javascript
+   // Vue3
    import { createApp } from 'vue';
 
    const app = createApp({
@@ -3107,150 +3108,150 @@ export function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 1. 缓存静态节点
 
-```html
-<div>
-  <!-- 静态节点 -->
-  <span>hello vue3</span>
-  <span>hello vue3</span>
-  <span>hello vue3</span>
-  <!-- 动态节点 -->
-  <span>{{ msg }}</span>
-</div>
-```
+   ```html
+   <div>
+     <!-- 静态节点 -->
+     <span>hello vue3</span>
+     <span>hello vue3</span>
+     <span>hello vue3</span>
+     <!-- 动态节点 -->
+     <span>{{ msg }}</span>
+   </div>
+   ```
 
-```javascript
-// 不使用 hoistStatic
-import {
-  createCommentVNode as _createCommentVNode,
-  createElementVNode as _createElementVNode,
-  toDisplayString as _toDisplayString,
-  openBlock as _openBlock,
-  createElementBlock as _createElementBlock,
-} from 'vue';
+   ```javascript
+   // 不使用 hoistStatic
+   import {
+     createCommentVNode as _createCommentVNode,
+     createElementVNode as _createElementVNode,
+     toDisplayString as _toDisplayString,
+     openBlock as _openBlock,
+     createElementBlock as _createElementBlock,
+   } from 'vue';
 
-export function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (
-    _openBlock(),
-    _createElementBlock('div', null, [
-      _createCommentVNode(' 静态节点 '),
-      _createElementVNode('span', null, 'hello vue3'),
-      _createElementVNode('span', null, 'hello vue3'),
-      _createElementVNode('span', null, 'hello vue3'),
-      _createCommentVNode(' 动态节点 '),
-      _createElementVNode(
-        'span',
-        null,
-        _toDisplayString(_ctx.msg),
-        1 /* TEXT */
-      ),
-    ])
-  );
-}
-```
+   export function render(_ctx, _cache, $props, $setup, $data, $options) {
+     return (
+       _openBlock(),
+       _createElementBlock('div', null, [
+         _createCommentVNode(' 静态节点 '),
+         _createElementVNode('span', null, 'hello vue3'),
+         _createElementVNode('span', null, 'hello vue3'),
+         _createElementVNode('span', null, 'hello vue3'),
+         _createCommentVNode(' 动态节点 '),
+         _createElementVNode(
+           'span',
+           null,
+           _toDisplayString(_ctx.msg),
+           1 /* TEXT */
+         ),
+       ])
+     );
+   }
+   ```
 
-```javascript
-// 使用 hoistStatic
-import {
-  createCommentVNode as _createCommentVNode,
-  createElementVNode as _createElementVNode,
-  toDisplayString as _toDisplayString,
-  openBlock as _openBlock,
-  createElementBlock as _createElementBlock,
-} from 'vue';
+   ```javascript
+   // 使用 hoistStatic
+   import {
+     createCommentVNode as _createCommentVNode,
+     createElementVNode as _createElementVNode,
+     toDisplayString as _toDisplayString,
+     openBlock as _openBlock,
+     createElementBlock as _createElementBlock,
+   } from 'vue';
 
-// 通过变量存储静态节点，实现缓存
-const _hoisted_1 = /*#__PURE__*/ _createElementVNode(
-  'span',
-  null,
-  'hello vue3',
-  -1 /* HOISTED */
-);
-const _hoisted_2 = /*#__PURE__*/ _createElementVNode(
-  'span',
-  null,
-  'hello vue3',
-  -1 /* HOISTED */
-);
-const _hoisted_3 = /*#__PURE__*/ _createElementVNode(
-  'span',
-  null,
-  'hello vue3',
-  -1 /* HOISTED */
-);
+   // 通过变量存储静态节点，实现缓存
+   const _hoisted_1 = /*#__PURE__*/ _createElementVNode(
+     'span',
+     null,
+     'hello vue3',
+     -1 /* HOISTED */
+   );
+   const _hoisted_2 = /*#__PURE__*/ _createElementVNode(
+     'span',
+     null,
+     'hello vue3',
+     -1 /* HOISTED */
+   );
+   const _hoisted_3 = /*#__PURE__*/ _createElementVNode(
+     'span',
+     null,
+     'hello vue3',
+     -1 /* HOISTED */
+   );
 
-export function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (
-    _openBlock(),
-    _createElementBlock('div', null, [
-      _createCommentVNode(' 静态节点 '),
-      _hoisted_1,
-      _hoisted_2,
-      _hoisted_3,
-      _createCommentVNode(' 动态节点 '),
-      _createElementVNode(
-        'span',
-        null,
-        _toDisplayString(_ctx.msg),
-        1 /* TEXT */
-      ),
-    ])
-  );
-}
-```
+   export function render(_ctx, _cache, $props, $setup, $data, $options) {
+     return (
+       _openBlock(),
+       _createElementBlock('div', null, [
+         _createCommentVNode(' 静态节点 '),
+         _hoisted_1,
+         _hoisted_2,
+         _hoisted_3,
+         _createCommentVNode(' 动态节点 '),
+         _createElementVNode(
+           'span',
+           null,
+           _toDisplayString(_ctx.msg),
+           1 /* TEXT */
+         ),
+       ])
+     );
+   }
+   ```
 
 2. 多个相邻静态节点，进行合并
 
-```html
-<div>
-  <!-- 静态节点 -->
-  <span>hello vue3</span>
-  <span>hello vue3</span>
-  <span>hello vue3</span>
-  <span>hello vue3</span>
-  <span>hello vue3</span>
-  <span>hello vue3</span>
-  <span>hello vue3</span>
-  <span>hello vue3</span>
-  <span>hello vue3</span>
-  <span>hello vue3</span>
-  <!-- 动态节点 -->
-  <span>{{ msg }}</span>
-</div>
-```
+   ```html
+   <div>
+     <!-- 静态节点 -->
+     <span>hello vue3</span>
+     <span>hello vue3</span>
+     <span>hello vue3</span>
+     <span>hello vue3</span>
+     <span>hello vue3</span>
+     <span>hello vue3</span>
+     <span>hello vue3</span>
+     <span>hello vue3</span>
+     <span>hello vue3</span>
+     <span>hello vue3</span>
+     <!-- 动态节点 -->
+     <span>{{ msg }}</span>
+   </div>
+   ```
 
-```javascript
-import {
-  createCommentVNode as _createCommentVNode,
-  createElementVNode as _createElementVNode,
-  toDisplayString as _toDisplayString,
-  createStaticVNode as _createStaticVNode,
-  openBlock as _openBlock,
-  createElementBlock as _createElementBlock,
-} from 'vue';
+   ```javascript
+   import {
+     createCommentVNode as _createCommentVNode,
+     createElementVNode as _createElementVNode,
+     toDisplayString as _toDisplayString,
+     createStaticVNode as _createStaticVNode,
+     openBlock as _openBlock,
+     createElementBlock as _createElementBlock,
+   } from 'vue';
 
-// 将 10 个相邻静态节点合并为一个，然后再使用变量存储
-const _hoisted_1 = /*#__PURE__*/ _createStaticVNode(
-  '<span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span>',
-  10
-);
+   // 将 10 个相邻静态节点合并为一个，然后再使用变量存储
+   const _hoisted_1 = /*#__PURE__*/ _createStaticVNode(
+     '<span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span><span>hello vue3</span>',
+     10
+   );
 
-export function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (
-    _openBlock(),
-    _createElementBlock('div', null, [
-      _createCommentVNode(' 静态节点 '),
-      _hoisted_1,
-      _createCommentVNode(' 动态节点 '),
-      _createElementVNode(
-        'span',
-        null,
-        _toDisplayString(_ctx.msg),
-        1 /* TEXT */
-      ),
-    ])
-  );
-}
-```
+   export function render(_ctx, _cache, $props, $setup, $data, $options) {
+     return (
+       _openBlock(),
+       _createElementBlock('div', null, [
+         _createCommentVNode(' 静态节点 '),
+         _hoisted_1,
+         _createCommentVNode(' 动态节点 '),
+         _createElementVNode(
+           'span',
+           null,
+           _toDisplayString(_ctx.msg),
+           1 /* TEXT */
+         ),
+       ])
+     );
+   }
+   ```
 
 ## 请介绍一下 cacheHandlers
 
@@ -3582,7 +3583,7 @@ import {
    使用 `setup()` 函数时，导入组件后，**需要再添加到 components 对象内**，而使用 `<script setup>` 时，**导入组件即可视为完成了局部注册**
 4. **父子通信中自定义属性和事件方式不同**
    使用 `setup()` 函数时，自定义属性和事件需要通过 **`props`** 和 **`emits`** 属性来定义，而使用 `<script setup>` 时，自定义属性和事件是使用 **`defineProps()`** 和 **`defineEmits()`** 方法来定义的
-5. 父组件访问子组件内数据或方法的方式不同
+5. **父组件访问子组件内数据或方法的方式不同**
    使用 `setup()` 函数时，在父组件内直接使用「ref 对象.value.组件内的数据/方法()」就可以访问子组件内的数据/方法，而使用 `<script setup>` 时，需要**先在子组件内**，通过**调用 defineExpose() 函数暴露所要被外部访问的属性和方法**，再使用「ref 对象.value.组件内的数据/方法()」来访问
    > 注：上述中的 ref 对象指的是子组件上 **ref 属性所绑定的 ref 对象数据**
 
