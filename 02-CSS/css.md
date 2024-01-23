@@ -361,67 +361,69 @@ BFC 可以看作是**独立的渲染区域**，内部的元素不会在布局上
 
 📢 参考答案：
 
-1. 水平居中
+### 水平居中
 
-   - inline 元素 → text-align: center;
-   - inline-block 元素 → text-align: center;
-   - block 元素 → margin: auto;（**使用前提**是该块级元素设置了宽度）
-   - absolute 元素 → left: 50% + margin-left: 负值（元素宽度的一半）；
-   - absolute 元素 → left: 50% + transform: translate(-50%, 0);
-   - flex 元素 → justify-content: center;
+- inline 元素 → text-align: center;
+- inline-block 元素 → text-align: center;
+- block 元素 → margin: auto;（**使用前提**是该块级元素设置了宽度）
+- absolute 元素 → left: 50% + margin-left: 负值（元素宽度的一半）；
+- absolute 元素 → left: 50% + **transform: translate(-50%, 0)**;
+- flex 元素 → justify-content: center;
 
-2. 垂直居中
+### 垂直居中
 
-   - inline 元素 → line-height 值等于 height 值
-   - inline-block 元素
+- inline 元素 → line-height 值等于 height 值
+- inline-block 元素
 
-     1. 给自身添加 **vertical-align: middle;** （**使用前提**是必须要有已经垂直居中的文本，因为`vertical-align`是设置行内元素/行内块元素与文字的垂直对齐方式）
+  1. 给自身添加 **vertical-align: middle;** （**使用前提**是必须要有已经垂直居中的文本，因为`vertical-align`是设置行内元素/行内块元素与文字的垂直对齐方式）
 
-        - 示例代码如下：
+     示例代码如下：
 
-          ```html
-          <div class="container container-4">
-            <img src="./盒模型宽度计算.png" alt="" />
-            <span>文字</span>
-          </div>
-          ```
+     ```html
+     <div class="container container-4">
+       <img src="./盒模型宽度计算.png" alt="" />
+       <span>文字</span>
+     </div>
+     ```
 
-          ```css
-          .container {
-            height: 500px;
-            border: 1px solid #ccc;
-            margin: 10px;
-            padding: 10px;
-          }
+     ```css
+     .container {
+       height: 500px;
+       border: 1px solid #ccc;
+       margin: 10px;
+       padding: 10px;
+     }
 
-          .container-4 {
-            text-align: center;
-            /* 先让文本垂直居中 */
-            line-height: 500px;
-          }
+     .container-4 {
+       text-align: center;
+       /* 先让文本垂直居中 */
+       line-height: 500px;
+     }
 
-          img {
-            /* 再让图片与文字垂直对齐，则图片也就垂直居中了 */
-            vertical-align: middle;
-          }
-          ```
+     img {
+       /* 再让图片与文字垂直对齐，则图片也就垂直居中了 */
+       vertical-align: middle;
+     }
+     ```
 
-     2. 使用 Flexbox 或 Grid 布局
+  2. 使用 Flexbox 或 Grid 布局
 
-   - absolute 元素 → top: 50% + margin-top: 负值（元素高度的一半）；
-   - absolute 元素 → top: 50% + transform: translate(0, -50%);
-   - absolute 元素 → top、right、bottom、left 都设为 0 + margin: auto
-   - flex 元素 → align-items: center;
+- absolute 元素 → top: 50% + margin-top: 负值（元素高度的一半）；
+- absolute 元素 → top: 50% + **transform: translate(0, -50%)**;
+- absolute 元素 → **top、right、bottom、left 都设为 0 + margin: auto**
+- flex 元素 → align-items: center;
 
 > 注：
-> 不需要知道元素宽高但是有兼容性问题的是：
-> **left: 50% + top: 50% + transform: translate(-50%,-50%);** > **justify-content: center; 和 align-items: center;**
 >
-> 无兼容性问题但是需要知道元素宽高的是：
-> **left: 50% + margin-left: 负值和 top: 50% + margin-top: 负值;**
+> - 不需要知道元素宽高但是有兼容性问题的是：
+>   **left: 50% + top: 50% + transform: translate(-50%,-50%);**
 >
-> 既无兼容性问题，也不需要知道元素宽度的是：
-> **top、right、bottom、left 都设为 0 + margin:auto;**
+>   **justify-content: center; 和 align-items: center;**
+>
+> - 无兼容性问题但是需要知道元素宽高的是：
+>   **left: 50% + margin-left: 负值和 top: 50% + margin-top: 负值;**
+> - 既无兼容性问题，也不需要知道元素宽度的是：
+>   **top、right、bottom、left 都设为 0 + margin:auto;**
 
 ## line-height 的继承问题？
 

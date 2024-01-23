@@ -1146,73 +1146,75 @@ this.$nextTick(() => {
 
 ### 定义
 
-- 指的是将所定义的属性/方法**混入**目标组件内
+- mixins 是抽离**多个组件**之间的**相同逻辑代码**，实现复用的一种技术
 
-### 作用
+### 为什么需要 mixins
 
-- 将**多个组件**内的**相同逻辑**抽离出来，实现多个组件可以**复用**
+- **多个组件存在相同逻辑代码，不仅会导致代码冗余不简洁，而且不方便维护**，所以要使用 mixins 技术将多个组件之间的相同逻辑代码抽离出来实现复用
 
-### 使用步骤
+### 基本使用
 
 1. 在 src→mixins 文件夹内，**新建**一个自定义名称的 js 文件
-2. 在新建的 js 文件中，**定义**属性和方法，并使用 export default 全部**导出**
+2. 在新建的 js 文件中，**定义**数据和方法，并使用 export default 全部**导出**
 
-```javascript
-export default {
-  data() {
-    return {
-      city: '北京',
-    };
-  },
-  methods: {
-    showName() {
-      console.log(this.name);
-    },
-  },
-  mounted() {
-    console.log('mixin mounted', this.name);
-  },
-};
-```
+   ```javascript
+   export default {
+     data() {
+       return {
+         city: '北京',
+       };
+     },
+     methods: {
+       showName() {
+         console.log(this.name);
+       },
+     },
+     mounted() {
+       console.log('mixin mounted', this.name);
+     },
+   };
+   ```
 
-3. 在目标组件内**导入**该文件，并在 export default 内**添加属性 mixins**，使用**数组存放**所导入的文件
+3. 在目标组件内**导入**该文件，并在 export default 内**添加属性 mixins**，使用**数组存放**所导入的文件，然后使用即可
 
-```html
-<template>
-  <div>
-    <p>{{name}} {{major}} {{city}}</p>
-    <button @click="showName">显示姓名</button>
-  </div>
-</template>
+   ```html
+   <template>
+     <div>
+       <p>{{name}} {{major}} {{city}}</p>
+       <button @click="showName">显示姓名</button>
+     </div>
+   </template>
 
-<script>
-  // 导入文件
-  import myMixin from './mixin';
+   <script>
+     // 导入文件
+     import myMixin from './mixin';
 
-  export default {
-    mixins: [myMixin], // 可以添加多个，会自动合并起来
-    data() {
-      return {
-        name: '张三',
-        major: 'web 前端',
-      };
-    },
-    methods: {},
-    mounted() {
-      console.log('component mounted', this.name);
-    },
-  };
-</script>
-```
+     export default {
+       mixins: [myMixin], // 可以添加多个，会自动合并起来
+       data() {
+         return {
+           name: '张三',
+           major: 'web 前端',
+         };
+       },
+       methods: {},
+       mounted() {
+         console.log('component mounted', this.name);
+       },
+     };
+   </script>
+   ```
 
-### 存在的问题
+### 使用注意
 
-1. **变量来源不明确，不利于阅读**
-   > 注：由于使用了 mixins 技术，所以导致目标组件内会出现一些当前组件内**未定义的属性和方法**，这些属性和方法**查找起来不方便**
-2. 多 mixins 可能会造成**命名冲突**
-   > 注：冲突时，若为**生命周期函数**，则**不会覆盖**，一起执行；若为**非生命周期函数**，则目标组件内的同名属性/方法会**覆盖** mixins 内所定义的属性/方法
-3. mixins 和组件可能出现**多对多**的关系，**复杂度较高**
-   > 注：多对多指的是一个组件引用多个 mixins 文件，而一个 mixins 文件又被多个组件引用
+- mixins 存在以下问题，使用时要注意：
+
+  1. **变量来源不明确，不利于阅读**
+     > 注：由于使用了 mixins 技术，所以导致目标组件内会出现一些当前组件内**未定义的属性和方法**，这些属性和方法**查找起来不方便**
+  2. 多 mixins 可能会造成**命名冲突**
+     > 注：冲突时，若为**生命周期函数**，则**不会覆盖**，一起执行；若为**非生命周期函数**，则目标组件内的同名属性/方法会**覆盖** mixins 内所定义的属性/方法
+  3. mixins 和组件可能出现**多对多**的关系，**复杂度较高**
+     > 注：多对多指的是一个组件引用多个 mixins 文件，而一个 mixins 文件又被多个组件引用
 
 ## 请介绍一下 Vuex
 
@@ -2792,7 +2794,7 @@ Vue 3 相比于 Vue 2，新增了如下新功能：
 
 在 Vue 3 的 Composition API 中，逻辑复用是通过**创建可重用的函数（即组合函数）**来实现的。这些函数可以**封装和管理状态、计算属性、侦听器等**，然后在多个组件中重用它们，具体步骤如下：
 
-1. 创建 js 文件，在其内**声明一个名为 useXxxx 的函数**
+1. 创建 js 文件，在其内**声明一个函数，命名格式为 useXxxx**
 2. **抽离相同逻辑的代码**到该函数中，并**导出**
 
    ```javascript
