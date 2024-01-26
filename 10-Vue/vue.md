@@ -451,7 +451,7 @@ Vue 框架中，可以**使用动态绑定属性的方式**来进行样式操作
 
    ```html
    <template>
-     <div v-for="(value, key, index) in object" :key="index">
+     <div v-for="(value, key, index) in object" :key="key">
        {{ index }} - {{ key }}: {{ value }}
      </div>
    </template>
