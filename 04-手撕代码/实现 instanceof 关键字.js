@@ -1,5 +1,5 @@
 /**
-@description 实现 instanceof 关键字 
+@description 实现 instanceof 关键字
 @author Colbyzn
  */
 
