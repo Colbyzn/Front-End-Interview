@@ -10,23 +10,51 @@
 
 <body>
   <script>
-    function isDuplicated(arr) {
-      let flag = false
+    var mirrorTree = function (root) {
+      if (root == null) return
 
-      arr.some((item, index, self) => {
-        if (self.indexOf(item) !== index) {
-          flag = true
-          return true
-        }
-      })
+      const temp = root.left
+      root.left = mirrorTree(root.right)
+      root.right = mirrorTree(temp)
 
-      return flag
-    }
+      return root
+    };
 
-    const arr1 = [1, 2, 3, 5, 2, 1]
-    const arr2 = [1, 2, 3, 5]
-    console.log(isDuplicated(arr1))
-    console.log(isDuplicated(arr2))
+    const tree = {
+      value: 'C',
+      left: {
+        value: 'B',
+        left: {
+          value: 'A',
+          left: null,
+          right: null
+        },
+        right: null
+      },
+      right: {
+        value: 'D',
+        left: {
+          value: 'E',
+          left: null,
+          right: {
+            value: 'G',
+            left: {
+              value: 'F',
+              left: null,
+              right: null
+            },
+            right: {
+              value: 'H',
+              left: null,
+              right: null
+            }
+          }
+        },
+        right: null
+      }
+    };
+
+    console.log(mirrorTree(tree))
   </script>
 </body>
 

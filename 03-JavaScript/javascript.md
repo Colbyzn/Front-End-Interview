@@ -2381,3 +2381,75 @@ console.log(fruitCount);
 
       str.toUpperCase(); // 'HELLO'
       ```
+
+## 请介绍一下数组扁平化
+
+<!-- notecardId: 1706629815086 -->
+
+📢 参考答案：
+
+### 定义
+
+- 指的是将多层嵌套的数组结构**转换成指定层数结构**
+- 例如，`[[1, 2], [3, [4, 5]]]` 只扁平化**一层**为 `[1, 2, 3, [4, 5]]`
+- 例如，`[[1, 2], [3, [4, 5]]]` 扁平化**两层**为 `[1, 2, 3, 4, 5]`
+
+### 为什么需要
+
+- 将嵌套数组数据扁平化后，**方便进行遍历、搜索或其他操作**
+
+### 基本使用
+
+- 可以使用数组的 **`flat()`** 方法来实现数组扁平化，该方法**默认扁平化一层**，也可以通过**传入参数指定扁平化的层数**
+
+  ```javascript
+  let nestedArray = [1, [2, [3, 4], 5], 6];
+  let flatArray1 = nestedArray.flat(1); // 扁平化一层
+  let flatArray2 = nestedArray.flat(Infinity); // 使用 Infinity 作为深度，以扁平化任意深度的嵌套数组
+  console.log(flatArray1); // 输出: [1, 2, [3, 4], 5, 6]
+  console.log(flatArray2); // 输出: [1, 2, 3, 4, 5, 6]
+  ```
+
+### 使用注意
+
+## 数组的 concat 方法的参数
+
+<!-- notecardId: 1706629815097 -->
+
+📢 参考答案：
+
+参数可以是**数组**，也可以是**基本数据类型**
+
+```javascript
+const letters = ['a'];
+
+const alphaNumeric = letters.concat(1, [2, 3], [4, [5]]);
+
+console.log(alphaNumeric); // ['a', 1, 2, 3, 4, [5]]
+```
+
+> 注：`concat()` 方法**不会处理数组内的嵌套数组**
+
+## 如何通过扩展运算符来接受剩余参数
+
+<!-- notecardId: 1706630458871 -->
+
+📢 参考答案：
+
+**在一个函数形参前加上扩展运算符 `...` 即可接受剩余参数**，这个参数会成为一个数组，包含所有传递给函数的额外参数
+
+```javascript
+function test(num1, num2, ...args) {
+  console.log(num1);
+  console.log(num2);
+  console.log(args);
+}
+
+test(1, 2, 5, 8, 9);
+```
+
+打印结果：
+
+- 1
+- 2
+- **[5, 8, 9]**
