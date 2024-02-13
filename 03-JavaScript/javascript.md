@@ -2453,3 +2453,440 @@ test(1, 2, 5, 8, 9);
 - 1
 - 2
 - **[5, 8, 9]**
+
+## 请介绍一下设计模式
+
+<!-- notecardId: 1706946793895 -->
+
+📢 参考答案：
+
+### 定义
+
+- 设计模式是**一套经过验证总结出来的解决方案**
+- 每种设计模式**解决特定的问题**，都有其适用的场景
+
+### 为什么需要
+
+- 因为设计模式可以**指导开发**，从而让**大大提高代码的可复用性、可扩展性、可维护性**
+
+### 基本使用
+
+1. 工厂模式：
+
+   - 定义：
+     指的是**使用一个工厂函数，来创建实例，隐藏 new**
+   - 使用场景：
+     用于**创建复杂对象**，当创建对象需要根据传入参数，进行一系列判断及初始化时，可以使用工厂模式将这些步骤封装在一起，例如，**jQuery 的 $ 函数**
+
+     ```javascript
+     class jQuery {
+       constructor(selector) {
+         // ...
+       }
+     }
+
+     function $(selector) {
+       // 一系列判断及初始化操作
+
+       return new jQuery(selector);
+     }
+
+     $('div');
+     ```
+
+2. 单例模式：
+
+   - 定义：
+     指的是**一个类只能创建一个实例**，即全局唯一的实例，无法生成第二个
+   - 使用场景：
+     用于**全局共享某个资源**，例如，**Vuex 的 store 实例**
+
+     ```typescript
+     class Singleton {
+       private static instance: Singleton | null = null;
+
+       private constructor() {}
+
+       public static getInstance(): Singleton {
+         // 如果实例不存在，则创建一个新实例
+         if (!Singleton.instance) {
+           Singleton.instance = new Singleton();
+         }
+         // 否则，返回实例
+         return Singleton.instance;
+       }
+     }
+
+     const s1 = Singleton.getInstance();
+     const s2 = Singleton.getInstance();
+     console.log(s1 === s2); // true
+     ```
+
+3. 代理模式：
+
+   - 定义：
+     指的是**无法直接访问对象，而是通过代理来访问**，可以理解为**在目标对象之前架设一层「拦截」，外界对该对象的访问，都必须先通过这层拦截**
+   - 使用场景：
+     用于**拦截对原对象的访问**，例如，**Vue3 中使用 Proxy 实现响应式**
+
+     ```javascript
+     let obj = {
+       name: 'zhangsan',
+     };
+     const proxyObj = new Proxy(obj, {
+       get: function (target, propKey) {
+         return 35;
+       },
+     });
+
+     console.log(obj.name); // zhangsan
+     console.log(proxyObj.name); // 35
+     ```
+
+     > 注：上述示例中，由于**使用 Proxy 代理对原对象 obj 做了拦截**，导致使用 `proxyObj.name` 访问 name 返回的是改写后的数据 35
+
+4. 观察者模式：
+
+   - 定义：
+     指的是当主题变化之后，触发观察者执行相应的操作
+   - 使用场景：
+     例如，事件监听
+
+     ```javascript
+     btn.addEventListener('click', () => {
+       console.log('发生点击了');
+     });
+     ```
+
+5. 发布订阅模式
+
+   - 定义：
+     在该模式中，**一个主体（发布者）维护一个依赖列表（订阅者列表）**，当主体的状态发生变化时，会通知所有订阅者，使它们能够自动更新
+   - 使用场景：
+     例如，Vue 组件之间的兄弟通信，**使用 `$on` 来监听自定义事件**
+
+     ```javascript
+     import Vue from 'vue';
+     const eventBus = new Vue();
+
+     // B 组件订阅
+     eventBus.$on('send', (msg) => {
+       console.log('收到消息了' + msg);
+     });
+     // C 组件订阅
+     eventBus.$on('send', (msg) => {
+       console.log('收到消息了' + msg);
+     });
+
+     // A 组件发布
+     eventBus.$emit('send', '这是一个新消息');
+     ```
+
+6. 装饰器模式
+
+   - 定义：
+     指的是在**不修改原始对象的结构**的情况下，通过添加装饰器来**扩展其功能**
+   - 使用场景：
+     用于增强 JavaScript 类（class）的功能，例如，**ES 内的 Decorator 语法**
+
+     ```javascript
+     @testable
+     class MyTestableClass {
+       // ...
+     }
+
+     function testable(target) {
+       target.isTestable = true;
+     }
+
+     MyTestableClass.isTestable; // true
+     ```
+
+     > 注：上面代码中，`@testable` 就是一个装饰器。它修改了 MyTestableClass 这个类的行为，为它加上了静态属性 isTestable。testable 函数的参数 target 是 MyTestableClass 类本身。
+
+### 使用注意
+
+- 不是每个问题都需要一个设计模式，要**根据实际情况进行选择**
+- 设计模式所遵循的**开闭原则**，指的是**对扩展开发，对修改封闭**
+
+## 观察者模式和发布订阅模式的区别
+
+<!-- notecardId: 1706946793900 -->
+
+📢 参考答案：
+
+- 观察者模式中，观察者**直接订阅**主题，并从主题那接受消息
+- 而发布订阅模式中，**引入一个中间层**（event channel）来维护发布者和订阅者之间的通信
+  ![](../Media/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E4%B8%8E%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB.png)
+
+## 请介绍一下 JS 的垃圾回收机制
+
+<!-- notecardId: 1706974778809 -->
+
+📢 参考答案：
+
+### 定义
+
+- 垃圾回收机制（Garbage Collection）是一种**自动管理内存**的机制
+- 用于**识别并回收**那些**不再被程序使用的内存**
+
+### 为什么需要
+
+- 及时释放内存，**避免造成内存泄漏**，提高程序的健壮性
+
+### 基本使用
+
+1. **引用计数算法**
+   指的是**给每个对象维护一个引用计数**，被引用一次就加 1，减少一次引用就减 1，**当不再被引用时，即引用计数为 0**，此时，就触发垃圾回收机制，**清除引用计数为 0 的对象**
+
+   ```javascript
+   let a = { x: 100 }; // 引用计数 1
+   let a1 = a; // 引用计数 2
+   a = 10; // 引用计数 1
+   a1 = null; // 引用计数 0
+   ```
+
+   > 注：开始时，a 引用了对象 `{ x: 100 }`，该对象被引用次数为 1，接着 a 将引用地址赋值给 a1，这时候 a1 也指向了对象 `{ x: 100 }`，被引用次数为 2，然后，将 10 赋值给 a，那么 a 不再指向对象 `{ x: 100 }`，被引用次数为 1，最后，将 null 赋值给 a1，被引用次数为 0
+
+2. **标记清除算法**
+   指的是从根（通常为全局对象 Window）开始遍历，**标记所有与根对象有直接或者间接引用关系的对象**，之后，垃圾回收器会**遍历整个内存，清除那些未被标记的对象**
+   > 注：未被标记说明该对象**无法再通过任何引用链从根对象访问到**，即为垃圾，可被回收
+
+### 使用注意
+
+- **引用计数算法无法处理循环引用对象**的情况，因为彼此引用，导致引用计数永远无法为 0，而标记清除法可以处理
+
+  ```javascript
+  // 循环引用
+  function fn() {
+    const obj1 = {};
+    const obj2 = {};
+    obj1.a = obj2;
+    obj2.a = obj1;
+  }
+  fn();
+  ```
+
+  > 注：上述示例中，**若使用引用计数算法**，则执行完函数 fn 后，**对象 obj1 和 obj2 不会被垃圾回收机制回收**，而**使用标记清除算法，遍历根对象无法访问到对象 obj1 和 obj2**，所以它们不会被标记，因此，在清理阶段会被清理掉
+
+- 引用计算算法是**早期的**垃圾回收算法，而标记清除是**现代的**垃圾回收算法
+
+## JS 闭包是内存泄漏吗？
+
+<!-- notecardId: 1707036288044 -->
+
+📢 参考答案：
+
+- **不是，但是闭包的数据不会被垃圾回收**
+- 严格来讲，内存泄漏指的是一种**非预期**的情况，例如，**本该被回收的的内存，却没有回收**，而闭包是一种**符合预期**的情况，**在闭包引用期间，对应的内存本来就不应该被回收**
+
+## 如何检测 JS 内存泄漏
+
+<!-- notecardId: 1707036288050 -->
+
+📢 参考答案：
+
+可使用 **Chrome DevTools 的 Performance 界面内的 Memory 工具**来检测 js 内存是否泄漏，若曲线有上升有下降，则说明内存无泄漏，若一直上升，则说明存在内存泄漏
+![](../Media/%E5%86%85%E5%AD%98%E6%97%A0%E6%B3%84%E6%BC%8F%E6%83%85%E5%86%B5.png)
+
+## Vue 当中，内存泄漏的场景有哪些？以及如何处理？
+
+<!-- notecardId: 1707036288055 -->
+
+📢 参考答案：
+
+> 注：以下所说的**全局**，指的是 **window 对象**
+
+- **被全局变量、函数引用**，但是组件销毁时未清除
+  在 **beforeDestroy** 生命周期函数中，通过**将 null 赋值给全局变量、函数**来清除掉
+
+  ```javascript
+  export default {
+    mounted() {
+      window.a = { x: 1 };
+      window.fn = () => {
+        console.log(this);
+      };
+    },
+    beforeDestroy() {
+      window.a = null;
+      window.fn = null;
+    },
+  };
+  ```
+
+- **被全局事件引用**，但是组件销毁时未清除
+  在 **beforeDestroy** 生命周期函数中，通过 **removeEventListener()** 方法移除全局事件
+
+  ```javascript
+  export default {
+    mounted() {
+      window.addEventListener('resize', this.handleResize);
+    },
+    beforeDestroy() {
+      window.removeEventListener('resize', this.handleResize);
+    },
+  };
+  ```
+
+- **被定时器引用**，但是组件销毁时未清除
+  在 **beforeDestroy** 生命周期函数中，通过 **clearTimeout() 或者 clearInterval()** 方法清除定时器
+
+  ```javascript
+  export default {
+    mounted() {
+      timer = setInterval(() => {
+        console.log(this);
+      }, 100);
+    },
+    beforeDestroy() {
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
+    },
+  };
+  ```
+
+- **被自定义事件引用**，但是组件销毁时未清除
+  在 **beforeDestroy** 生命周期函数中，通过 **$off()** 方法清除自定义事件
+
+  ```javascript
+  export default {
+    mounted() {
+      eventBus.$on('customEvent', this.handleEvent);
+    },
+    beforeDestroy() {
+      eventBus.$off('customEvent', this.handleEvent);
+    },
+  };
+  ```
+
+## 正则表达式中的 g 是什么意思？
+
+<!-- notecardId: 1707036288060 -->
+
+📢 参考答案：
+
+- g 是一个**修饰符**
+- 表示匹配整个字符串内**所有**满足条件的子字符串，而**不仅仅只匹配第一个**
+- 例如，**`/\b\w+\b/g`** 表示匹配目标字符串中**所有满足条件的单词**
+
+## match() 与 matches() 方法的区别？
+
+<!-- notecardId: 1707036288063 -->
+
+📢 参考答案：
+
+match() 是**字符串的方法**，而 matches() 是 **DOM 对象的方法**
+
+1. match()
+
+   - 作用：
+     检索目标字符串与正则表达式进行匹配的结果
+   - 参数：
+     传入一个**正则表达式**
+   - 返回值：
+     返回一个包含与正则表达式相匹配结果的**数组**
+
+2. matches()
+   - 作用：
+     检索目标 DOM 对象是否与指定的 CSS 选择器匹配
+   - 参数：
+     传入一个**CSS 选择器字符串**
+   - 返回值：
+     返回一个**布尔值**
+
+## 使用正则表达式匹配手机和邮箱
+
+<!-- notecardId: 1707821685810 -->
+
+📢 参考答案：
+
+- 匹配手机：**`/^1[3-9]\d{9}$/`**
+- 匹配邮箱：**`/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/`**
+
+## 请介绍一下 padStart() 方法
+
+<!-- notecardId: 1707821685814 -->
+
+📢 参考答案：
+
+padStart() 方法是**字符串的方法**
+
+- 作用：
+  从当前字符串**开头填充**指定的字符串，**直至达到给定的长度**
+- 参数：
+  第一个参数：**指定填充后的字符串长度**，第二参数：**用于填充的指定字符串**
+- 返回值：
+  返回一个**填充后的字符串**
+- 示例代码：
+
+  ```javascript
+  let str = 6;
+  str.padStart(2, 0); // "06"
+  ```
+
+## 请介绍一下函数柯里化
+
+<!-- notecardId: 1707821685818 -->
+
+📢 参考答案：
+
+### 定义
+
+- 函数柯里化是一种在**函数式编程**中常见的技术
+- 它将接受**多个参数**函数转换为接受**部分参数**的函数的链式调用
+- **在接受到所有必须参数之前都返回一个新函数**，当**收到最后一个参数时**，就会**返回执行结果**
+
+### 为什么需要
+
+- 可以**延迟函数的执行**，直到收到所有必要的参数为止
+
+### 基本使用
+
+- 例如，一个接受两个参数并返回它们之和的加法函数。通过函数柯里化，可以将这个函数转换成接受一个参数的函数，然后返回另一个接受第二个参数的函数
+
+  ```javascript
+  // 原始函数
+  function add(x, y) {
+    return x + y;
+  }
+
+  // 使用柯里化
+  function curriedAdd(x) {
+    return function (y) {
+      return x + y;
+    };
+  }
+
+  // 调用柯里化函数
+  const add5 = curriedAdd(5); // 传递第一个参数
+  console.log(add5(3)); // 传递第二个参数，输出 8
+  ```
+
+### 使用注意
+
+1. **需要明确知道**函数预期要**接受多少个参数**，因为这会影响函数何时执行其计算
+2. 由于**每次**传参会返回一个新函数，所以会形参**闭包**，当闭包过多，可能会对性能造成影响
+
+## 普通函数与箭头函数的区别？
+
+<!-- notecardId: 1707821685822 -->
+
+📢 参考答案：
+
+1. 从语法简洁性来讲：
+   - 箭头函数比普通函数**更简洁**
+2. 从 this 指向来讲：
+   - 普通函数中的 **this 取决于如何调用函数**，且**可以**通过 call、apply、bind 方法修改 this 指向
+   - 箭头函数**没有自己的 this**，它会捕获其所在上下文的 this 值作为自己的 this，且**无法**通过 call、apply、bind 方法修改 this 指向
+3. 从声明构造函数来讲：
+   - 普通函数**可以通过 new 关键字**来声明构造函数
+   - 而箭头函数**无法通过 new 关键字**来声明构造函数
+4. 从使用 arguments 对象来讲：
+   - 普通函数**可以使用 arguments 类数组对象**
+   - 箭头函数**没有自己的 arguments 类数组对象**，但是可以通过剩余参数语法 **`...args`** 来访问函数内的参数
+     > 注：
+     >
+     > 1. 剩余参数**只包含那些没有对应形参的实参**，而 arguments 对象包含了传给函数的**所有实参**
+     > 2. arguments 对象**不是一个真正的数组**，而剩余参数**是真正的数组**，可以直接使用所有的数组方法，方便进行数据处理

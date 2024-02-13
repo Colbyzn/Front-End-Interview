@@ -58,10 +58,10 @@ console.log(fibonacci1(4))
 
 #### 思路提炼
 
-1. 初始化三个变量 res、n_1、n_2，分别表示 F(n)、F(n - 1) 和 F(n - 2)
+1. 初始化三个变量 res、cur、prev，分别表示 F(n)、F(n - 1) 和 F(n - 2)
 2. 从第二项开始迭代到 n，每次迭代，分为 3 步：
    1. 计算 res 的值
-   2. 整体向右移动更新 n_1 与 n_2 的值
+   2. 整体向右移动更新 cur 与 prev 的值
 3. 循环结束后，返回 res
 
 #### 边界处理/注意点
@@ -81,19 +81,19 @@ function fibonacci2(n) {
   if (n === 0 || n === 1) return n
 
   let res = 0
-  let n_1 = 1
-  let n_2 = 0
+  let cur = 1
+  let prev = 0
   /* 以下是爬楼梯算法
-  let n_2 = 1
+  let prev = 1
   */
 
   for (let i = 2; i <= n; i++) {
     // 计算 res 的值
-    res = n_1 + n_2
+    res = cur + prev
 
-    // 整体向右移动更新 n_1 与 n_2 的值
-    n_2 = n_1
-    n_1 = res
+    // 整体向右移动更新 cur 与 prev 的值
+    prev = cur
+    cur = res
   }
 
   return res

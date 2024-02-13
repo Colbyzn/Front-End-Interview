@@ -158,12 +158,7 @@ module.exports = {
       {
         test: /\.js$/, // 匹配以 .js 结尾的文件
         exclude: /node_modules/, // 不要处理 node_modules 目录下的任何 .js文件
-        use: {
-          loader: 'babel-loader', // 使用 babel 加载器进行转译
-          options: {
-            presets: ['@babel/preset-env'],
-          },
-        },
+        use: 'babel-loader', // 使用 babel 加载器进行转译
       },
       {
         test: /\.css$/,
@@ -182,7 +177,7 @@ module.exports = {
 
 - **扩展 Webpack 的功能**，让开发者可以根据项目需求，在构建过程的不同阶段**执行各种自定义任务**
 
-  > 注：例如，使用了 HtmlWebpackPlugin 插件来生成 HTML 文件，使用了 UglifyJsPlugin 插件来压缩 JavaScript 代码
+  > 注：例如，使用了 HtmlWebpackPlugin 插件来生成 HTML 文件
 
 #### 语法格式
 
@@ -204,7 +199,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/index.html',
     }),
-    new UglifyJsPlugin(),
   ],
 };
 ```
@@ -224,8 +218,8 @@ module.exports = {
   // package.json
   {
     "scripts": {
-      "dev": "webpack-dev-server --config build-optimization/webpack.dev.js",
-      "build": "webpack --config build-optimization/webpack.prod.js"
+      "dev": "webpack-dev-server --config webpack.dev.js",
+      "build": "webpack --config webpack.prod.js"
     }
   }
   ```
@@ -281,19 +275,19 @@ loader 用于**处理不同类型的文件或代码**，使其能够被正确打
 
 | Loader                 | 作用                                                                                          |
 | ---------------------- | --------------------------------------------------------------------------------------------- |
-| `babel-loader`         | 将 **ES6 及以上版本**的代码**转换成 ES5**                                                     |
 | `ts-loader`            | 将 **TypeScript** 代码编译成 JavaScript                                                       |
+| `babel-loader`         | 将 **ES6 及以上版本**的代码**转换成 ES5**                                                     |
+| `postcss-loader`       | 为一些有兼容性问题的 CSS，**自动添加浏览器前缀**，提高兼容性                                  |
 | `sass-loader`          | 将 **SASS/SCSS** 文件**编译成 CSS**                                                           |
 | `less-loader`          | 将 **LESS** 文件**编译成 CSS**                                                                |
 | `css-loader`           | **解析 CSS 文件**，并将其**转换为 JavaScript 对象**，以便通过 JavaScript 控制样式的加载和应用 |
-| `style-loader`         | 将处理后的 CSS 代码**插入到页面的 style 标签中**，使样式生效                                  |
+| `style-loader`         | 将解析后的 CSS 代码**插入到页面的 style 标签中**，使样式生效                                  |
 | `file-loader`          | **处理项目中的文件资源，如字体和图片**，将文件输出到指定文件夹                                |
 | `url-loader`           | 与 `file-loader` 类似，但可以**设置文件大小阈值**，将小于阈值的**较小文件转换为 base64 格式** |
 | `vue-loader`           | **处理 Vue 的单文件组件（.vue 文件）**，包括解析模板、处理样式和脚本                          |
 | `image-loader`         | **将图片文件转换成可被项目引用的 URL**                                                        |
 | `image-webpack-loader` | **优化和压缩图片文件**                                                                        |
 | `eslint-loader`        | 在打包构建过程中，对 JavaScript 代码**进行 eslint 检查**                                      |
-| `postcss-loader`       | 为一些有兼容性问题的 CSS，**自动添加浏览器前缀**，提高兼容性                                  |
 
 ## Webpack 常用的 plugin 有哪些？
 
@@ -595,7 +589,7 @@ npm install -D vue-loader vue-template-compiler
 
 > 注：除非您是使用 Vue 模板编译器自己的分支版本的高级用户，否则您应该一起安装 `vue-loader` 和 `vue-template-compiler`
 
-### 配置
+### 2. 配置
 
 ```javascript
 const { VueLoaderPlugin } = require('vue-loader');
@@ -725,7 +719,7 @@ module、chunk、bundel 之间的关系如下：
 
    - 为什么需要 IgnorePlugin：
 
-     引入无用模块，不仅会减低打包构建的速度，而且还会增加打包输出文件的体积，例如，实际项目**只需要支持中文和英文的日期格式**，当我们通过 `import moment from 'moment` 来引入一个处理时间格式的第三方模块时，**默认情况下，会引入所有语言的 js 代码**，从而导致引入了一些没用的模块
+     引入无用模块，不仅会减低打包构建的速度，而且还会增加打包输出文件的体积，例如，实际项目**只需要支持中文和英文的日期格式**，当我们通过 `import moment from 'moment'` 来引入一个处理时间格式的第三方模块时，**默认情况下，会引入所有语言的 js 代码**，从而导致引入了一些没用的模块
 
    - 配置：
 

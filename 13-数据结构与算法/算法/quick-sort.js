@@ -1,5 +1,5 @@
 /**
-@description 快速排序
+@description 快速排序（递增）
 @author Colbyzn
  */
 
@@ -10,11 +10,11 @@
 
 #### 思路提炼
 
-1. 获取数组的中间元素，作为比较的基准值
-2. 创建两个子数组 left、right
+1. 创建两个子数组 left、right
+2. 获取数组的中间元素 midValue，作为比较的基准值
 3. 遍历数组内的元素，若元素大于基准值，则将其放到子数组 right，否则放到子数组 left
-4. 递归地对子数组 left 和 right 进行步骤 1-3 的操作
-5. 返回拼接后的结果数组，即 `[left, mid, right]`
+5. 返回拼接后的结果数组，即 `[left, midValue, right]`
+4. 递归地对子数组 left 和 right 进行步骤 1-4 的操作
 
 #### 边界处理/注意点
 
@@ -32,28 +32,29 @@
  */
 
 function quickSort(arr) {
-  const length = arr.length
+  const length = arr.length;
   // 数组长度为 0，再返回
-  if (length === 0) return arr
+  if (length === 0) return arr;
 
-  const midIndex = Math.floor(length / 2)
-  const midValue = arr[midIndex]
-  const left = []
-  const right = []
+  const left = [];
+  const right = [];
+
+  const midIndex = Math.floor(length / 2);
+  const midValue = arr[midIndex];
 
   for (let i = 0; i < length; i++) {
     // 要避开基准值
     if (i !== midIndex) {
-      const n = arr[i]
-      if (n < midValue) {
-        left.push(n)
+      const cur = arr[i];
+      if (cur < midValue) {
+        left.push(cur);
       } else {
-        right.push(n)
+        right.push(cur);
       }
     }
   }
 
-  return [...quickSort(left), midValue, ...quickSort(right)]
+  return [...quickSort(left), midValue, ...quickSort(right)];
 }
 
 // 测试用例

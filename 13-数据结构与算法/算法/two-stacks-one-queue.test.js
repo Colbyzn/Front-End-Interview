@@ -18,7 +18,7 @@ describe('两个栈实现一个队列', () => {
 
     it('delete', () => {
         const q = new MyQueue()
-        expect(q.delete()).toBeNull()
+        expect(q.delete()).toBeUndefined()
 
         q.add(100)
         q.add(200)

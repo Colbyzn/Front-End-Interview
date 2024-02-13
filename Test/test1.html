@@ -10,51 +10,29 @@
 
 <body>
   <script>
-    var mirrorTree = function (root) {
-      if (root == null) return
+    function arrayToObject1(arr) {
+      if (arr.length === 0) return null
 
-      const temp = root.left
-      root.left = mirrorTree(root.right)
-      root.right = mirrorTree(temp)
+      const [head, ...args] = arr
 
-      return root
-    };
-
-    const tree = {
-      value: 'C',
-      left: {
-        value: 'B',
-        left: {
-          value: 'A',
-          left: null,
-          right: null
-        },
-        right: null
-      },
-      right: {
-        value: 'D',
-        left: {
-          value: 'E',
-          left: null,
-          right: {
-            value: 'G',
-            left: {
-              value: 'F',
-              left: null,
-              right: null
-            },
-            right: {
-              value: 'H',
-              left: null,
-              right: null
-            }
-          }
-        },
-        right: null
+      return {
+        [head]: arrayToObject1(args)
       }
-    };
+    }
 
-    console.log(mirrorTree(tree))
+    // 测试用例
+    const inputArray1 = ['a', 'b', 'c'];
+
+    console.log(arrayToObject1(inputArray1));
+
+    function arrayToObject2(arr) {
+      return arr.reduceRight((acc, item) => ({ [item]: acc }), null)
+    }
+
+    // 测试用例
+    const inputArray2 = ['a', 'b', 'c'];
+
+    console.log(arrayToObject2(inputArray2));
   </script>
 </body>
 
