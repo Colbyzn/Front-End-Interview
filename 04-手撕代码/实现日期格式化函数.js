@@ -36,8 +36,7 @@ function formatDate(date, formatString) {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
 
-  const res = `${year}-${month}-${day}`
-
+  res = formatString.replace('YYYY', year).replace('MM', month).replace('DD', day);
   return res;
 }
 

@@ -36,7 +36,7 @@ ts 是 js 的超集，所以对于 js 的数据类型，ts 都支持
 2. 引用数据类型：
    例如，**function、object、array**
 3. ts 新增数据类型：
-   例如，**联合类型、类型别名、接口、元组、字面量类型、枚举、void、any、unknown、never**
+   例如，**联合类型、字面量类型、类型别名、接口、元组、枚举、void、any、unknown、never**
 
 ## 请介绍一下 ts 中 any 类型
 
@@ -84,7 +84,7 @@ ts 是 js 的超集，所以对于 js 的数据类型，ts 都支持
 ### 定义
 
 - unknown 类型用于**表示值的类型是未知的**
-- 被指定为 any 类型的变量可以**被任意数据类型所赋值**，但是**不能随意将它赋值给其他任意类型的变量**
+- 被指定为 unknown 类型的变量可以**被任意数据类型所赋值**，但是**不能随意将它赋值给其他任意类型的变量**
 - 要将 unknown 类型的数据赋值给其他类型的变量，**必须先**进行**类型判断**或者**类型断言**，然后再赋值给其他类型的变量
 
 ### 为什么需要
@@ -93,24 +93,24 @@ ts 是 js 的超集，所以对于 js 的数据类型，ts 都支持
 
 ### 基本使用
 
-- 只需在声明变量时，将其类型指定为 any 即可
+- 只需在声明变量时，将其类型指定为 unknown 即可
 
-```typescript
-let userInput: unknown;
-let userName: string;
+  ```typescript
+  let userInput: unknown;
+  let userName: string;
 
-userInput = 5; // 可以赋值为数字
-userInput = 'Hello'; // 也可以赋值为字符串
-// ...
+  userInput = 5; // 可以赋值为数字
+  userInput = 'Hello'; // 也可以赋值为字符串
+  // ...
 
-// 将其赋值给其他变量前，要先进行类型判断
-if (typeof userInput === 'string') {
-  userName = userInput; // 判断后，才可以安全地将 unknown 类型转换为 string 类型
-}
+  // 将其赋值给其他变量前，要先进行类型判断
+  if (typeof userInput === 'string') {
+    userName = userInput; // 判断后，才可以安全地将 unknown 类型转换为 string 类型
+  }
 
-// 或者将其赋值给其他变量前，先进行类型断言
-userName = userInput as string;
-```
+  // 或者将其赋值给其他变量前，先进行类型断言
+  userName = userInput as string;
+  ```
 
 ### 使用注意
 
@@ -147,64 +147,64 @@ unknown 和 any **都可以用于处理未知类型**，但它们之间有关键
 
 1. 定义接口
 
-```typescript
-// 定义一个接口
-interface Person {
-  name: string;
-  age: number;
-  greet: () => void;
-}
+   ```typescript
+   // 定义一个接口
+   interface Person {
+     name: string;
+     age: number;
+     greet: () => void;
+   }
 
-// 正确使用接口
-const person: Person = {
-  name: 'Alice',
-  age: 30,
-  greet: () => {
-    console.log(`Hello, my name is ${person.name}.`);
-  },
-};
+   // 正确使用接口
+   const person: Person = {
+     name: 'Alice',
+     age: 30,
+     greet: () => {
+       console.log(`Hello, my name is ${person.name}.`);
+     },
+   };
 
-// 错误使用接口 --- 缺少 age 属性
-const person: Person = {
-  name: 'Alice',
-  greet: () => {
-    console.log(`Hello, my name is ${person.name}.`);
-  },
-};
-```
+   // 错误使用接口 --- 缺少 age 属性
+   const person: Person = {
+     name: 'Alice',
+     greet: () => {
+       console.log(`Hello, my name is ${person.name}.`);
+     },
+   };
+   ```
 
 2. 继承接口
 
-```typescript
-// 定义一个基础接口
-interface Person {
-  name: string;
-}
+   ```typescript
+   // 定义一个基础接口
+   interface Person {
+     name: string;
+   }
 
-// 定义一个继承自 Person 接口的子接口
-interface Student extends Person {
-  age: number;
-}
+   // 定义一个继承自 Person 接口的子接口
+   interface Student extends Person {
+     age: number;
+   }
 
-// 使用 Student 接口
-const xialuo: Student = {
-  name: '夏洛',
-  age: 22,
-};
+   // 使用 Student 接口
+   const xialuo: Student = {
+     name: '夏洛',
+     age: 22,
+   };
 
-console.log(xialuo); // 输出：{ name: '夏洛', age: 22 }
-```
+   console.log(xialuo); // 输出：{ name: '夏洛', age: 22 }
+   ```
 
-> 注：由于 Student 接口继承了 Person 接口，所以在创建 Student 类型的对象时，**还需要提供 name 属性**
+   > 注：由于 Student 接口继承了 Person 接口，所以在创建 Student 类型的对象时，**还需要提供 name 属性**
 
 ### 使用注意
 
 - 接口**只能定义对象类型**，不能定义其他任何类型，例如，基本数据类型、联合类型、交叉类型等等
 - 定义接口时，自定义名称后面**没有等号**，且其内的属性方法之间**使用分号隔开**，而不是逗号
-- 接口可以继承其他接口
+- 接口可以**继承**其他接口
 - 多个**相同名称**的接口会**自动合并**为一个接口
 
-## 请介绍一下 ts 中的 type 类型别名
+## 请介绍一下 ts 中的类型别名 type
 
 <!-- notecardId: 1707821825904 -->
 
@@ -225,33 +225,33 @@ console.log(xialuo); // 输出：{ name: '夏洛', age: 22 }
 
 1. 对象的类型别名
 
-```typescript
-// 定义一个对象的类型别名
-type Point = {
-  x: number;
-  y: number;
-};
+   ```typescript
+   // 定义一个对象的类型别名
+   type Point = {
+     x: number;
+     y: number;
+   };
 
-// 使用对象的类型别名
-const point: Point = {
-  x: 10,
-  y: 20,
-};
-```
+   // 使用对象的类型别名
+   const point: Point = {
+     x: 10,
+     y: 20,
+   };
+   ```
 
 2. 其他类型的类型别名
 
-```typescript
-// 定义一个联合类型和类型别名
-type Result = number | string;
+   ```typescript
+   // 定义一个联合类型和类型别名
+   type Result = number | string;
 
-function getResult(): Result {
-  return Math.random() > 0.5 ? 'success' : 404;
-}
+   function getResult(): Result {
+     return Math.random() > 0.5 ? 'success' : 404;
+   }
 
-const result: Result = getResult();
-console.log(result);
-```
+   const result: Result = getResult();
+   console.log(result);
+   ```
 
 ### 使用注意
 

@@ -59,7 +59,7 @@ const curriedAdd = curry(add);
 
 // 可以逐个传递参数
 console.log(curriedAdd(1)(2)(3)); // 输出 6
-也可以一次传递部分参数
+// 也可以一次传递部分参数
 console.log(curriedAdd(1, 2)(3)); // 输出 6
 // 或者一次性传递所有参数
 console.log(curriedAdd(1, 2, 3)); // 输出 6

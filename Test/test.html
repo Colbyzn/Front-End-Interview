@@ -1,36 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <style>
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-    }
-    .item {
-      width: calc(33.33% - 20px);
-      margin: 10px;
-      height: 100px;
-      background-color: purple;
-    }
-  </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
-    <div class="item"></div>
-  </div>
+  <script>
+    function arrayToObject(arr) {
+      return arr.reduceRight((acc, item) => {
+        return { [item]: acc }
+      }, null)
+    }
+
+    console.log(arrayToObject(['a', 'b', 'c']))
+  </script>
 </body>
+
 </html>

@@ -3758,3 +3758,102 @@ import {
    ```
 
    ![](../Media/lighthouse%20%E7%BD%91%E9%A1%B5%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90.png)
+
+## 请介绍一下 Pinia
+
+<!-- notecardId: 1708184647780 -->
+
+🔍 所考察的知识点：
+
+📢 参考答案：
+
+### 定义
+
+- Pinia 是 Vue.js 的**新一代状态管理库**
+
+### 为什么需要
+
+- 相比于上一代状态管理库 Vuex，Pinia 有如下优势：
+  1. **去掉了 mutations**，同步和异步代码都写到 actions 内
+  2. **去掉了 modules**，默认每一个 store 仓库都是一个独立的模块，不需要通过开启命名空间 namespaced
+  3. 除了支持选项式 API，还支持**组合式 API**
+  4. 对 **TypeScript** 的支持更好
+  5. 可通过**插件**扩展 Pinia 功能，比如，pinia-plugin-persistedstate 插件
+
+### 基本使用
+
+1. 终端
+   安装 pinia
+
+   ```bash
+   npm install pinia
+   ```
+
+2. main.js
+   导入 createPinia 函数、创建 Pinia 对象、全局注册
+
+   ```javascript
+   import { createApp } from 'vue';
+   import { createPinia } from 'pinia'; // 导入 createPinia 函数
+   import App from './App.vue';
+
+   const app = createApp(App);
+   const pinia = createPinia(); // 创建 Pinia 对象
+
+   app.use(pinia); // 全局注册
+   app.mount('#app');
+   ```
+
+3. store → 自定义模块
+   导入 defineStore 函数、调用 defineStore 函数创建仓库
+
+   ```javascript
+   // 导入 defineStore 函数
+   import { defineStore } from 'pinia';
+
+   // 调用 defineStore 函数创建仓库，比如，counter
+   export const useCounterStore = defineStore('counter', () => {
+     // 声明 state
+     const count = ref(0);
+
+     // 声明 getters
+     const doubleCount = computed(() => count.value * 2);
+
+     // 声明 actions
+     const increment = () => {
+       count.value++;
+     };
+
+     // 向外暴露数据和方法
+     return { count, doubleCount, increment };
+   });
+   ```
+
+4. 目标组件内
+   导入所创建的仓库，并使用
+
+   ```html
+   <script setup>
+     //  导入所创建的 counter 仓库
+     import { useCounterStore } from '@/stores/counter';
+
+     // 获取仓库对象
+     const store = useCounterStore();
+
+     // ❌ 不能直接解构数据，因为它破坏了响应性
+     const { name, doubleCount } = store;
+
+     // ✅ 调用 storeToRefs 来解构属性，这样写是响应式的
+     const { name, doubleCount } = storeToRefs(store);
+     // ✅ 或者不解构，直接使用 `store.doubleCount`
+     const doubleValue = computed(() => store.doubleCount);
+   </script>
+   ```
+
+### 使用注意
+
+- 创建仓库时，按需导出的函数名，其命名格式「**use 仓库名 Store**」
+- defineStore 函数的第一个参数为**唯一的仓库名称**，作用是将仓库定义为**独立的模块**
+- defineStore 函数的第二个参数取值为对象或者箭头函数，若要使用**组合式 API 写法**，则**传入箭头函数**；若使用**选项式 API 写法**，则**传入对象**
+- 若仓库使用组合式 API 写法，则 **state** 数据通过**调用 ref() 来声明**，**getters** 计算属性通过**调用 computed() 来声明**，**actions** 方法直接**通过函数来声明**
+- 在目标组件内使用时，若要**解构方法**，则**直接解构**，若要**解构属性**，则需要**使用 storeToRefs()** 函数来处理
